@@ -1,0 +1,250 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Lurus"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_gerak_lurus_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Jalur Cepat: Simulator GLB & GLBB",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Gerak Lurus",
+      "topik": "Gerak Lurus",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat membedakan Gerak Lurus Beraturan (GLB) dan Gerak Lurus Berubah Beraturan (GLBB) melalui simulasi",
+        "Siswa dapat menerapkan persamaan GLB (x = v₀·t) dan GLBB (x = v₀t + ½at²) untuk menghitung posisi",
+        "Siswa dapat menginterpretasikan grafik x-t dan v-t untuk GLB dan GLBB"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Balapan di Lintasan Lurus",
+        "story": "Selamat datang di sirkuit uji coba! Kamu adalah insinyur yang menguji dua mobil eksperimental di lintasan lurus panjang. Mobil A bergerak dengan kecepatan tetap, Mobil B bergerak dengan percepatan. Atur parameter, jalankan simulasi, dan analisis grafik geraknya!",
+        "image_description": "Lintasan lurus panjang di padang terbuka, dua mobil berwarna berbeda (biru dan merah) siap di garis start, papan instrumen digital di sisi lintasan menampilkan data kecepatan dan jarak",
+        "cta_text": "Nyalakan Mesin"
+      },
+      "visual_element": {
+        "theme_name": "Racing Circuit",
+        "theme_preset": "minimal_mono",
+        "mood": "dynamic, precise, analytical",
+        "color_palette": {
+          "primary": "#0077b6",
+          "secondary": "#d62828",
+          "background": "#f0f4f8",
+          "accent": "#f4a261",
+          "text": "#1d3557"
+        },
+        "setting_description": "Lintasan balap lurus dengan marka jarak di tepi, papan data digital di sepanjang lintasan, langit biru cerah, gradasi rumput hijau di sisi kanan kiri.",
+        "art_style": "clean technical illustration, sporty minimal",
+        "ambient_elements": [
+          "Bendera-bendera kecil di sepanjang lintasan",
+          "Angka jarak di papan marka setiap 10 meter",
+          "Efek debu ringan di belakang mobil saat bergerak"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Pilih mode: GLB (percepatan = 0) atau GLBB (percepatan ≠ 0)." },
+          { "step": 2, "text": "Atur kecepatan awal v₀ dan percepatan a dengan slider." },
+          { "step": 3, "text": "Tekan Jalankan untuk memulai simulasi dan amati mobil bergerak." },
+          { "step": 4, "text": "Perhatikan grafik x-t dan v-t yang terbentuk secara real-time." },
+          { "step": 5, "text": "Selesaikan tantangan dengan mengatur parameter yang tepat!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Persamaan GLB dan GLBB",
+          "strategy": "GLB: kecepatan konstan, grafik x-t berupa garis lurus, grafik v-t berupa garis horizontal. GLBB: percepatan konstan, grafik x-t berupa parabola, grafik v-t berupa garis miring.",
+          "formula": "GLB: x = v₀·t  |  GLBB: x = v₀t + ½at²,  vₜ = v₀ + at,  vₜ² = v₀² + 2ax",
+          "example": "Mobil GLB, v₀=10 m/s, t=5s: x = 10×5 = 50 m. Mobil GLBB, v₀=0, a=2 m/s², t=5s: x = 0 + ½×2×25 = 25 m.",
+          "hint_image_description": "Dua panel berdampingan: kiri GLB dengan grafik x-t lurus dan v-t horizontal; kanan GLBB dengan grafik x-t parabola dan v-t miring"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_start", "event": "on_correct_action", "description": "Suara mesin mobil menyala saat simulasi dimulai" },
+          { "id": "sfx_challenge_done", "event": "on_win", "description": "Klakson finish line dan sorak penonton saat tantangan selesai" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Suara mesin mati singkat" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik elektronik dinamis bertempo sedang, nuansa sirkuit balap, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Sirkuit Uji Gerak Lurus",
+        "narrative": "Uji dua jenis gerak lurus — GLB dengan kecepatan konstan dan GLBB dengan percepatan konstan — pada lintasan lurus sepanjang 200 meter. Analisis grafik dan selesaikan tantangan waktu tempuh.",
+        "context": "Gerak 1D pada lintasan lurus horizontal. Hambatan udara dan gesekan diabaikan. Arah positif ke kanan."
+      },
+      "variables": [
+        {
+          "id": "v0",
+          "label": "Kecepatan awal",
+          "symbol": "v₀",
+          "unit": "m/s",
+          "type": "user_input",
+          "min": 0,
+          "max": 30,
+          "default": 10,
+          "step": 1
+        },
+        {
+          "id": "a",
+          "label": "Percepatan",
+          "symbol": "a",
+          "unit": "m/s²",
+          "type": "user_input",
+          "min": -10,
+          "max": 10,
+          "default": 0,
+          "step": 0.5
+        },
+        {
+          "id": "t",
+          "label": "Waktu simulasi",
+          "symbol": "t",
+          "unit": "s",
+          "type": "simulation_time",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "id": "x",
+          "label": "Posisi",
+          "symbol": "x",
+          "unit": "m",
+          "type": "computed"
+        },
+        {
+          "id": "vt",
+          "label": "Kecepatan saat t",
+          "symbol": "vₜ",
+          "unit": "m/s",
+          "type": "computed"
+        },
+        {
+          "id": "t_finish",
+          "label": "Waktu finish (x=100 m)",
+          "symbol": "t_finish",
+          "unit": "s",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_x",
+          "computes": "x",
+          "formula": "x = v0 * t + 0.5 * a * t^2",
+          "description": "Posisi benda pada waktu t (berlaku untuk GLB saat a=0 dan GLBB saat a≠0)"
+        },
+        {
+          "id": "eq_vt",
+          "computes": "vt",
+          "formula": "vt = v0 + a * t",
+          "description": "Kecepatan benda pada waktu t"
+        },
+        {
+          "id": "eq_t_finish",
+          "computes": "t_finish",
+          "formula": "t_finish = (-v0 + sqrt(v0^2 + 2*a*100)) / a  (jika a≠0),  t_finish = 100/v0  (jika a=0)",
+          "description": "Waktu yang dibutuhkan benda untuk mencapai posisi x = 100 m"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_track",
+          "type": "animation",
+          "title": "Animasi Lintasan",
+          "description": "Mobil bergerak dari kiri ke kanan di atas lintasan, posisi diperbarui setiap frame sesuai persamaan gerak, jejak posisi ditampilkan"
+        },
+        {
+          "id": "viz_xt",
+          "type": "graph",
+          "x_axis": "t",
+          "y_axis": "x",
+          "title": "Grafik Posisi terhadap Waktu (x-t)"
+        },
+        {
+          "id": "viz_vt",
+          "type": "graph",
+          "x_axis": "t",
+          "y_axis": "vt",
+          "title": "Grafik Kecepatan terhadap Waktu (v-t)"
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur simulasi GLB (a = 0) dengan v₀ = 20 m/s. Berapa waktu yang dibutuhkan mobil untuk mencapai posisi x = 100 m? Verifikasi dengan simulasi.",
+          "success_condition": "abs(a) < 0.1 AND abs(v0 - 20) < 0.5 AND abs(t_finish - 5) < 0.5",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Atur GLBB dengan v₀ = 0 dan a = 4 m/s². Amati grafik x-t yang terbentuk dan tentukan jenis kurva yang dihasilkan (linier atau parabola).",
+          "success_condition": "abs(v0) < 0.5 AND abs(a - 4) < 0.2",
+          "points": 25
+        },
+        {
+          "id": "ch_003",
+          "task": "Temukan kombinasi v₀ dan a sehingga mobil mencapai x = 100 m tepat dalam 4 detik.",
+          "success_condition": "abs(t_finish - 4) < 0.3",
+          "points": 30
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan minimal 2 dari 3 tantangan gerak lurus",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu menguasai konsep GLB dan GLBB. Insinyur masa depan!",
+        "feedback_audio": "sfx_challenge_done"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan selesai",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: GLB punya a=0, GLBB punya a konstan. Coba lagi!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_parameter_change": 1
+      },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

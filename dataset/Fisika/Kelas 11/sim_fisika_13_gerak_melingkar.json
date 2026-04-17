@@ -1,0 +1,176 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Simulator Gerak Melingkar Beraturan",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Melingkar Beraturan",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_kin_gmb_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Simulator Gerak Melingkar Beraturan",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Gerak Melingkar Beraturan",
+      "topik": "Gerak Melingkar Beraturan",
+      "difficulty": 3,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat menghitung periode, frekuensi, dan kecepatan sudut pada gerak melingkar beraturan",
+        "Siswa dapat menentukan kecepatan linear dan percepatan sentripetal benda yang bergerak melingkar",
+        "Siswa dapat menganalisis hubungan antara jari-jari, frekuensi, dan percepatan sentripetal"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Kapal Selam dan Baling-Baling Ajaib",
+        "story": "Di kedalaman laut biru yang tenang, baling-baling kapal selam berputar terus-menerus dengan kecepatan konstan. Sebagai insinyur muda kapal selam, kamu harus menganalisis gerak melingkar baling-baling: berapa cepat ujungnya bergerak? Berapa besar percepatan sentripetal yang menariknya ke pusat? Jawaban yang tepat menentukan keselamatan misi!",
+        "image_description": "Kapal selam biru tua mengapung di bawah laut dengan baling-baling besar berputar; gelembung-gelembung udara naik ke permukaan; ikan-ikan kecil berenang di sekitar; cahaya dari atas membentuk kisi-kisi indah di dasar laut",
+        "cta_text": "Aktifkan Baling-Baling"
+      },
+      "visual_element": {
+        "theme_name": "Deep Sea Engineering",
+        "theme_preset": "underwater",
+        "mood": "mysterious, precise, immersive",
+        "color_palette": {
+          "primary": "#0077b6",
+          "secondary": "#00b4d8",
+          "background": "#03045e",
+          "accent": "#90e0ef",
+          "text": "#caf0f8"
+        },
+        "setting_description": "Dasar laut biru gelap dengan efek cahaya refraksi dari permukaan, ganggang laut bergoyang pelan, partikel air berkilauan, dan panel data holografik berwarna cyan mengambang di sisi kiri.",
+        "art_style": "flat design underwater sci-fi dengan efek depth blur dan cahaya bioluminesen",
+        "ambient_elements": [
+          "Gelembung-gelembung udara naik perlahan dari baling-baling yang berputar",
+          "Cahaya biru dari atas laut menembus air membentuk pola bergelombang",
+          "Partikel-partikel kecil mengambang mengikuti arus air di sekitar kapal"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur jari-jari putaran baling-baling (r) dengan slider." },
+          { "step": 2, "text": "Atur frekuensi putaran (f) dalam Hertz." },
+          { "step": 3, "text": "Amati periode (T), kecepatan sudut (ω), kecepatan linear (v_linear), dan percepatan sentripetal (a_s)." },
+          { "step": 4, "text": "Perhatikan grafik sudut vs waktu yang harus linear untuk GMB." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk menyelesaikan misi kapal selam!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Besaran-Besaran GMB",
+          "strategy": "Periode (T) adalah waktu satu putaran penuh. Frekuensi (f) adalah jumlah putaran per detik. Kecepatan sudut (ω) = 2πf. Kecepatan linear (v) = ω·r, artinya ujung baling-baling yang lebih panjang bergerak lebih cepat. Percepatan sentripetal (as) = ω²·r = v²/r selalu mengarah ke pusat lingkaran.",
+          "formula": "T = 1/f,  ω = 2πf,  v = ω·r,  as = ω²·r",
+          "example": "r=2m, f=0,5Hz: T=2s, ω=π rad/s≈3,14 rad/s, v=3,14×2≈6,28 m/s, as=π²×2≈19,74 m/s².",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_spin", "event": "on_correct_action", "description": "Suara baling-baling berputar di dalam air saat parameter diubah, terdengar seperti putaran mekanis yang halus" },
+          { "id": "sfx_win", "event": "on_win", "description": "Bunyi sonar ping tiga kali disertai musik kemenangan bawah laut saat misi berhasil" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Bunyi alarm kapal selam yang perlahan dan berulang saat waktu habis" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient bawah laut yang tenang dengan nada-nada dalam dan suara air yang menenangkan, loop panjang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Gerak Melingkar Beraturan pada Baling-Baling",
+        "narrative": "Atur jari-jari dan frekuensi putaran baling-baling kapal selam. Simulasi menghitung semua besaran GMB secara otomatis dan menampilkan animasi putaran serta grafik sudut terhadap waktu.",
+        "context": "Gerak melingkar beraturan dengan kecepatan sudut konstan; tidak ada gesekan; π diambil = 3,14159; satuan jari-jari dalam meter, frekuensi dalam Hz."
+      },
+      "variables": [
+        { "id": "r", "label": "Jari-jari putaran", "symbol": "r", "unit": "m", "type": "user_input", "min": 0.5, "max": 10, "default": 2, "step": 0.5 },
+        { "id": "frekuensi", "label": "Frekuensi putaran", "symbol": "f", "unit": "Hz", "type": "user_input", "min": 0.1, "max": 5, "default": 1, "step": 0.1 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 20 },
+        { "id": "periode", "label": "Periode", "symbol": "T", "unit": "s", "type": "computed" },
+        { "id": "omega", "label": "Kecepatan sudut", "symbol": "ω", "unit": "rad/s", "type": "computed" },
+        { "id": "v_linear", "label": "Kecepatan linear", "symbol": "v", "unit": "m/s", "type": "computed" },
+        { "id": "a_sentripetal", "label": "Percepatan sentripetal", "symbol": "as", "unit": "m/s²", "type": "computed" },
+        { "id": "sudut", "label": "Sudut posisi", "symbol": "θ(t)", "unit": "derajat", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_periode", "computes": "periode", "formula": "periode = 1 / frekuensi", "description": "Periode adalah waktu yang dibutuhkan untuk satu putaran penuh" },
+        { "id": "eq_omega", "computes": "omega", "formula": "omega = 2 * pi * frekuensi", "description": "Kecepatan sudut dalam radian per detik" },
+        { "id": "eq_v_linear", "computes": "v_linear", "formula": "v_linear = omega * r", "description": "Kecepatan linear ujung baling-baling, berbanding lurus dengan jari-jari dan kecepatan sudut" },
+        { "id": "eq_a_sentripetal", "computes": "a_sentripetal", "formula": "a_sentripetal = omega^2 * r", "description": "Percepatan sentripetal yang selalu mengarah ke pusat lingkaran" },
+        { "id": "eq_sudut", "computes": "sudut", "formula": "sudut = omega * t * 180 / pi", "description": "Posisi sudut baling-baling pada waktu t dalam derajat" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Baling-baling berputar melingkar di tengah layar; titik merah di ujung baling-baling menunjukkan posisi; anak panah cyan menunjukkan arah v_linear (tangensial), anak panah oranye menunjukkan a_sentripetal (ke pusat); jejak titik merah membentuk lingkaran penuh" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "sudut", "title": "Sudut Posisi vs Waktu (θ-t)" },
+        { "id": "viz_3", "type": "table", "title": "Ringkasan Besaran GMB", "description": "Tabel menampilkan r, f, T, ω, v_linear, dan a_sentripetal secara real-time" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur r=2 m dan f=0,5 Hz. Verifikasi bahwa kecepatan linear baling-baling ≈ 6,28 m/s dan percepatan sentripetal ≈ 19,74 m/s².",
+          "success_condition": "abs(r - 2) < 0.1 AND abs(frekuensi - 0.5) < 0.05 AND abs(v_linear - 6.28) < 0.3 AND abs(a_sentripetal - 19.74) < 0.5",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi r dan f (keduanya bukan nilai default) sedemikian sehingga kecepatan linear baling-baling tepat = 10 m/s.",
+          "success_condition": "abs(v_linear - 10) < 0.3",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur r=1 m dan f=1 Hz. Verifikasi bahwa percepatan sentripetal ≈ 39,48 m/s² (= 4π²).",
+          "success_condition": "abs(r - 1) < 0.05 AND abs(frekuensi - 1) < 0.05 AND abs(a_sentripetal - 39.48) < 0.5",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan GMB",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Misi berhasil! Baling-baling bekerja sempurna. Kamu menguasai besaran-besaran Gerak Melingkar Beraturan!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Misi gagal! Ingat rumus kunci: v = ω·r dan as = ω²·r, dengan ω = 2πf. Coba lagi!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

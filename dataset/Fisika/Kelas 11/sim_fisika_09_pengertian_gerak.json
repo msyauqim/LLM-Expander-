@@ -1,0 +1,133 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Mengapa Benda Dikatakan Bergerak?",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Pengertian Gerak",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_kin_pengertiangerak_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Mengapa Benda Dikatakan Bergerak?",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Pengertian Gerak",
+      "topik": "Pengertian Gerak",
+      "difficulty": 2,
+      "estimated_duration_minutes": 10,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan pengertian gerak sebagai perubahan posisi terhadap titik acuan",
+        "Siswa dapat membedakan perpindahan (vektor) dan jarak (skalar) pada lintasan benda",
+        "Siswa dapat menentukan titik acuan yang tepat dalam mengamati gerak suatu benda"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Misteri Gerak di Kelas",
+        "story": "Pak Guru bertanya kepada murid-muridnya: 'Apakah kursi ini bergerak?' Sebagian menjawab tidak, sebagian menjawab ya. Ternyata jawabannya bergantung pada titik acuan! Kamu adalah asisten laboratorium yang akan membantu teman-teman memahami kapan sebuah benda dikatakan bergerak. Atur posisi awal dan akhir benda, lalu amati bagaimana perubahan posisi mendefinisikan gerak.",
+        "image_description": "Ruang kelas SMA Indonesia yang nyaman, meja guru di depan, garis bilangan besar tergambar di papan tulis hijau, seorang siswa berdiri di sisi kiri ruangan dengan tanda tanya di atas kepalanya",
+        "cta_text": "Mulai Eksplorasi"
+      },
+      "visual_element": {
+        "theme_name": "Classroom Discovery",
+        "theme_preset": "classroom",
+        "mood": "curious, warm, approachable",
+        "color_palette": {
+          "primary": "#27ae60",
+          "secondary": "#e67e22",
+          "background": "#fdfbf5",
+          "accent": "#2c3e50",
+          "text": "#2c3e50"
+        },
+        "setting_description": "Ruang kelas fisika yang bersih dan terang dengan papan tulis hijau berisi diagram posisi, meja kayu coklat, jendela dengan cahaya pagi, dan garis bilangan besar di lantai kelas.",
+        "art_style": "flat cartoon bergaya buku teks edukatif Indonesia dengan warna hangat",
+        "ambient_elements": [
+          "Cahaya pagi masuk dari jendela kelas yang setengah terbuka",
+          "Partikel debu kapur melayang pelan saat papan tulis digunakan",
+          "Jam dinding berdetak pelan di sudut kelas"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur posisi awal benda (titik A) dengan slider Posisi Awal." },
+          { "step": 2, "text": "Atur posisi akhir benda (titik B) dengan slider Posisi Akhir." },
+          { "step": 3, "text": "Atur durasi perjalanan dengan slider Waktu Tempuh." },
+          { "step": 4, "text": "Tekan Mulai untuk menjalankan animasi benda bergerak dari A ke B." },
+          { "step": 5, "text": "Perhatikan nilai Perpindahan dan Jarak di panel hasil." }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Gerak = Perubahan Posisi",
+          "strategy": "Benda dikatakan bergerak jika posisinya berubah terhadap titik acuan. Perpindahan adalah perubahan posisi (vektor, bisa negatif), sedangkan jarak adalah total lintasan yang ditempuh (selalu positif). Jika posisi akhir sama dengan posisi awal, benda tidak berpindah meskipun telah menempuh jarak.",
+          "formula": "Perpindahan = Posisi Akhir − Posisi Awal,  Jarak = |Posisi Akhir − Posisi Awal|",
+          "example": "Benda dari posisi 5m ke 20m: perpindahan = +15m, jarak = 15m. Benda dari 20m kembali ke 5m: perpindahan = −15m, jarak = 15m.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": false,
+        "tracks": []
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Gerak pada Garis Bilangan",
+        "narrative": "Atur posisi awal dan akhir benda di atas garis bilangan, tentukan durasi perjalanan, lalu amati animasi gerak benda dan nilai perpindahan serta jarak yang dihitung secara otomatis.",
+        "context": "Gerak satu dimensi pada garis bilangan horizontal; titik acuan ditetapkan di posisi 0; satuan posisi dalam meter."
+      },
+      "variables": [
+        { "id": "posisi_awal", "label": "Posisi awal benda", "symbol": "x₀", "unit": "m", "type": "user_input", "min": 0, "max": 50, "default": 5, "step": 0.5 },
+        { "id": "posisi_akhir", "label": "Posisi akhir benda", "symbol": "x₁", "unit": "m", "type": "user_input", "min": 0, "max": 50, "default": 20, "step": 0.5 },
+        { "id": "t_tempuh", "label": "Waktu tempuh", "symbol": "t", "unit": "s", "type": "user_input", "min": 1, "max": 10, "default": 5, "step": 0.5 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t_sim", "unit": "s", "type": "simulation_time", "min": 0, "max": 10 },
+        { "id": "perpindahan", "label": "Perpindahan", "symbol": "Δx", "unit": "m", "type": "computed" },
+        { "id": "jarak", "label": "Jarak", "symbol": "d", "unit": "m", "type": "computed" },
+        { "id": "posisi_saat_ini", "label": "Posisi saat ini", "symbol": "x(t)", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_perpindahan", "computes": "perpindahan", "formula": "perpindahan = posisi_akhir - posisi_awal", "description": "Perpindahan adalah perubahan posisi, bernilai positif jika ke kanan dan negatif jika ke kiri" },
+        { "id": "eq_jarak", "computes": "jarak", "formula": "jarak = abs(posisi_akhir - posisi_awal)", "description": "Jarak adalah panjang lintasan yang ditempuh, selalu bernilai positif" },
+        { "id": "eq_posisi", "computes": "posisi_saat_ini", "formula": "posisi_saat_ini = posisi_awal + perpindahan * t / t_tempuh", "description": "Posisi benda pada waktu t, bergerak secara linear dari posisi awal ke posisi akhir" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Titik/bola bergerak di atas garis bilangan horizontal dari posisi_awal ke posisi_akhir; panah perpindahan berwarna hijau ditampilkan di bawah garis; label posisi sekarang tampil di atas titik" },
+        { "id": "viz_2", "type": "table", "title": "Hasil Pengukuran Gerak", "description": "Tabel menampilkan posisi awal, posisi akhir, perpindahan (Δx), dan jarak (d) secara real-time" }
+      ],
+      "challenges": []
+    },
+    "win_lose_condition": { "applicable": false },
+    "gameplay_parameters": {
+      "scoring": { "exploration_points_per_parameter_change": 2 },
+      "lives": null,
+      "time_limit_seconds": null,
+      "pass_threshold": null
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Efek Doppler Gelombang Bunyi",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gelombang Bunyi",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_bunyi_doppler_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Efek Doppler Gelombang Bunyi",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Gelombang, Bunyi, dan Cahaya",
+      "subbab": "Gelombang Bunyi",
+      "topik": "Efek Doppler",
+      "difficulty": 3,
+      "estimated_duration_minutes": 22,
+      "learning_objectives": [
+        "Siswa dapat menghitung frekuensi yang terdengar oleh pendengar akibat Efek Doppler",
+        "Siswa dapat membedakan perubahan frekuensi saat sumber atau pendengar mendekati dan menjauhi",
+        "Siswa dapat menganalisis pengaruh kecepatan sumber dan pendengar terhadap frekuensi terdengar",
+        "Siswa dapat menerapkan persamaan Doppler dalam konteks sumber bergerak dan pendengar diam"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pusat Kendali Kereta Supersonik",
+        "story": "Di pusat kendali kereta cepat Nusantara, sistem deteksi bunyi harus dikalibrasi. Kereta berkecepatan tinggi memancarkan sirine dengan frekuensi tertentu, namun petugas di peron mendengar frekuensi yang berbeda! Efek Doppler menyebabkan frekuensi berubah saat kereta mendekat dan menjauh. Kamu adalah operator yang harus menghitung frekuensi yang terdengar agar sistem alarm bekerja akurat!",
+        "image_description": "Peron kereta futuristik bergaya Nusantara modern: kereta aerodinamis berwarna merah-emas melaju di rel yang bercahaya; gelombang bunyi sirine digambarkan sebagai lingkaran-lingkaran konsentris yang rapat di depan kereta dan renggang di belakang; operator berseragam batik di panel kontrol",
+        "cta_text": "Kalibrasi Sistem"
+      },
+      "visual_element": {
+        "theme_name": "Kereta Cepat Nusantara Futuristik",
+        "theme_preset": "scifi_neon",
+        "mood": "dynamic, precise, high-tech",
+        "color_palette": {
+          "primary": "#c62828",
+          "secondary": "#ffd600",
+          "background": "#1a1a2e",
+          "accent": "#00e5ff",
+          "text": "#e8eaf6"
+        },
+        "setting_description": "Peron kereta supersonik bergaya futuristik dengan rel bercahaya biru neon; lingkaran gelombang bunyi divisualisasikan di sekitar kereta; panel HUD menampilkan data frekuensi real-time berwarna kuning-merah.",
+        "art_style": "sci-fi flat design bergaya kereta cepat Nusantara dengan glow effect neon biru-merah dan grafis gelombang akustik",
+        "ambient_elements": [
+          "Lingkaran gelombang bunyi konsentris bergerak dari sumber kereta, rapat di depan dan renggang di belakang",
+          "Efek blur horizontal pada kereta saat kecepatan tinggi diatur",
+          "Angka frekuensi pada panel HUD berubah warna dari biru (rendah) ke merah (tinggi)"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur frekuensi sumber bunyi (f) yang dipancarkan kereta." },
+          { "step": 2, "text": "Atur cepat rambat bunyi di udara (v_bunyi), biasanya 340 m/s pada suhu kamar." },
+          { "step": 3, "text": "Atur kecepatan sumber (v_s): positif = sumber mendekati pendengar, negatif = menjauhi." },
+          { "step": 4, "text": "Atur kecepatan pendengar (v_p): positif = pendengar mendekati sumber, negatif = menjauhi." },
+          { "step": 5, "text": "Simulasi menghitung f_terdengar dan selisih frekuensi. Selesaikan tantangan kalibrasi!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Persamaan Efek Doppler",
+          "strategy": "Efek Doppler: frekuensi terdengar berubah jika sumber atau pendengar bergerak. Konvensi tanda: v_s dan v_p POSITIF jika bergerak MENDEKATI satu sama lain, NEGATIF jika MENJAUHI. Frekuensi naik saat saling mendekat, turun saat saling menjauh. Jika hanya sumber diam (v_s=0) dan pendengar diam (v_p=0), maka f_terdengar = f.",
+          "formula": "f' = f × (v_bunyi + v_p) / (v_bunyi − v_s)",
+          "example": "Kereta (f=500 Hz) mendekati pendengar diam dengan v_s=34 m/s, v_bunyi=340 m/s: f'=500×340/(340-34)=500×340/306≈556 Hz. Saat menjauhi v_s=-34: f'=500×340/374≈455 Hz.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_siren", "event": "on_correct_action", "description": "Suara sirine kereta yang pitch-nya berubah saat parameter kecepatan diubah, mengikuti efek Doppler" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara kemenangan elektronik diikuti sirine kereta yang stabil menandakan kalibrasi berhasil" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara alarm peringatan pusat kendali yang berdenyut cepat" },
+          { "id": "bgm", "event": "background", "description": "Musik elektronik bertempo cepat dengan beat industrial khas stasiun kereta modern, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Efek Doppler pada Sumber dan Pendengar Bergerak",
+        "narrative": "Atur frekuensi sumber, kecepatan bunyi, kecepatan sumber, dan kecepatan pendengar. Simulasi menghitung frekuensi yang terdengar dan selisihnya terhadap frekuensi sumber.",
+        "context": "Konvensi tanda: v_s positif = sumber mendekati pendengar; v_s negatif = sumber menjauhi pendengar; v_p positif = pendengar mendekati sumber; v_p negatif = pendengar menjauhi sumber. Batasan: |v_s| < v_bunyi (tidak melampaui kecepatan bunyi). Cepat rambat bunyi standar di udara = 340 m/s."
+      },
+      "variables": [
+        { "id": "f", "label": "Frekuensi sumber bunyi", "symbol": "f", "unit": "Hz", "type": "user_input", "min": 50, "max": 2000, "default": 500, "step": 10 },
+        { "id": "v_bunyi", "label": "Cepat rambat bunyi", "symbol": "v", "unit": "m/s", "type": "user_input", "min": 300, "max": 400, "default": 340, "step": 5 },
+        { "id": "v_s", "label": "Kecepatan sumber (+ mendekati)", "symbol": "v_s", "unit": "m/s", "type": "user_input", "min": -100, "max": 100, "default": 0, "step": 1 },
+        { "id": "v_p", "label": "Kecepatan pendengar (+ mendekati)", "symbol": "v_p", "unit": "m/s", "type": "user_input", "min": -100, "max": 100, "default": 0, "step": 1 },
+        { "id": "f_terdengar", "label": "Frekuensi yang terdengar", "symbol": "f'", "unit": "Hz", "type": "computed" },
+        { "id": "delta_f", "label": "Selisih frekuensi (f' − f)", "symbol": "Δf", "unit": "Hz", "type": "computed" },
+        { "id": "lambda_sumber", "label": "Panjang gelombang sumber", "symbol": "λ", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_lambda", "computes": "lambda_sumber", "formula": "lambda_sumber = v_bunyi / f", "description": "Panjang gelombang sumber = cepat rambat bunyi dibagi frekuensi sumber" },
+        { "id": "eq_fdoppler", "computes": "f_terdengar", "formula": "f_terdengar = f * (v_bunyi + v_p) / (v_bunyi - v_s)", "description": "Persamaan Doppler: frekuensi terdengar dengan konvensi tanda mendekati positif" },
+        { "id": "eq_delta_f", "computes": "delta_f", "formula": "delta_f = f_terdengar - f", "description": "Selisih frekuensi: positif berarti f terdengar lebih tinggi (mendekati), negatif lebih rendah (menjauhi)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Kereta bergerak di rel horizontal; lingkaran gelombang bunyi konsentris terpampang di sekitar kereta — rapat di arah gerakan (frekuensi tinggi) dan renggang di belakang (frekuensi rendah); label f dan f_terdengar ditampilkan di sisi pendengar" },
+        { "id": "viz_2", "type": "graph", "x_axis": "v_s", "y_axis": "f_terdengar", "title": "Frekuensi Terdengar vs Kecepatan Sumber (f'–v_s)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "v_p", "y_axis": "f_terdengar", "title": "Frekuensi Terdengar vs Kecepatan Pendengar (f'–v_p)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Kereta memancarkan f=500 Hz bergerak mendekati pendengar diam dengan v_s=34 m/s dan v_bunyi=340 m/s. Hitung frekuensi yang terdengar. (Petunjuk: f'=500×340/306)",
+          "success_condition": "abs(f - 500) < 5 AND abs(v_bunyi - 340) < 2 AND abs(v_s - 34) < 0.5 AND abs(v_p) < 0.5 AND abs(f_terdengar - 555.56) < 5",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Sumber diam (v_s=0) memancarkan f=400 Hz. Pendengar bergerak mendekati sumber dengan v_p=34 m/s dan v_bunyi=340 m/s. Berapa frekuensi yang terdengar?",
+          "success_condition": "abs(f - 400) < 3 AND abs(v_s) < 0.5 AND abs(v_p - 34) < 0.5 AND abs(v_bunyi - 340) < 2 AND abs(f_terdengar - 440) < 5",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Kereta menjauhi pendengar diam (v_s = -40 m/s) dengan f=600 Hz dan v_bunyi=340 m/s. Hitung f_terdengar. Bandingkan hasilnya dengan kasus sumber mendekati (v_s=+40 m/s) — berapa selisih kedua frekuensi terdengar tersebut?",
+          "success_condition": "abs(f - 600) < 3 AND abs(v_bunyi - 340) < 2 AND abs(v_s - (-40)) < 0.5 AND abs(f_terdengar - 537.14) < 8",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan Efek Doppler",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Sistem kalibrasi berhasil! Kamu menguasai Efek Doppler: f' = f×(v+v_p)/(v−v_s). Sumber mendekat = frekuensi naik, menjauhi = frekuensi turun!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Kalibrasi gagal! Ingat: f'=f×(v+v_p)/(v−v_s). v_s dan v_p positif saat saling mendekati. Mendekat = frekuensi naik. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 1050,
+      "pass_threshold": 50
+    }
+  }
+}

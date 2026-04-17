@@ -1,0 +1,168 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium GLB dan GLBB",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Lurus",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_kin_geraklurus_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Laboratorium GLB dan GLBB",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Gerak Lurus",
+      "topik": "Gerak Lurus",
+      "difficulty": 2,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat membedakan karakteristik Gerak Lurus Beraturan (GLB) dan Gerak Lurus Berubah Beraturan (GLBB)",
+        "Siswa dapat menghitung kecepatan dan posisi benda pada waktu tertentu menggunakan persamaan GLBB",
+        "Siswa dapat menginterpretasikan grafik v-t dan x-t untuk menentukan jenis gerak lurus benda"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Lintasan Atletik Nasional",
+        "story": "Kamu adalah ilmuwan olahraga di lintasan atletik nasional. Dua atlet akan berlomba: satu berlari dengan kecepatan tetap (GLB) dan satu lagi dengan percepatan konstan (GLBB). Atur parameter gerak masing-masing benda, amati grafik kecepatan dan posisi terhadap waktu, lalu prediksi posisi benda pada waktu tertentu untuk memenangkan analisis!",
+        "image_description": "Lintasan atletik hijau terbuka dengan pohon di sepanjang sisi, dua benda bergerak di jalur berbeda, grafik v-t dan x-t bercahaya tampil di papan panel kanan, atmosfer siang hari yang segar",
+        "cta_text": "Mulai Analisis"
+      },
+      "visual_element": {
+        "theme_name": "Athletic Field Lab",
+        "theme_preset": "forest_green",
+        "mood": "energetic, precise, competitive",
+        "color_palette": {
+          "primary": "#27ae60",
+          "secondary": "#f39c12",
+          "background": "#1a2e1a",
+          "accent": "#ecf0f1",
+          "text": "#ecf0f1"
+        },
+        "setting_description": "Lintasan atletik outdoor dengan rumput hijau subur di sisi, langit biru cerah, pohon-pohon di kejauhan, dan panel layar digital di tepi lapangan menampilkan grafik gerak.",
+        "art_style": "flat design dengan nuansa lapangan olahraga outdoor, warna hijau dominan",
+        "ambient_elements": [
+          "Angin bertiup menggerakkan bendera penanda di sisi lintasan",
+          "Layar digital grafik berkedip halus saat data diperbarui",
+          "Bayangan benda bergerak di permukaan lintasan yang bersih"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur kecepatan awal (v0) dengan slider." },
+          { "step": 2, "text": "Atur percepatan (a): nol untuk GLB, positif/negatif untuk GLBB." },
+          { "step": 3, "text": "Atur waktu checkpoint (t_maks) untuk menghitung v dan x pada saat itu." },
+          { "step": 4, "text": "Amati grafik v-t dan x-t yang terbentuk." },
+          { "step": 5, "text": "Selesaikan dua tantangan untuk menyelesaikan analisis gerak!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Persamaan GLB dan GLBB",
+          "strategy": "GLB: kecepatan konstan (a=0), grafik v-t horizontal, grafik x-t linear. GLBB: percepatan konstan (a≠0), grafik v-t linear, grafik x-t parabola. Gunakan t_maks untuk melihat nilai kecepatan dan posisi pada waktu tertentu.",
+          "formula": "GLB: x = v₀·t | GLBB: v = v₀ + a·t,  x = v₀·t + ½·a·t²",
+          "example": "v0=10 m/s, a=2 m/s², t_maks=5s: v = 10+2×5 = 20 m/s; x = 10×5+0,5×2×25 = 50+25 = 75 m.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_start", "event": "on_correct_action", "description": "Suara peluit start pendek saat simulasi dijalankan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara sorak penonton dan bunyi klakson kemenangan saat semua tantangan selesai" },
+          { "id": "bgm", "event": "background", "description": "Musik instrumentalia bersemangat bernuansa olahraga outdoor, bertempo sedang, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi GLB dan GLBB pada Lintasan Lurus",
+        "narrative": "Atur kecepatan awal dan percepatan benda, tentukan waktu checkpoint untuk melihat nilai v dan x pada saat tersebut. Grafik v-t dan x-t memvisualisasikan perbedaan antara GLB (percepatan=0) dan GLBB (percepatan≠0).",
+        "context": "Gerak satu dimensi ke arah positif; benda mulai dari posisi x=0 dengan kecepatan awal v0; percepatan konstan sepanjang simulasi; g = 10 m/s²."
+      },
+      "variables": [
+        { "id": "v0", "label": "Kecepatan awal", "symbol": "v₀", "unit": "m/s", "type": "user_input", "min": 0, "max": 30, "default": 10, "step": 0.5 },
+        { "id": "percepatan", "label": "Percepatan", "symbol": "a", "unit": "m/s²", "type": "user_input", "min": -10, "max": 10, "default": 0, "step": 0.5 },
+        { "id": "t_maks", "label": "Waktu checkpoint", "symbol": "t_c", "unit": "s", "type": "user_input", "min": 1, "max": 20, "default": 5, "step": 0.5 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 20 },
+        { "id": "v", "label": "Kecepatan saat t", "symbol": "v(t)", "unit": "m/s", "type": "computed" },
+        { "id": "x", "label": "Posisi saat t", "symbol": "x(t)", "unit": "m", "type": "computed" },
+        { "id": "v_pada_tmaks", "label": "Kecepatan di t_c", "symbol": "v(t_c)", "unit": "m/s", "type": "computed" },
+        { "id": "x_pada_tmaks", "label": "Posisi di t_c", "symbol": "x(t_c)", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_v", "computes": "v", "formula": "v = v0 + percepatan * t", "description": "Kecepatan benda pada waktu t (GLBB); jika percepatan=0 maka ini adalah GLB" },
+        { "id": "eq_x", "computes": "x", "formula": "x = v0 * t + 0.5 * percepatan * t^2", "description": "Posisi benda pada waktu t, dihitung dari persamaan kinematika GLBB" },
+        { "id": "eq_v_tmaks", "computes": "v_pada_tmaks", "formula": "v_pada_tmaks = v0 + percepatan * t_maks", "description": "Kecepatan benda tepat pada waktu checkpoint t_maks" },
+        { "id": "eq_x_tmaks", "computes": "x_pada_tmaks", "formula": "x_pada_tmaks = v0 * t_maks + 0.5 * percepatan * t_maks^2", "description": "Posisi benda tepat pada waktu checkpoint t_maks" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Benda bergerak di lintasan horizontal dari kiri ke kanan; kecepatan divisualisasikan dengan panjang anak panah di atas benda; garis vertikal putus-putus menandai posisi saat t=t_maks" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "v", "title": "Grafik Kecepatan vs Waktu (v-t)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "t", "y_axis": "x", "title": "Grafik Posisi vs Waktu (x-t)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur v0=10 m/s, percepatan=2 m/s², dan t_maks=5 s. Berapa kecepatan benda pada t=5 detik? (Jawaban: 20 m/s)",
+          "success_condition": "abs(v0 - 10) < 0.1 AND abs(percepatan - 2) < 0.1 AND abs(t_maks - 5) < 0.1 AND abs(v_pada_tmaks - 20) < 0.5",
+          "points": 30
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi v0 (positif) dan percepatan (negatif) sehingga benda tepat berhenti (v=0) pada waktu checkpoint t_maks=6 detik. (Contoh solusi: v0=12 m/s, a=-2 m/s²)",
+          "success_condition": "abs(v_pada_tmaks) < 0.3 AND percepatan < 0 AND v0 > 0 AND abs(t_maks - 6) < 0.1",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan kedua tantangan analisis gerak lurus",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Analisis sempurna! Kamu telah menguasai GLB dan GLBB. Ingat: grafik v-t mendatar = GLB, grafik v-t miring = GLBB!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat persamaan GLBB: v = v₀ + a·t dan x = v₀·t + ½·a·t². Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 720,
+      "pass_threshold": 40
+    }
+  }
+}

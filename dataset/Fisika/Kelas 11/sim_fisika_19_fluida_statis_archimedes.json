@@ -1,0 +1,175 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Hukum Archimedes dan Gaya Apung",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Fluida Statis",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_fluida_archimedes_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Hukum Archimedes dan Gaya Apung",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Fluida",
+      "subbab": "Fluida Statis",
+      "topik": "Hukum Archimedes dan Gaya Apung",
+      "difficulty": 3,
+      "estimated_duration_minutes": 22,
+      "learning_objectives": [
+        "Siswa dapat menghitung gaya apung (FA) berdasarkan massa jenis fluida dan volume benda yang tercelup",
+        "Siswa dapat menghitung berat semu benda di dalam fluida menggunakan selisih berat nyata dan gaya apung",
+        "Siswa dapat menentukan kondisi terapung, melayang, atau tenggelam berdasarkan perbandingan massa jenis benda dan fluida",
+        "Siswa dapat menganalisis faktor-faktor yang mempengaruhi besar gaya apung pada benda"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Misteri Mahkota Raja Bawah Laut",
+        "story": "Di kerajaan bawah laut Nusantara, seorang ilmuwan kerajaan harus membuktikan apakah mahkota raja terbuat dari emas murni. Dengan menggunakan prinsip Hukum Archimedes, ia mengukur berat mahkota di udara lalu di dalam air. Bedanya mengungkap gaya apung — dan kebenaran tentang mahkota! Kamu adalah ilmuwan itu. Selidiki benda-benda di laboratorium air kerajaan!",
+        "image_description": "Laboratorium bawah laut bergaya kerajaan Nusantara kuno: bejana kristal besar berisi air jernih; benda-benda berbentuk geometris mengambang atau tenggelam; neraca digital melayang; taman karang berwarna-warni di latar belakang jendela kaca bundar",
+        "cta_text": "Mulai Penyelidikan"
+      },
+      "visual_element": {
+        "theme_name": "Laboratorium Bawah Laut Nusantara",
+        "theme_preset": "underwater",
+        "mood": "mysterious, exploratory, scientific",
+        "color_palette": {
+          "primary": "#006064",
+          "secondary": "#f9a825",
+          "background": "#e0f7fa",
+          "accent": "#00897b",
+          "text": "#004d40"
+        },
+        "setting_description": "Laboratorium bawah laut dengan bejana air kristal besar, pencahayaan biru kehijauan dari permukaan laut, terumbu karang mini sebagai dekorasi, dan panel data berwarna kuning emas di sekeliling bejana.",
+        "art_style": "ilustrasi flat watercolor dengan gradien biru-hijau khas bawah laut dan aksen emas motif ukiran Nusantara",
+        "ambient_elements": [
+          "Gelembung udara kecil naik perlahan dari dasar bejana saat benda dicelupkan",
+          "Cahaya bergelombang keperakan di permukaan air yang beriak",
+          "Ikan kecil berwarna cerah berenang di latar jendela kaca bundar"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa jenis benda (ρ_benda) dan volume benda (V) yang akan dicelupkan." },
+          { "step": 2, "text": "Atur massa jenis fluida (ρ_fluida) — air tawar, air laut, atau minyak." },
+          { "step": 3, "text": "Simulasi menghitung berat benda (W), gaya apung (FA), dan berat semu (W_semu) secara otomatis." },
+          { "step": 4, "text": "Amati kondisi benda: terapung jika ρ_benda < ρ_fluida, melayang jika sama, tenggelam jika lebih besar." },
+          { "step": 5, "text": "Selesaikan tiga tantangan penyelidikan untuk membuktikan keahlianmu sebagai ilmuwan kerajaan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Hukum Archimedes dan Gaya Apung",
+          "strategy": "Gaya apung FA = ρ_fluida × g × V_celup — sama dengan berat fluida yang dipindahkan. Berat semu W_semu = W - FA. Kondisi: jika ρ_benda < ρ_fluida → benda terapung (hanya sebagian V tercelup); ρ_benda = ρ_fluida → melayang; ρ_benda > ρ_fluida → tenggelam (V_celup = V penuh). Saat tenggelam, FA maksimum = ρ_fluida × g × V.",
+          "formula": "FA = ρ_fluida · g · V_celup ;  W_semu = W − FA ;  W = ρ_benda · g · V",
+          "example": "Benda: ρ=800 kg/m³, V=0,001 m³ → W=8 N. Di air (ρ_f=1000): FA=1000×10×0,001=10 N > W → terapung. Saat tenggelam penuh: W_semu=8-10= −2 N (benda naik ke permukaan).",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_splash", "event": "on_correct_action", "description": "Suara percikan air halus saat benda dicelupkan ke dalam bejana" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi kemenangan bernada gamelan dengan efek gelembung air yang riang" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara gemericik air yang menurun menandakan kegagalan penyelidikan" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient bawah laut dengan suara ombak lembut dan melodi seruling Nusantara, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Gaya Apung dan Kondisi Benda dalam Fluida",
+        "narrative": "Atur massa jenis benda, volume benda, dan jenis fluida. Simulasi menghitung berat benda, gaya apung penuh (seluruh volume tercelup), berat semu, dan menentukan kondisi keseimbangan benda.",
+        "context": "Benda homogen berbentuk balok; g = 10 m/s²; saat simulasi dijalankan, benda diasumsikan tercelup penuh (untuk menghitung FA maksimum dan W_semu); kondisi terapung/tenggelam ditentukan dari perbandingan massa jenis."
+      },
+      "variables": [
+        { "id": "rho_benda", "label": "Massa jenis benda", "symbol": "ρ_benda", "unit": "kg/m³", "type": "user_input", "min": 200, "max": 11400, "default": 800, "step": 50 },
+        { "id": "rho_fluida", "label": "Massa jenis fluida", "symbol": "ρ_fluida", "unit": "kg/m³", "type": "user_input", "min": 700, "max": 13600, "default": 1000, "step": 50 },
+        { "id": "v_benda", "label": "Volume benda", "symbol": "V", "unit": "m³", "type": "user_input", "min": 0.0001, "max": 0.01, "default": 0.001, "step": 0.0001 },
+        { "id": "w_benda", "label": "Berat benda di udara", "symbol": "W", "unit": "N", "type": "computed" },
+        { "id": "fa", "label": "Gaya apung (benda tercelup penuh)", "symbol": "FA", "unit": "N", "type": "computed" },
+        { "id": "w_semu", "label": "Berat semu dalam fluida", "symbol": "W_semu", "unit": "N", "type": "computed" },
+        { "id": "selisih_rho", "label": "Selisih massa jenis (ρ_benda − ρ_fluida)", "symbol": "Δρ", "unit": "kg/m³", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_w", "computes": "w_benda", "formula": "w_benda = rho_benda * 10 * v_benda", "description": "Berat benda = massa jenis benda × gravitasi × volume benda" },
+        { "id": "eq_fa", "computes": "fa", "formula": "fa = rho_fluida * 10 * v_benda", "description": "Gaya apung maksimum (benda tercelup penuh) = berat fluida yang dipindahkan" },
+        { "id": "eq_wsemu", "computes": "w_semu", "formula": "w_semu = w_benda - fa", "description": "Berat semu = berat nyata dikurangi gaya apung; negatif berarti benda terdorong ke atas" },
+        { "id": "eq_drho", "computes": "selisih_rho", "formula": "selisih_rho = rho_benda - rho_fluida", "description": "Selisih massa jenis: positif → tenggelam, nol → melayang, negatif → terapung" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Bejana bening berisi fluida: benda kotak tercelup penuh; anak panah merah ke bawah (W) dan anak panah hijau ke atas (FA) dengan panjang proporsional; label W_semu ditampilkan di samping; warna latar fluida berubah sesuai jenis fluida yang dipilih" },
+        { "id": "viz_2", "type": "graph", "x_axis": "rho_benda", "y_axis": "w_semu", "title": "Berat Semu vs Massa Jenis Benda (W_semu–ρ_benda)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "v_benda", "y_axis": "fa", "title": "Gaya Apung vs Volume Benda (FA–V)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur benda kayu (ρ_benda = 700 kg/m³) dengan volume 0,001 m³ dalam air (ρ_fluida = 1000 kg/m³). Hitung FA dan tentukan apakah benda terapung atau tenggelam.",
+          "success_condition": "abs(rho_benda - 700) < 10 AND abs(rho_fluida - 1000) < 10 AND abs(v_benda - 0.001) < 0.0001 AND abs(fa - 10) < 0.2",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan massa jenis benda yang menghasilkan kondisi melayang sempurna (berat semu = 0 N) dalam air (ρ_fluida = 1000 kg/m³). Atur volume = 0,002 m³.",
+          "success_condition": "abs(rho_fluida - 1000) < 10 AND abs(v_benda - 0.002) < 0.0001 AND abs(w_semu) < 0.5",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Benda aluminium memiliki ρ_benda = 2700 kg/m³ dan volume = 0,0005 m³. Temukan jenis fluida (massa jenisnya) agar berat semu benda berkurang menjadi separuh berat nyatanya di udara.",
+          "success_condition": "abs(rho_benda - 2700) < 20 AND abs(v_benda - 0.0005) < 0.00005 AND abs(w_semu - (w_benda * 0.5)) < 0.5",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan Hukum Archimedes",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Penyelidikan berhasil! Mahkota raja terbukti asli. Kamu menguasai Hukum Archimedes: FA = ρ_fluida × g × V, dan kondisi terapung/melayang/tenggelam!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Penyelidikan gagal! Ingat: FA = ρ_fluida × g × V_celup dan W_semu = W − FA. Bandingkan ρ_benda dengan ρ_fluida untuk menentukan kondisi benda. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 1050,
+      "pass_threshold": 50
+    }
+  }
+}

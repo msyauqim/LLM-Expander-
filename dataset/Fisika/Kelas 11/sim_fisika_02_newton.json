@@ -1,0 +1,128 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium Newton",
+    "jenjang": "SMA-10",
+    "mata_pelajaran": "Fisika",
+    "topik": "Hukum Newton kedua",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys10_newton_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Laboratorium Newton",
+      "subject": "Fisika",
+      "grade_level": "SMA-10",
+      "bab": "Dinamika Partikel",
+      "subbab": "Hukum-Hukum Newton",
+      "topik": "Hukum Newton kedua",
+      "difficulty": 2,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan hubungan antara gaya neto, massa, dan percepatan",
+        "Siswa dapat menggunakan Hukum Newton II untuk menghitung percepatan benda"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Meja Eksperimen Newton",
+        "story": "Di ruang laboratorium fisika sekolah, kamu mendorong benda bermassa berbeda di atas rel licin. Ubah besar gaya dan massa benda, lalu amati bagaimana percepatan berubah. Temukan sendiri pola di balik Hukum Newton Kedua!",
+        "image_description": "Ruang laboratorium fisika dengan meja kayu panjang, balok berbeda ukuran di atas rel tanpa gesekan, anak panah gaya berwarna oranye menunjuk ke kanan",
+        "cta_text": "Mulai Eksperimen"
+      },
+      "visual_element": {
+        "theme_name": "Classic Lab Warm",
+        "theme_preset": "classroom",
+        "mood": "curious, warm, methodical",
+        "color_palette": {
+          "primary": "#ef8354",
+          "secondary": "#4f5d75",
+          "background": "#fdf6e3",
+          "accent": "#2d3142",
+          "text": "#2d3142"
+        },
+        "setting_description": "Ruang laboratorium fisika klasik dengan meja kayu coklat, papan tulis hijau penuh rumus di belakang, cahaya siang hangat dari jendela.",
+        "art_style": "flat cartoon with warm gradients",
+        "ambient_elements": ["Debu kapur melayang di dekat papan tulis", "Buku fisika tertumpuk di pojok meja", "Cahaya siang hangat dari jendela"]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa benda m dengan slider." },
+          { "step": 2, "text": "Atur besar gaya neto F yang bekerja pada benda." },
+          { "step": 3, "text": "Tekan Jalankan untuk memulai simulasi gerak." },
+          { "step": 4, "text": "Amati nilai percepatan, kecepatan, dan posisi pada panel." },
+          { "step": 5, "text": "Coba berbagai kombinasi F dan m untuk memahami polanya!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Hukum Newton II",
+          "strategy": "Percepatan berbanding lurus dengan gaya neto dan berbanding terbalik dengan massa. Jika F tetap dan m diperbesar dua kali, percepatan mengecil setengahnya. Jika m tetap dan F diperbesar dua kali, percepatan membesar dua kali.",
+          "formula": "a = F / m",
+          "example": "Benda massa 4 kg diberi gaya 20 N: a = 20/4 = 5 m/s². Jika massa diganti 2 kg: a = 20/2 = 10 m/s².",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": false,
+        "tracks": []
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Hukum Newton II",
+        "narrative": "Ubah nilai gaya neto dan massa benda, amati bagaimana percepatan, kecepatan, dan posisi benda berubah pada grafik waktu.",
+        "context": "Permukaan licin tanpa gesekan, benda bergerak satu dimensi horizontal, gaya konstan sepanjang simulasi."
+      },
+      "variables": [
+        { "id": "massa", "label": "Massa benda", "symbol": "m", "unit": "kg", "type": "user_input", "min": 1, "max": 20, "default": 5, "step": 0.5 },
+        { "id": "gaya", "label": "Gaya neto", "symbol": "F", "unit": "N", "type": "user_input", "min": 0, "max": 100, "default": 10, "step": 1 },
+        { "id": "t", "label": "Waktu", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 10 },
+        { "id": "percepatan", "label": "Percepatan", "symbol": "a", "unit": "m/s²", "type": "computed" },
+        { "id": "kecepatan", "label": "Kecepatan", "symbol": "v", "unit": "m/s", "type": "computed" },
+        { "id": "posisi", "label": "Posisi", "symbol": "x", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_a", "computes": "percepatan", "formula": "percepatan = gaya / massa", "description": "Hukum Newton II: percepatan = gaya neto dibagi massa" },
+        { "id": "eq_v", "computes": "kecepatan", "formula": "kecepatan = percepatan * t", "description": "Kecepatan benda dari keadaan diam dengan percepatan tetap (GLBB)" },
+        { "id": "eq_x", "computes": "posisi", "formula": "posisi = 0.5 * percepatan * t^2", "description": "Posisi benda dari titik asal dengan percepatan tetap (GLBB)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Balok bergerak horizontal di atas rel licin, anak panah gaya berwarna oranye ukurannya proporsional nilai F, label percepatan tampil di atas balok" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "kecepatan", "title": "Kecepatan vs Waktu (v–t)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "t", "y_axis": "posisi", "title": "Posisi vs Waktu (x–t)" }
+      ],
+      "challenges": []
+    },
+    "win_lose_condition": { "applicable": false },
+    "gameplay_parameters": {
+      "scoring": { "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": null,
+      "pass_threshold": null
+    }
+  }
+}

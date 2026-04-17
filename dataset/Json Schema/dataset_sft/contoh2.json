@@ -1,0 +1,133 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Detektif Turunan",
+    "jenjang": "SMA-11", "mata_pelajaran": "Matematika",
+    "topik": "Turunan fungsi aljabar", "tingkat_kesulitan": 3,
+    "jenis_game": "puzzle_game"
+  },
+  "output": {
+    "schema_version": "1.2", "game_id": "game_math11_deriv_puzzle_001", "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Detektif Turunan", "subject": "Matematika", "grade_level": "SMA-11",
+      "bab": "Kalkulus Diferensial", "subbab": "Turunan Fungsi Aljabar", "topik": "Turunan fungsi aljabar",
+      "difficulty": 3, "estimated_duration_minutes": 12,
+      "learning_objectives": ["Siswa dapat menghitung turunan polinomial", "Siswa dapat mencocokkan fungsi dengan turunannya"],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001", "show_once": true, "title": "Kasus Fungsi Hilang",
+        "story": "Agen Matematika! Potongan fungsi dan turunannya tercampur. Pasangkan untuk memecahkan kasus!",
+        "image_description": "Meja detektif dengan kaca pembesar di atas kertas berisi rumus, gaya noir",
+        "cta_text": "Mulai Investigasi"
+      },
+      "visual_element": {
+        "theme_name": "Neon Detective", "theme_preset": "scifi_neon",
+        "mood": "mysterious, sharp, focused",
+        "color_palette": {
+          "primary": "#e94560", "secondary": "#16c79a", "background": "#1a1a2e", "accent": "#f5f5f5", "text": "#f5f5f5",
+          "gradient_bg": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
+        },
+        "setting_description": "Ruang investigasi gelap dengan lampu neon merah-hijau, papan kasus dengan benang merah penghubung.",
+        "art_style": "flat minimalist with neon glow",
+        "ambient_elements": ["Asap tipis", "Cahaya neon berdenyut pelan"],
+        "canvas_scene": {
+          "render_method": "css_divs",
+          "background_layers": [
+            {
+              "id": "bg_dark_room",
+              "type": "gradient",
+              "css_description": "Ruangan gelap: radial-gradient(ellipse at 50% 40%, #16213e 0%, #1a1a2e 60%, #0a0a1a 100%). Kesan ruang investigasi redup.",
+              "z_index": 0
+            },
+            {
+              "id": "bg_neon_glow",
+              "type": "image_css",
+              "css_description": "2 glow neon: radial-gradient(circle 80px at 10% 20%, rgba(233,69,96,0.12), transparent) dan radial-gradient(circle 80px at 90% 80%, rgba(22,199,154,0.10), transparent). Kesan lampu neon menyala di pojok.",
+              "z_index": 1
+            }
+          ],
+          "objects": [
+            {
+              "id": "case_board",
+              "shape_description": "Papan kasus di background atas: div 50% x 30%, background rgba(30,30,50,0.6), border 1px solid rgba(233,69,96,0.3), box-shadow: inset 0 0 20px rgba(0,0,0,0.5). Di dalamnya ada 3 'pin' kecil (div 6px, border-radius 50%, background #e94560) dihubungkan garis merah (border-top 1px solid rgba(233,69,96,0.4)).",
+              "position": "top: 5%; left: 25%",
+              "animation": null
+            },
+            {
+              "id": "desk_lamp",
+              "shape_description": "Lampu meja: cone kecil (border-left/right 10px transparent, border-bottom 15px #333) di atas div 3x20px #444 (tiang). Cahaya kerucut ke bawah: div segitiga background linear-gradient(180deg, rgba(255,255,200,0.15), transparent), lebar membesar ke bawah.",
+              "position": "top: 60%; right: 10%",
+              "animation": "flicker 3s ease-in-out infinite"
+            }
+          ],
+          "particle_effects": [
+            {
+              "type": "smoke",
+              "count": 5,
+              "css_description": "Asap tipis: div 15-25px, border-radius 50%, background rgba(200,200,200,0.04), filter blur(8px), animasi float naik dari bawah perlahan 12-20s, opacity 0.02-0.06. Posisi tersebar di area bawah."
+            }
+          ]
+        },
+        "ui_components": {
+          "button_style": "Rounded 6px, background transparent, border 1px solid #e94560, color #e94560, box-shadow: 0 0 8px rgba(233,69,96,0.3), hover: background rgba(233,69,96,0.15) + box-shadow 0 0 15px rgba(233,69,96,0.5), transition 0.3s",
+          "card_style": "Background rgba(26,26,46,0.9), border 1px solid rgba(233,69,96,0.15), border-radius 10px, backdrop-filter blur(5px), box-shadow: 0 4px 20px rgba(0,0,0,0.3)",
+          "score_display_style": "Font monospace, color #16c79a, text-shadow: 0 0 8px rgba(22,199,154,0.5), letter-spacing 2px",
+          "input_style": null
+        }
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+        "steps": [
+          { "step": 1, "text": "Baca fungsi f(x) yang tersedia." },
+          { "step": 2, "text": "Klik fungsi, lalu klik turunan yang cocok." },
+          { "step": 3, "text": "Hijau = benar, merah = salah. Salah bisa diulang." },
+          { "step": 4, "text": "Selesaikan semua 5 pasangan untuk menang." }
+        ]
+      },
+      "hint": {
+        "id": "hint_001", "scope": "global",
+        "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+        "content": {
+          "title": "Aturan Dasar Turunan",
+          "strategy": "Gunakan aturan pangkat. Konstanta hilang saat diturunkan, koefisien tetap mengalikan hasil.",
+          "formula": "d/dx(a·x^n) = a·n·x^(n-1)",
+          "example": "Turunan 3x² = 6x. Turunan 5 = 0.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_match", "event": "on_correct_action", "description": "Click memuaskan" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Buzz singkat" },
+          { "id": "sfx_win", "event": "on_win", "description": "Fanfare misteri terpecahkan" },
+          { "id": "bgm", "event": "background", "description": "Jazz noir pelan loop" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 5 fungsi dengan turunannya.",
+      "pairs": [
+        { "id": "p_001", "left": { "type": "formula", "content": "f(x) = 3x² + 2x" }, "right": { "type": "formula", "content": "f'(x) = 6x + 2" }, "explanation": "3·2x + 2·1 = 6x + 2." },
+        { "id": "p_002", "left": { "type": "formula", "content": "f(x) = x³ - 4x" }, "right": { "type": "formula", "content": "f'(x) = 3x² - 4" }, "explanation": "Turunan x³=3x², -4x=-4." },
+        { "id": "p_003", "left": { "type": "formula", "content": "f(x) = 5x⁴" }, "right": { "type": "formula", "content": "f'(x) = 20x³" }, "explanation": "5·4x³ = 20x³." },
+        { "id": "p_004", "left": { "type": "formula", "content": "f(x) = 2x + 7" }, "right": { "type": "formula", "content": "f'(x) = 2" }, "explanation": "Konstanta 7 hilang." },
+        { "id": "p_005", "left": { "type": "formula", "content": "f(x) = x⁵ - x²" }, "right": { "type": "formula", "content": "f'(x) = 5x⁴ - 2x" }, "explanation": "5x⁴ dari x⁵, 2x dari x²." }
+      ],
+      "distractors": ["f'(x) = 6x² + 2", "f'(x) = 3x³ - 4x", "f'(x) = x⁴"]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": { "description": "Semua 5 pasangan benar", "logic": "correct_pairs == 5", "feedback_text": "Kasus terpecahkan!", "feedback_audio": "sfx_win" },
+      "lose": { "description": "Lebih dari 3 kesalahan", "logic": "wrong_attempts > 3", "feedback_text": "Kasus belum terpecahkan. Coba lagi.", "feedback_audio": null, "retry_allowed": true }
+    },
+    "gameplay_parameters": {
+      "scoring": { "correct_pair": 20, "wrong_attempt": -5 }, "lives": null,
+      "time_limit_seconds": 600, "pass_threshold": 80
+    }
+  }
+}

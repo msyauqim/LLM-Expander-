@@ -1,0 +1,167 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Pengertian Gerak"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_gerak_pengertian_puzzle_001",
+    "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Dunia Bergerak atau Diam?",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Pengertian Gerak",
+      "topik": "Pengertian Gerak",
+      "difficulty": 1,
+      "estimated_duration_minutes": 8,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan pengertian gerak sebagai perubahan posisi terhadap titik acuan",
+        "Siswa dapat membedakan konsep gerak relatif dan gerak semu",
+        "Siswa dapat mengidentifikasi contoh gerak dalam kehidupan sehari-hari"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Siapa yang Bergerak?",
+        "story": "Di stasiun kereta, kamu duduk di dalam gerbong yang mulai berjalan. Pohon-pohon di luar seolah bergerak ke belakang, padahal mereka diam. Gerak itu relatif! Pasangkan konsep-konsep gerak dengan definisi yang tepat untuk memahami fenomena ini.",
+        "image_description": "Pemandangan dari dalam gerbong kereta yang bergerak: jendela menampilkan pohon-pohon dan stasiun yang seolah bergerak mundur, langit sore jingga keemasan",
+        "cta_text": "Mulai Pasangkan"
+      },
+      "visual_element": {
+        "theme_name": "Journey Station",
+        "theme_preset": "nusantara",
+        "mood": "curious, warm, observational",
+        "color_palette": {
+          "primary": "#e76f51",
+          "secondary": "#2a9d8f",
+          "background": "#fdf8f0",
+          "accent": "#e9c46a",
+          "text": "#264653"
+        },
+        "setting_description": "Suasana peron stasiun kereta Indonesia dengan atap kayu, lampu gantung kuning hangat, rel kereta membentang ke kejauhan, tanaman tropis di sisi peron.",
+        "art_style": "warm flat illustration, Indonesian everyday life",
+        "ambient_elements": [
+          "Asap lokomotif mengepul pelan",
+          "Bayangan pohon bergerak di lantai peron",
+          "Penumpang menunggu dengan koper"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Baca kartu konsep di kolom kiri dengan seksama." },
+          { "step": 2, "text": "Klik satu kartu di kolom kiri untuk memilihnya." },
+          { "step": 3, "text": "Klik kartu yang cocok di kolom kanan (definisi atau contoh)." },
+          { "step": 4, "text": "Hijau = pasangan benar, merah = salah, coba lagi tanpa penalti ganda." },
+          { "step": 5, "text": "Selesaikan semua pasangan untuk menang!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 40,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Kunci Konsep Gerak",
+          "strategy": "Gerak selalu bersifat relatif — suatu benda dikatakan bergerak jika posisinya berubah terhadap titik acuan tertentu. Titik acuan yang berbeda dapat membuat benda yang sama tampak bergerak atau diam.",
+          "formula": null,
+          "example": "Penumpang di kereta tampak diam bagi penumpang lain (acuan: kereta), tetapi tampak bergerak bagi orang di stasiun (acuan: tanah).",
+          "hint_image_description": "Diagram dua sudut pandang: orang di stasiun melihat kereta bergerak, penumpang dalam kereta melihat stasiun bergerak"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara klik ringan menyenangkan saat pasangan benar" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Suara 'ups' singkat saat pasangan salah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Peluit kereta dan tepuk tangan saat semua pasangan selesai" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik keroncong modern ringan, nuansa perjalanan, loop tenang" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 5 konsep gerak di kolom kiri dengan definisi atau contohnya di kolom kanan. Waspadai distraktor!",
+      "pairs": [
+        {
+          "id": "p_001",
+          "left": { "type": "text", "content": "Gerak" },
+          "right": { "type": "text", "content": "Perubahan posisi suatu benda terhadap titik acuan dalam selang waktu tertentu" },
+          "explanation": "Gerak didefinisikan relatif terhadap titik acuan. Tanpa menyebut acuan, pernyataan 'benda bergerak' menjadi tidak lengkap."
+        },
+        {
+          "id": "p_002",
+          "left": { "type": "text", "content": "Titik Acuan" },
+          "right": { "type": "text", "content": "Titik yang dianggap diam sebagai patokan untuk mengamati gerak benda lain" },
+          "explanation": "Titik acuan adalah dasar pengamatan gerak. Pemilihan titik acuan yang berbeda dapat menghasilkan deskripsi gerak yang berbeda untuk benda yang sama."
+        },
+        {
+          "id": "p_003",
+          "left": { "type": "text", "content": "Gerak Relatif" },
+          "right": { "type": "text", "content": "Gerak yang bergantung pada titik acuan pengamat; benda dapat bergerak bagi satu pengamat namun diam bagi pengamat lain" },
+          "explanation": "Contoh: penumpang kereta tampak diam bagi sesama penumpang, tetapi bergerak bagi orang yang berdiri di stasiun."
+        },
+        {
+          "id": "p_004",
+          "left": { "type": "text", "content": "Gerak Semu" },
+          "right": { "type": "text", "content": "Gerak yang tampak terjadi pada suatu benda padahal benda tersebut sesungguhnya diam" },
+          "explanation": "Contoh klasik: matahari seolah bergerak dari timur ke barat setiap hari, padahal bumilah yang berputar pada sumbunya."
+        },
+        {
+          "id": "p_005",
+          "left": { "type": "text", "content": "Benda Diam" },
+          "right": { "type": "text", "content": "Benda yang posisinya tidak berubah terhadap titik acuan yang telah ditentukan" },
+          "explanation": "Sebuah benda dikatakan diam hanya dalam konteks titik acuan tertentu. Terhadap titik acuan yang berbeda, benda yang sama bisa saja bergerak."
+        }
+      ],
+      "distractors": [
+        "Perubahan bentuk benda akibat gaya yang bekerja padanya",
+        "Gerak yang lintasannya berupa garis lurus tanpa percepatan",
+        "Kecepatan suatu benda yang selalu konstan dalam segala kondisi"
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil memasangkan semua 5 kartu konsep dengan benar",
+        "logic": "correct_pairs == 5",
+        "feedback_text": "Kamu memahami relativitas gerak dengan sangat baik! Selamat melanjutkan perjalanan ilmu!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Siswa melakukan lebih dari 4 kesalahan pasangan",
+        "logic": "wrong_attempts > 4",
+        "feedback_text": "Ingat: gerak selalu diukur terhadap titik acuan. Coba lagi dengan lebih teliti!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "correct_pair": 20,
+        "wrong_attempt": -4
+      },
+      "lives": null,
+      "time_limit_seconds": 420,
+      "pass_threshold": 70
+    }
+  }
+}

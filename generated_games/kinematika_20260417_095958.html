@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+import React, { useState, useEffect, useRef } from 'react';
+
+const CollisionBallSimulation = () => {
+  const [gameState, setGameState] = useState('start'); // start, playing, end
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(10);
+  const [isRunning, setIsRunning] = useState(false);
+  const [var_1, setVar_1] = useState(0); // Massa bola 1
+  const [Parameter1, setParameter1] = useState(0); // Kecepatan awal bola 1
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackClass, setFeedbackClass] = useState('');
+  const [balls, setBalls] = useState([
+    { id: 1, x: 100, y: 200, vx: 2, vy: 0, mass: 1, radius: 20, color: '#1E90FF' },
+    { id: 2, x: 300, y: 200, vx: -1, vy: 0, mass: 1.5, radius: 25, color: '#FF6347' }
+  ]);
+  
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+
+  // Inisialisasi permainan
+  const initGame = () => {
+    setScore(0);
+    setLives(3);
+    setTimeLeft(60);
+    setCurrentQuestion(0);
+    setVar_1(1);
+    setParameter1(2);
+    setBalls([
+      { id: 1, x: 100, y: 200, vx: 2, vy: 0, mass: 1, radius: 20, color: '#1E90FF' },
+      { id: 2, x: 300, y: 200, vx: -1, vy: 0, mass: 1.5, radius: 25, color: '#FF6347' }
+    ]);
+  };
+
+  // Mulai permainan
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+  };
+
+  // Akhiri permainan
+  const endGame = () => {
+    setGameState('end');
+    setIsRunning(false);
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+  };
+
+  // Perbarui skor
+  const updateScore = (points) => {
+    setScore(prev => prev + points);
+  };
+
+  // Perbarui waktu
+  const updateTimer = () => {
+    if (timeLeft > 0) {
+      setTimeLeft(prev => prev - 1);
+    } else {
+      endGame();
+    }
+  };
+
+  // Tampilkan instruksi
+  const showInstructions = () => {
+    setGameState('instructions');
+  };
+
+  // Sembunyikan instruksi
+  const hideInstructions = () => {
+    setGameState('start');
+  };
+
+  // Tampilkan petunjuk
+  const showHint = () => {
+    setFeedbackText('Petunjuk: Simulasikan momentum sebelum dan sesudah tabrakan');
+    setFeedbackClass('glow');
+    setShowFeedback(true);
+    setTimeout(() => setShowFeedback(false), 2000);
+  };
+
+  // Sembunyikan petunjuk
+  const hideHint = () => {
+    setShowFeedback(false);
+  };
+
+  // Deteksi tabrakan antar bola
+  const detectCollision = (ball1, ball2) => {
+    const dx = ball2.x - ball1.x;
+    const dy = ball2.y - ball1.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    return distance < ball1.radius + ball2.radius;
+  };
+
+  // Tangani tabrakan elastis
+  const handleCollision = (ball1, ball2) => {
+    const dx = ball2.x - ball1.x;
+    const dy = ball2.y - ball1.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Normalisasi vektor arah
+    const nx = dx / distance;
+    const ny = dy / distance;
+    
+    // Kecepatan relatif
+    const dvx = ball2.vx - ball1.vx;
+    const dvy = ball2.vy - ball1.vy;
+    
+    // Komponen kecepatan sepanjang garis hubung
+    const dvn = dvx * nx + dvy * ny;
+    
+    // Jika mendekat, tangani tabrakan
+    if (dvn < 0) {
+      // Koefisien restitusi (untuk tabrakan elastis = 1)
+      const e = 1;
+      
+      // Gaya impuls
+      const j = -(1 + e) * dvn / (1/ball1.mass + 1/ball2.mass);
+      
+      // Update kecepatan
+      ball1.vx -= j * nx / ball1.mass;
+      ball1.vy -= j * ny / ball1.mass;
+      ball2.vx += j * nx / ball2.mass;
+      ball2.vy += j * ny / ball2.mass;
+      
+      // Pisahkan bola agar tidak overlap
+      const overlap = ball1.radius + ball2.radius - distance;
+      const moveX = overlap * nx * 0.5;
+      const moveY = overlap * ny * 0.5;
+      
+      ball1.x -= moveX;
+      ball1.y -= moveY;
+      ball2.x += moveX;
+      ball2.y += moveY;
+    }
+  };
+
+  // Animasi simulasi bola
+  const animate = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    setBalls(prevBalls => {
+      let newBalls = [...prevBalls];
+      
+      // Update posisi bola
+      newBalls = newBalls.map(ball => ({
+        ...ball,
+        x: ball.x + ball.vx,
+        y: ball.y + ball.vy
+      }));
+      
+      // Cek tabrakan antar bola
+      if (newBalls.length >= 2 && detectCollision(newBalls[0], newBalls[1])) {
+        handleCollision(newBalls[0], newBalls[1]);
+      }
+      
+      // Cek tabrakan dengan dinding
+      newBalls.forEach(ball => {
+        if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+          ball.vx *= -1;
+          ball.x = ball.x < ball.radius ? ball.radius : canvas.width - ball.radius;
+        }
+        if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+          ball.vy *= -1;
+          ball.y = ball.y < ball.radius ? ball.radius : canvas.height - ball.radius;
+        }
+      });
+      
+      // Gambar bola
+      newBalls.forEach(ball => {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = ball.color;
+        ctx.fill();
+        
+        // Efek bayangan
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        
+        ctx.closePath();
+      });
+      
+      return newBalls;
+    });
+    
+    if (isRunning) {
+      animationRef.current = requestAnimationFrame(animate);
+    }
+  };
+
+  // Timer effect
+  useEffect(() => {
+    let timer;
+    if (gameState === 'playing' && timeLeft > 0) {
+      timer = setInterval(updateTimer, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(timer);
+  }, [gameState, timeLeft]);
+
+  // Animasi bola effect
+  useEffect(() => {
+    if (gameState === 'playing') {
+      animate();
+    }
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [gameState, isRunning]);
+
+  // Partikel latar belakang
+  const renderParticles = () => {
+    const particles = [];
+    for (let i = 0; i < 20; i++) {
+      particles.push(
+        <div
+          key={i}
+          className="particle absolute rounded-full bg-blue-200 opacity-20"
+          style={{
+            width: `${Math.random() * 10 + 2}px`,
+            height: `${Math.random() * 10 + 2}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            animation: `float ${Math.random() * 10 + 5}s infinite ease-in-out`
+          }}
+        />
+      );
+    }
+    return particles;
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden relative">
+      {/* Partikel Latar Belakang */}
+      <div className="absolute inset-0 overflow-hidden">
+        {renderParticles()}
+      </div>
+      
+      {/* Efek Gradien */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-red-500/10"></div>
+      
+      <div id="game-container" className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+        {/* Layar Awal */}
+        {gameState === 'start' && (
+          <div id="start-screen" className="text-center max-w-md w-full backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Simulasi Momentum Kolisi Bola
+            </h1>
+            <p className="text-gray-300 mb-8 text-lg">
+              Alami hukum fisika dalam dunia simulasi interaktif
+            </p>
+            
+            <div className="space-y-4">
+              <button
+                onClick={startGame}
+                className="btn-primary w-full py-4 px-8 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Mulai Simulasi
+              </button>
+              
+              <button
+                onClick={showInstructions}
+                className="btn-secondary w-full py-3 px-8 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Petunjuk
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Layar Instruksi */}
+        {gameState === 'instructions' && (
+          <div className="text-center max-w-2xl w-full backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 className="text-3xl font-bold mb-6 text-blue-400">Instruksi Simulasi</h2>
+            
+            <div className="text-left space-y-4 text-gray-300 mb-8">
+              <p>• Simulasi ini menunjukkan prinsip momentum linier dalam tabrakan bola</p>
+              <p>• Momentum sebelum dan sesudah tabrakan harus selalu terjaga</p>
+              <p>• Gunakan parameter massa dan kecepatan untuk mengamati perubahan</p>
+              <p>• Observasi bagaimana bola berinteraksi saat bertabrakan</p>
+            </div>
+            
+            <button
+              onClick={hideInstructions}
+              className="btn-primary py-3 px-8 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              Kembali
+            </button>
+          </div>
+        )}
+
+        {/* Layar Permainan */}
+        {gameState === 'playing' && (
+          <div id="game-screen" className="w-full max-w-6xl">
+            {/* Area Informasi Permainan */}
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex space-x-6">
+                <div id="score-display" className="bg-white/10 backdrop-blur-lg rounded-xl px-4 py-2 border border-white/20">
+                  <span className="text-blue-400 font-semibold">Skor:</span>
+                  <span className="ml-2 text-xl font-bold">{score}</span>
+                </div>
+                
+                <div id="lives-display" className="bg-white/10 backdrop-blur-lg rounded-xl px-4 py-2 border border-white/20">
+                  <span className="text-red-400 font-semibold">Nyawa:</span>
+                  <span className="ml-2 text-xl font-bold">{lives}</span>
+                </div>
+                
+                <div id="timer-display" className="bg-white/10 backdrop-blur-lg rounded-xl px-4 py-2 border border-white/20">
+                  <span className="text-green-400 font-semibold">Waktu:</span>
+                  <span className="ml-2 text-xl font-bold">{timeLeft}s</span>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => setGameState('start')}
+                className="btn-secondary py-2 px-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white rounded-lg transition-all duration-300"
+              >
+                Keluar
+              </button>
+            </div>
+
+            {/* Area Simulasi */}
+            <div id="scene-area" className="backdrop-blur-lg bg-white/5 rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+              <canvas
+                ref={canvasRef}
+                width={800}
+                height={400}
+                className="w-full h-96 bg-gradient-to-br from-slate-800/50 to-slate-900/50"
+              />
+            </div>
+
+            {/* Area Kontrol */}
+            <div id="content-area" className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Parameter Fisika */}
+              <div className="card bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <h3 className="text-xl font-semibold mb-4 text-blue-400">Parameter Fisika</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Massa Bola 1 (kg)</label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="3"
+                      step="0.1"
+                      value={var_1}
+                      onChange={(e) => setVar_1(parseFloat(e.target.value))}
+                      className="w-full accent-blue-500"
+                    />
+                    <span className="text-sm text-gray-300">{var_1} kg</span>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Kecepatan Awal (m/s)</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      step="0.1"
+                      value={Parameter1}
+                      onChange={(e) => setParameter1(parseFloat(e.target.value))}
+                      className="w-full accent-red-500"
+                    />
+                    <span className="text-sm text-gray-300">{Parameter1} m/s</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Statistik */}
+              <div className="card bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <h3 className="text-xl font-semibold mb-4 text-green-400">Statistik</h3>
+                
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Momentum Awal:</span>
+                    <span>{(var_1 * Parameter1).toFixed(2)} kg⋅m/s</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Energi Kinetik:</span>
+                    <span>{(0.5 * var_1 * Parameter1 * Parameter1).toFixed(2)} J</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Jumlah Tabrakan:</span>
+                    <span>{currentQuestion}/10</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Akurasi:</span>
+                    <span>{score > 0 ? Math.round((score / (currentQuestion || 1)) * 10) : 0}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Aksi */}
+              <div className="card bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <h3 className="text-xl font-semibold mb-4 text-purple-400">Aksi</h3>
+                
+                <div className="space-y-3">
+                  <button
+                    onClick={showHint}
+                    className="btn-secondary w-full py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
+                  >
+                    Tampilkan Petunjuk
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setBalls(prev => prev.map(ball => ({
+                        ...ball,
+                        vx: ball.id === 1 ? Parameter1 : -Parameter1
+                      })));
+                    }}
+                    className="btn-primary w-full py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-300"
+                  >
+                    Reset Simulasi
+                  </button>
+                  
+                  <button
+                    onClick={endGame}
+                    className="btn-secondary w-full py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg transition-all duration-300"
+                  >
+                    Akhiri Simulasi
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Layar Akhir */}
+        {gameState === 'end' && (
+          <div id="end-screen" className="text-center max-w-md w-full backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 className="text-3xl font-bold mb-6 text-yellow-400">Simulasi Selesai!</h2>
+            
+            <div className="mb-8 space-y-3">
+              <p className="text-xl">Skor Akhir: <span className="font-bold text-blue-400">{score}</span></p>
+              <p className="text-lg">Tabrakan Berhasil: <span className="font-bold">{currentQuestion}/10</span></p>
+              <p className="text-lg">Akurasi: <span className="font-bold text-green-400">
+                {score > 0 ? Math.round((score / (currentQuestion || 1)) * 10) : 0}%
+              </span></p>
+            </div>
+            
+            <div className="space-y-4">
+              <button
+                onClick={startGame}
+                className="btn-primary w-full py-4 px-8 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Ulangi Simulasi
+              </button>
+              
+              <button
+                onClick={() => setGameState('start')}
+                className="btn-secondary w-full py-3 px-8 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium rounded-xl transition-all duration-300"
+              >
+                Menu Utama
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Feedback Tampilan */}
+      {showFeedback && (
+        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg ${feedbackClass} bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg transition-all duration-300`}>
+          <p className="text-white font-medium">{feedbackText}</p>
+        </div>
+      )}
+
+      <style jsx>{`
+        .particle {
+          animation: float 6s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(20px, -20px); }
+          50% { transform: translate(-20px, 20px); }
+          75% { transform: translate(20px, 20px); }
+        }
+        
+        .glow {
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+          animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+          50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+        }
+        
+        .fade-in {
+          animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default CollisionBallSimulation;
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Momentum Kolisi Bola</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .active {
+            display: block !important;
+        }
+
+        /* Start Screen */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            height: 100%;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(76, 201, 240, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #a9d6e5;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #4cc9f0;
+            border: 2px solid #4cc9f0;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(76, 201, 240, 0.2);
+        }
+
+        /* Game Screen */
+        #game-screen {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(76, 201, 240, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a9d6e5;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+
+        #scene-area {
+            flex: 1;
+            background: rgba(10, 15, 35, 0.7);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(76, 201, 240, 0.2);
+        }
+
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .ball-1 {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .ball-2 {
+            background: linear-gradient(45deg, #4cc9f0, #4895ef);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.5);
+        }
+
+        .collision-line {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            transform-origin: left center;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .control-group {
+            background: rgba(25, 35, 60, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+
+        .control-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #4cc9f0;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .input-label {
+            width: 120px;
+            color: #a9d6e5;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #4361ee;
+            border-radius: 5px;
+            background: rgba(10, 15, 35, 0.7);
+            color: white;
+        }
+
+        #submit-btn {
+            grid-column: span 2;
+            margin-top: 10px;
+        }
+
+        /* End Screen */
+        #end-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            height: 100%;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+        }
+
+        .final-score {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Instructions Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid #4cc9f0;
+            box-shadow: 0 0 30px rgba(76, 201, 240, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: #a9d6e5;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(76, 201, 240, 0.8);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(76, 201, 240, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            #submit-btn {
+                grid-column: 1;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="active">
+            <h1 class="title">Simulasi Momentum Kolisi Bola</h1>
+            <p class="subtitle">Eksplorasi hukum kekekalan momentum melalui simulasi interaktif kolisi bola. Atur massa dan kecepatan, lalu amati hasilnya!</p>
+            <button id="start-btn" class="btn-primary glow">Mulai Simulasi</button>
+            <button id="instructions-btn" class="btn-secondary">Petunjuk Penggunaan</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <div class="header">
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Skor</span>
+                        <span id="score-display" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nyawa</span>
+                        <span id="lives-display" class="stat-value">3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Waktu</span>
+                        <span id="timer-display" class="stat-value">60</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scene-area">
+                <!-- Balls will be created dynamically -->
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <h3 class="control-title">Bola 1</h3>
+                    <div class="input-row">
+                        <label class="input-label">Massa (kg):</label>
+                        <input type="number" id="mass-1" class="input-field" value="2" min="0.1" step="0.1">
+                    </div>
+                    <div class="input-row">
+                        <label class="input-label">Kecepatan (m/s):</label>
+                        <input type="number" id="velocity-1" class="input-field" value="5" min="-10" max="10" step="0.1">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3 class="control-title">Bola 2</h3>
+                    <div class="input-row">
+                        <label class="input-label">Massa (kg):</label>
+                        <input type="number" id="mass-2" class="input-field" value="1" min="0.1" step="0.1">
+                    </div>
+                    <div class="input-row">
+                        <label class="input-label">Kecepatan (m/s):</label>
+                        <input type="number" id="velocity-2" class="input-field" value="0" min="-10" max="10" step="0.1">
+                    </div>
+                </div>
+
+                <button id="submit-btn" class="btn-primary">Hitung Momentum</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="hidden">
+            <h2 class="result-title">Simulasi Selesai!</h2>
+            <div class="final-score" id="final-score">0</div>
+            <p>Skor akhir Anda dari simulasi momentum kolisi</p>
+            <button id="restart-btn" class="btn-primary">Ulangi Simulasi</button>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div id="instructions-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3 class="modal-title">Petunjuk Penggunaan</h3>
+                <div class="modal-body">
+                    <p><strong>Simulasi Momentum Kolisi Bola</strong></p>
+                    <p>1. Atur massa dan kecepatan untuk kedua bola</p>
+                    <p>2. Klik "Hitung Momentum" untuk memulai simulasi</p>
+                    <p>3. Amati perubahan momentum sebelum dan sesudah tabrakan</p>
+                    <p>4. Gunakan nilai-nilai yang realistis untuk hasil yang akurat</p>
+                    <p>5. Skor diberikan berdasarkan akurasi perhitungan momentum</p>
+                </div>
+                <button id="close-instructions" class="close-btn">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let gameState = 'menu'; // menu, playing, ended
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 60;
+        let currentQuestion = 1;
+        let totalQuestions = 5;
+        let isRunning = false;
+        let timerInterval;
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const sceneArea = document.getElementById('scene-area');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const finalScore = document.getElementById('final-score');
+        const instructionsModal = document.getElementById('instructions-modal');
+
+        // Buttons
+        const startBtn = document.getElementById('start-btn');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const closeInstructions = document.getElementById('close-instructions');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Input fields
+        const mass1Input = document.getElementById('mass-1');
+        const velocity1Input = document.getElementById('velocity-1');
+        const mass2Input = document.getElementById('mass-2');
+        const velocity2Input = document.getElementById('velocity-2');
+
+        // Initialize game
+        function initGame() {
+            updateDisplays();
+            createBalls();
+        }
+
+        // Start game
+        function startGame() {
+            gameState = 'playing';
+            timeLeft = 60;
+            score = 0;
+            lives = 3;
+            
+            startScreen.classList.remove('active');
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            gameScreen.classList.add('active');
+            
+            updateDisplays();
+            startTimer();
+            createBalls();
+        }
+
+        // End game
+        function endGame() {
+            gameState = 'ended';
+            clearInterval(timerInterval);
+            
+            gameScreen.classList.remove('active');
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            endScreen.classList.add('active');
+            
+            finalScore.textContent = score;
+        }
+
+        // Update displays
+        function updateDisplays() {
+            scoreDisplay.textContent = score;
+            livesDisplay.textContent = lives;
+            timerDisplay.textContent = timeLeft;
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateDisplays();
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // Create balls in scene
+        function createBalls() {
+            sceneArea.innerHTML = '';
+            
+            const ball1 = document.createElement('div');
+            ball1.className = 'ball ball-1';
+            ball1.id = 'ball-1';
+            ball1.style.width = '60px';
+            ball1.style.height = '60px';
+            ball1.style.left = '100px';
+            ball1.style.top = '50%';
+            ball1.style.transform = 'translateY(-50%)';
+            ball1.textContent = 'A';
+            
+            const ball2 = document.createElement('div');
+            ball2.className = 'ball ball-2';
+            ball2.id = 'ball-2';
+            ball2.style.width = '50px';
+            ball2.style.height = '50px';
+            ball2.style.left = '800px';
+            ball2.style.top = '50%';
+            ball2.style.transform = 'translateY(-50%)';
+            ball2.textContent = 'B';
+            
+            sceneArea.appendChild(ball1);
+            sceneArea.appendChild(ball2);
+        }
+
+        // Calculate momentum collision
+        function calculateCollision() {
+            const m1 = parseFloat(mass1Input.value);
+            const v1 = parseFloat(velocity1Input.value);
+            const m2 = parseFloat(mass2Input.value);
+            const v2 = parseFloat(velocity2Input.value);
+            
+            // Validate inputs
+            if (isNaN(m1) || isNaN(v1) || isNaN(m2) || isNaN(v2)) {
+                alert('Silakan masukkan nilai yang valid untuk semua parameter!');
+                return;
+            }
+            
+            // Calculate initial momentum
+            const initialMomentum = (m1 * v1) + (m2 * v2);
+            
+            // For elastic collision (conservation of momentum and kinetic energy)
+            // v1_final = ((m1-m2)*v1 + 2*m2*v2) / (m1+m2)
+            // v2_final = ((m2-m1)*v2 + 2*m1*v1) / (m1+m2)
+            const v1_final = ((m1 - m2) * v1 + 2 * m2 * v2) / (m1 + m2);
+            const v2_final = ((m2 - m1) * v2 + 2 * m1 * v1) / (m1 + m2);
+            
+            const finalMomentum = (m1 * v1_final) + (m2 * v2_final);
+            
+            // Check conservation (should be same before and after)
+            const momentumConserved = Math.abs(initialMomentum - finalMomentum) < 0.01;
+            
+            // Update score based on accuracy
+            if (momentumConserved) {
+                score += 10;
+                showFeedback('Momentum terjaga! Perhitungan benar.', true);
+            } else {
+                lives--;
+                showFeedback('Momentum tidak terjaga. Coba periksa kembali perhitungan.', false);
+            }
+            
+            updateDisplays();
+            
+            // Animate collision
+            animateCollision(v1_final, v2_final);
+            
+            // Check game over conditions
+            if (lives <= 0) {
+                setTimeout(endGame, 1500);
+            } else if (currentQuestion >= totalQuestions) {
+                setTimeout(endGame, 1500);
+            } else {
+                currentQuestion++;
+            }
+        }
+
+        // Animate collision
+        function animateCollision(v1_final, v2_final) {
+            const ball1 = document.getElementById('ball-1');
+            const ball2 = document.getElementById('ball-2');
+            
+            // Create collision effect
+            const collisionLine = document.createElement('div');
+            collisionLine.className = 'collision-line';
+            collisionLine.style.width = '200px';
+            collisionLine.style.left = '400px';
+            collisionLine.style.top = '50%';
+            collisionLine.style.transform = 'translateY(-50%) rotate(90deg)';
+            sceneArea.appendChild(collisionLine);
+            
+            // Animate balls moving apart
+            ball1.style.transition = 'left 2s ease-in-out';
+            ball2.style.transition = 'left 2s ease-in-out';
+            
+            // Determine new positions based on final velocities
+            const basePos1 = 100;
+            const basePos2 = 800;
+            const newPos1 = basePos1 + (v1_final > 0 ? 200 : -200);
+            const newPos2 = basePos2 + (v2_final > 0 ? 200 : -200);
+            
+            ball1.style.left = `${Math.max(50, Math.min(newPos1, 300))}px`;
+            ball2.style.left = `${Math.max(600, Math.min(newPos2, 950))}px`;
+            
+            // Remove collision line after animation
+            setTimeout(() => {
+                collisionLine.remove();
+                
+                // Reset balls to original positions after delay
+                setTimeout(() => {
+                    ball1.style.left = '100px';
+                    ball2.style.left = '800px';
+                }, 1000);
+            }, 2000);
+        }
+
+        // Show feedback
+        function showFeedback(message, isSuccess) {
+            // Create feedback element
+            const feedback = document.createElement('div');
+            feedback.textContent = message;
+            feedback.style.position = 'fixed';
+            feedback.style.top = '50%';
+            feedback.style.left = '50%';
+            feedback.style.transform = 'translate(-50%, -50%)';
+            feedback.style.padding = '20px';
+            feedback.style.borderRadius = '10px';
+            feedback.style.color = 'white';
+            feedback.style.fontSize = '1.2rem';
+            feedback.style.zIndex = '100';
+            feedback.style.animation = 'fadeIn 0.5s, fadeOut 0.5s 1.5s';
+            
+            if (isSuccess) {
+                feedback.style.background = 'linear-gradient(45deg, #06d6a0, #118ab2)';
+            } else {
+                feedback.style.background = 'linear-gradient(45deg, #ef476f, #d90429)';
+            }
+            
+            document.body.appendChild(feedback);
+            
+            // Remove feedback after animation
+            setTimeout(() => {
+                feedback.remove();
+            }, 2000);
+        }
+
+        // Show instructions
+        function showInstructions() {
+            instructionsModal.classList.remove('hidden');
+            instructionsModal.classList.add('active');
+        }
+
+        // Hide instructions
+        function hideInstructions() {
+            instructionsModal.classList.remove('active');
+            instructionsModal.classList.add('hidden');
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        instructionsBtn.addEventListener('click', showInstructions);
+        closeInstructions.addEventListener('click', hideInstructions);
+        submitBtn.addEventListener('click', calculateCollision);
+        restartBtn.addEventListener('click', () => {
+            endScreen.classList.remove('active');
+            endScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            startScreen.classList.add('active');
+            gameState = 'menu';
+        });
+
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>
+<script>
+import React, { useState, useEffect, useRef } from 'react';
+
+const SimulasiMomentumKolisionsBola = () => {
+  // State variables
+  const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'results'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [isRunning, setIsRunning] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(10);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const [showFeedback, setShowFeedback] = useState(false);
+  
+  // Physics simulation state
+  const [ball1, setBall1] = useState({ x: 100, y: 200, vx: 3, vy: 0, mass: 1, radius: 20 });
+  const [ball2, setBall2] = useState({ x: 300, y: 200, vx: -2, vy: 0, mass: 2, radius: 25 });
+  const [collisionCount, setCollisionCount] = useState(0);
+  
+  const animationRef = useRef();
+  const containerRef = useRef();
+
+  // Questions data
+  const questions = [
+    { question: "Apa hukum kekekalan momentum?", options: ["Energi tidak bisa diciptakan", "Momentum total sebelum dan sesudah tabrakan tetap", "Kecepatan selalu konstan", "Massa tidak berubah"], answer: 1 },
+    { question: "Jika dua bola bermassa sama bertabrakan elastis, apa yang terjadi?", options: ["Salah satu berhenti", "Mereka bertukar kecepatan", "Kecepatan ganda", "Tidak ada perubahan"], answer: 1 },
+    { question: "Apa satuan momentum dalam SI?", options: ["kg.m/s", "N.s", "J.s", "W.s"], answer: 0 },
+    { question: "Dalam tabrakan inelastis, apa yang terjadi?", options: ["Energi kinetik hilang", "Momentum tidak kekal", "Kecepatan bertambah", "Massa berkurang"], answer: 0 },
+    { question: "Jika massa bola A = 2kg, kecepatan = 3m/s, berapa momentumnya?", options: ["1 kg.m/s", "5 kg.m/s", "6 kg.m/s", "9 kg.m/s"], answer: 2 }
+  ];
+
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
+
+  // Physics simulation
+  useEffect(() => {
+    if (gameState !== 'playing') return;
+
+    const animate = () => {
+      setBall1(prev => {
+        let newX = prev.x + prev.vx;
+        let newY = prev.y + prev.vy;
+        let newVx = prev.vx;
+        let newVy = prev.vy;
+
+        // Boundary collision
+        if (newX <= prev.radius || newX >= 480 - prev.radius) {
+          newVx = -newVx;
+        }
+
+        return { ...prev, x: newX, y: newY, vx: newVx };
+      });
+
+      setBall2(prev => {
+        let newX = prev.x + prev.vx;
+        let newY = prev.y + prev.vy;
+        let newVx = prev.vx;
+        let newVy = prev.vy;
+
+        // Boundary collision
+        if (newX <= prev.radius || newX >= 480 - prev.radius) {
+          newVx = -newVx;
+        }
+
+        return { ...prev, x: newX, y: newY, vx: newVx };
+      });
+
+      // Check ball-to-ball collision
+      checkBallCollision();
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [gameState, ball1, ball2]);
+
+  const checkBallCollision = () => {
+    const dx = ball2.x - ball1.x;
+    const dy = ball2.y - ball1.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < ball1.radius + ball2.radius) {
+      // Collision detected
+      setCollisionCount(prev => prev + 1);
+      
+      // Calculate new velocities (simplified elastic collision)
+      const m1 = ball1.mass;
+      const m2 = ball2.mass;
+      const v1 = ball1.vx;
+      const v2 = ball2.vx;
+
+      const newV1 = ((m1 - m2) * v1 + 2 * m2 * v2) / (m1 + m2);
+      const newV2 = ((m2 - m1) * v2 + 2 * m1 * v1) / (m1 + m2);
+
+      setBall1(prev => ({ ...prev, vx: newV1 }));
+      setBall2(prev => ({ ...prev, vx: newV2 }));
+    }
+  };
+
+  // Game functions
+  const initGame = () => {
+    setScore(0);
+    setLives(3);
+    setTimeLeft(300);
+    setCurrentQuestion(0);
+    setCollisionCount(0);
+    setBall1({ x: 100, y: 200, vx: 3, vy: 0, mass: 1, radius: 20 });
+    setBall2({ x: 300, y: 200, vx: -2, vy: 0, mass: 2, radius: 25 });
+  };
+
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+  };
+
+  const endGame = () => {
+    setIsRunning(false);
+    setGameState('results');
+  };
+
+  const updateScore = (points) => {
+    setScore(prev => prev + points);
+  };
+
+  const handleAnswer = (selectedOption) => {
+    const correct = selectedOption === questions[currentQuestion].answer;
+    
+    if (correct) {
+      updateScore(10);
+      setFeedback('Benar! Momentum terjaga.');
+    } else {
+      setLives(prev => prev - 1);
+      setFeedback('Salah! Pelajari kembali hukum kekekalan momentum.');
+    }
+    
+    setShowFeedback(true);
+    setTimeout(() => {
+      setShowFeedback(false);
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      } else {
+        endGame();
+      }
+    }, 1500);
+  };
+
+  const resetGame = () => {
+    setGameState('menu');
+  };
+
+  // Format time
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Render current screen based on gameState
+  const renderScreen = () => {
+    switch (gameState) {
+      case 'menu':
+        return (
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <h1 className="text-4xl font-bold text-blue-600 mb-4">Simulasi Momentum Kolisi</h1>
+            <p className="text-lg text-gray-700 max-w-md text-center">
+              Belajar tentang hukum kekekalan momentum melalui simulasi interaktif bola-bola bertabrakan
+            </p>
+            <button 
+              onClick={startGame}
+              className="btn-primary bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-xl transition-all"
+            >
+              Mulai Permainan
+            </button>
+            <button 
+              onClick={() => setShowInstructions(true)}
+              className="btn-secondary bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-all"
+            >
+              Petunjuk
+            </button>
+          </div>
+        );
+      
+      case 'playing':
+        return (
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Game Info Panel */}
+              <div className="bg-white rounded-lg shadow-lg p-4 space-y-4">
+                <div className="score-display bg-green-100 p-3 rounded text-center">
+                  <h3>Skor: {score}</h3>
+                </div>
+                <div className="lives-display bg-red-100 p-3 rounded text-center">
+                  <h3>Nyawa: {lives}</h3>
+                </div>
+                <div className="timer-display bg-blue-100 p-3 rounded text-center">
+                  <h3>Waktu: {formatTime(timeLeft)}</h3>
+                </div>
+                <div className="bg-gray-100 p-3 rounded text-center">
+                  <h3>Tabrakan: {collisionCount}</h3>
+                </div>
+                
+                <div className="mt-4">
+                  <h3 className="font-bold mb-2">Pertanyaan:</h3>
+                  <p className="mb-3">{questions[currentQuestion]?.question}</p>
+                  <div className="space-y-2">
+                    {questions[currentQuestion]?.options.map((option, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleAnswer(idx)}
+                        className="w-full text-left p-2 bg-gray-200 hover:bg-gray-300 rounded transition-all"
+                      >
+                        {String.fromCharCode(65 + idx)}. {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Physics Simulation Area */}
+              <div className="lg:col-span-2">
+                <div 
+                  ref={containerRef}
+                  className="scene-area bg-gradient-to-b from-sky-200 to-blue-300 rounded-lg border-4 border-blue-500 relative overflow-hidden"
+                  style={{ height: '400px' }}
+                >
+                  {/* Ball 1 */}
+                  <div
+                    className="absolute bg-gradient-to-r from-red-500 to-red-600 rounded-full shadow-lg"
+                    style={{
+                      left: `${ball1.x - ball1.radius}px`,
+                      top: `${ball1.y - ball1.radius}px`,
+                      width: `${ball1.radius * 2}px`,
+                      height: `${ball1.radius * 2}px`,
+                      transition: 'left 0.05s, top 0.05s'
+                    }}
+                  />
+                  
+                  {/* Ball 2 */}
+                  <div
+                    className="absolute bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg"
+                    style={{
+                      left: `${ball2.x - ball2.radius}px`,
+                      top: `${ball2.y - ball2.radius}px`,
+                      width: `${ball2.radius * 2}px`,
+                      height: `${ball2.radius * 2}px`,
+                      transition: 'left 0.05s, top 0.05s'
+                    }}
+                  />
+                  
+                  {/* Grid lines for reference */}
+                  <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+                </div>
+                
+                <div className="mt-4 bg-white rounded-lg p-4">
+                  <h3 className="font-bold mb-2">Informasi Fisika:</h3>
+                  <p className="text-sm">
+                    Momentum: p = m × v | Kekekalan Momentum: Σp_awal = Σp_akhir
+                  </p>
+                  <button 
+                    onClick={() => setShowHint(true)}
+                    className="mt-2 btn-secondary bg-purple-500 hover:bg-purple-600 text-white px-4 py-1 rounded text-sm"
+                  >
+                    Tampilkan Petunjuk Fisika
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'results':
+        return (
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <h1 className="text-4xl font-bold text-purple-600">Hasil Akhir</h1>
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+              <div className="space-y-4">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold">Skor Akhir: {score}</h2>
+                  <p className="text-lg">
+                    {score >= 70 ? '🎉 Selamat! Anda Mengerti Momentum!' : 
+                     score >= 50 ? '👍 Lumayan, Teruskan Belajar!' : '📚 Perlu Lebih Banyak Latihan'}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-green-100 p-3 rounded text-center">
+                    <h3>Benar</h3>
+                    <p>{Math.floor(score / 10)}</p>
+                  </div>
+                  <div className="bg-red-100 p-3 rounded text-center">
+                    <h3>Salah</h3>
+                    <p>{Math.max(0, questions.length - Math.floor(score / 10))}</p>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p>Tabrakan Simulasi: {collisionCount}</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex space-x-4">
+              <button 
+                onClick={startGame}
+                className="btn-primary bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition-all"
+              >
+                Ulangi
+              </button>
+              <button 
+                onClick={resetGame}
+                className="btn-secondary bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition-all"
+              >
+                Menu Utama
+              </button>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="max-w-6xl mx-auto">
+        {/* Feedback Popup */}
+        {showFeedback && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className={`card bg-white p-6 rounded-lg shadow-xl transform transition-all ${feedback.includes('Benar') ? 'border-green-500' : 'border-red-500'} border-2`}>
+              <h3 className={`text-xl font-bold ${feedback.includes('Benar') ? 'text-green-600' : 'text-red-600'}`}>
+                {feedback.includes('Benar') ? '✅ Benar!' : '❌ Salah!'}
+              </h3>
+              <p>{feedback}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Instructions Modal */}
+        {showInstructions && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="card bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+              <h2 className="text-2xl font-bold mb-4 text-blue-600">Petunjuk Permainan</h2>
+              <div className="space-y-3 text-sm">
+                <p>• Pelajari simulasi bola-bola bertabrakan</p>
+                <p>• Jawab pertanyaan tentang momentum</p>
+                <p>• Skor tinggi menunjukkan pemahaman baik</p>
+                <p>• Waktu terbatas - berpikir cepat!</p>
+                <p>• Hukum kekekalan momentum: Σp_awal = Σp_akhir</p>
+              </div>
+              <button 
+                onClick={() => setShowInstructions(false)}
+                className="mt-4 btn-secondary bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hint Modal */}
+        {showHint && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="card bg-yellow-50 p-6 rounded-lg shadow-xl max-w-md w-full mx-4 border-2 border-yellow-300">
+              <h2 className="text-xl font-bold mb-3 text-yellow-800">Petunjuk Fisika</h2>
+              <div className="space-y-2 text-sm">
+                <p><strong>Momentum:</strong> p = m × v</p>
+                <p><strong>Hukum Kekekalan:</strong> Σp_sebelum = Σp_sesudah</p>
+                <p><strong>Tabrakan Elastis:</strong> Energi & momentum terjaga</p>
+                <p><strong>Tabrakan Inelastis:</strong> Momentum terjaga, energi hilang</p>
+              </div>
+              <button 
+                onClick={() => setShowHint(false)}
+                className="mt-4 btn-secondary bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content Area */}
+        <div className="content-area min-h-screen flex items-center justify-center">
+          {renderScreen()}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SimulasiMomentumKolisionsBola;
+</script>
+</body>
+</html>

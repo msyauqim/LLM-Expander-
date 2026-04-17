@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const EducationalGame = () => {
+  const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'end'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackType, setFeedbackType] = useState('');
+  const [particles, setParticles] = useState([]);
+
+  const questions = [
+    {
+      question: "Apa ibukota Indonesia?",
+      options: ["Jakarta", "Bandung", "Surabaya", "Medan"],
+      answer: 0
+    },
+    {
+      question: "Berapa hasil dari 8 x 7?",
+      options: ["54", "56", "58", "60"],
+      answer: 1
+    },
+    {
+      question: "Siapa penemu bola lampu?",
+      options: ["Thomas Edison", "Albert Einstein", "Nikola Tesla", "Isaac Newton"],
+      answer: 0
+    },
+    {
+      question: "Apa gas yang paling melimpah di atmosfer bumi?",
+      options: ["Oksigen", "Nitrogen", "Karbondioksida", "Hidrogen"],
+      answer: 1
+    },
+    {
+      question: "Berapa jumlah sisi pada kubus?",
+      options: ["4", "6", "8", "12"],
+      answer: 1
+    }
+  ];
+
+  // Initialize particles
+  useEffect(() => {
+    const initialParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      speed: Math.random() * 2 + 1
+    }));
+    setParticles(initialParticles);
+  }, []);
+
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (gameState === 'playing' && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(interval);
+  }, [gameState, timeLeft]);
+
+  // Particle animation effect
+  useEffect(() => {
+    const animateParticles = () => {
+      setParticles(prev => prev.map(particle => ({
+        ...particle,
+        y: particle.y > 100 ? 0 : particle.y + particle.speed * 0.1
+      })));
+    };
+    
+    const particleInterval = setInterval(animateParticles, 50);
+    return () => clearInterval(particleInterval);
+  }, []);
+
+  const startGame = () => {
+    setGameState('playing');
+    setScore(0);
+    setLives(3);
+    setTimeLeft(60);
+    setCurrentQuestion(0);
+  };
+
+  const endGame = () => {
+    setGameState('end');
+  };
+
+  const handleAnswer = useCallback((selectedOption) => {
+    const isCorrect = selectedOption === questions[currentQuestion].answer;
+    
+    if (isCorrect) {
+      setScore(prev => prev + 10);
+      setFeedbackType('correct');
+    } else {
+      setLives(prev => prev - 1);
+      setFeedbackType('incorrect');
+    }
+    
+    setShowFeedback(true);
+    
+    setTimeout(() => {
+      setShowFeedback(false);
+      
+      if (isCorrect && currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      } else if (!isCorrect && lives <= 1) {
+        endGame();
+      } else if (currentQuestion >= questions.length - 1) {
+        endGame();
+      } else if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      }
+    }, 1000);
+  }, [currentQuestion, lives]);
+
+  const resetGame = () => {
+    setGameState('start');
+    setScore(0);
+    setLives(3);
+    setTimeLeft(60);
+    setCurrentQuestion(0);
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+      {/* Animated Background Particles */}
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute rounded-full bg-blue-400 opacity-20 particle"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+          }}
+        />
+      ))}
+
+      {/* Main Game Container */}
+      <div id="game-container" className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        
+        {/* Start Screen */}
+        {gameState === 'start' && (
+          <div id="start-screen" className="text-center space-y-8 max-w-md w-full">
+            <div className="card bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+              <h1 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Game Edukasi
+              </h1>
+              <p className="text-blue-200 mb-8 text-lg">
+                Uji pengetahuanmu dalam permainan edukatif yang menyenangkan!
+              </p>
+              
+              <button
+                onClick={startGame}
+                className="btn-primary bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Mulai Bermain
+              </button>
+              
+              <div className="mt-6 space-y-2">
+                <p className="text-blue-300">🎯 Jawaban benar: +10 poin</p>
+                <p className="text-blue-300">❤️ Nyawa: 3 kesempatan</p>
+                <p className="text-blue-300">⏱️ Waktu: 60 detik</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Game Screen */}
+        {gameState === 'playing' && (
+          <div id="game-screen" className="w-full max-w-2xl">
+            <div className="card bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+              {/* Game Info Bar */}
+              <div className="flex justify-between items-center mb-6 text-white">
+                <div id="score-display" className="bg-green-500/20 px-4 py-2 rounded-lg border border-green-400/30">
+                  <span className="font-semibold">Skor: {score}</span>
+                </div>
+                <div id="lives-display" className="bg-red-500/20 px-4 py-2 rounded-lg border border-red-400/30">
+                  <span className="font-semibold">Nyawa: {lives}</span>
+                </div>
+                <div id="timer-display" className="bg-yellow-500/20 px-4 py-2 rounded-lg border border-yellow-400/30">
+                  <span className="font-semibold">Waktu: {formatTime(timeLeft)}</span>
+                </div>
+              </div>
+
+              {/* Question Area */}
+              <div id="content-area" className="space-y-6">
+                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                  <h2 className="text-xl font-semibold text-white mb-4">
+                    {questions[currentQuestion].question}
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 gap-3">
+                    {questions[currentQuestion].options.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleAnswer(index)}
+                        className="btn-secondary bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-102 hover:shadow-lg border border-white/20"
+                      >
+                        {String.fromCharCode(65 + index)}. {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Progress */}
+                <div className="text-center text-blue-300">
+                  Soal {currentQuestion + 1} dari {questions.length}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* End Screen */}
+        {gameState === 'end' && (
+          <div id="end-screen" className="text-center space-y-6 max-w-md w-full">
+            <div className="card bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+              <h2 className="text-3xl font-bold text-white mb-4">Permainan Selesai!</h2>
+              <div className="space-y-2 mb-6">
+                <p className="text-xl text-blue-300">Skor Akhir: <span className="text-yellow-400 font-bold">{score}</span></p>
+                <p className="text-lg text-blue-300">Benar: <span className="text-green-400 font-bold">{Math.floor(score / 10)}</span> dari {questions.length}</p>
+              </div>
+              
+              <div className="space-y-3">
+                <button
+                  onClick={startGame}
+                  className="btn-primary bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg w-full"
+                >
+                  Main Lagi
+                </button>
+                <button
+                  onClick={resetGame}
+                  className="btn-secondary bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg w-full"
+                >
+                  Kembali ke Awal
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Feedback Overlay */}
+        {showFeedback && (
+          <div className={`fixed inset-0 flex items-center justify-center z-50 ${feedbackType === 'correct' ? 'glow' : ''}`}>
+            <div className={`fade-in ${feedbackType === 'correct' ? 'bg-green-500/90' : 'bg-red-500/90'} px-8 py-4 rounded-xl`}>
+              <h3 className="text-white text-2xl font-bold">
+                {feedbackType === 'correct' ? '✅ Benar!' : '❌ Salah!'}
+              </h3>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style jsx>{`
+        .card {
+          transition: all 0.3s ease;
+        }
+        
+        .btn-primary, .btn-secondary {
+          transition: all 0.3s ease;
+        }
+        
+        .particle {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .glow {
+          animation: glow 0.5s ease-in-out;
+        }
+        
+        .fade-in {
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes glow {
+          0% { box-shadow: 0 0 0px rgba(34, 197, 94, 0.5); }
+          50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
+          100% { box-shadow: 0 0 0px rgba(34, 197, 94, 0.5); }
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.8); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default EducationalGame;
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Fisika - Word Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            padding: 40px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4cc9f0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #4cc9f0;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a9d6e5;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(30, 30, 50, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a9d6e5;
+        }
+
+        .question-card {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #4361ee;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .answer-input {
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            border: 2px solid #4361ee;
+            border-radius: 10px;
+            background: rgba(25, 25, 45, 0.8);
+            color: white;
+            width: 300px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #f72585, #b5179e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+
+        .incorrect {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .end-screen {
+            text-align: center;
+        }
+
+        .final-score {
+            font-size: 5rem;
+            color: #4cc9f0;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .hint-btn {
+            background: linear-gradient(45deg, #ffd166, #ff9e00);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(76, 201, 240, 0.5);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .glow {
+            text-shadow: 0 0 10px #4cc9f0, 0 0 20px #4cc9f0;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .screen {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .answer-input {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .submit-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active fade-in">
+            <div class="header">
+                <h1 class="glow">Game Edukasi Fisika</h1>
+                <p>Pelajari konsep fisika melalui permainan interaktif!</p>
+            </div>
+            
+            <div class="question-card">
+                <p class="question-text">Uji pengetahuanmu tentang konsep-konsep dasar Fisika SMA Kelas 10</p>
+                <p style="margin: 20px 0; color: #a9d6e5;">Kamu akan diberikan pertanyaan pilihan ganda dan harus menjawab secepat mungkin!</p>
+                <p style="color: #ffd166;">Skor tinggi menunggu kamu!</p>
+            </div>
+            
+            <button id="start-btn" class="btn-primary">Mulai Permainan</button>
+            
+            <button id="instructions-btn" class="hint-btn">Petunjuk Bermain</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="header">
+                <h1 class="glow">Word Game Fisika</h1>
+                <p>Masukkan kata kunci fisika sesuai petunjuk</p>
+            </div>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="score-display">0</div>
+                    <div class="stat-label">Skor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timer-display">30</div>
+                    <div class="stat-label">Waktu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lives-display">3</div>
+                    <div class="stat-label">Nyawa</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <p class="question-text" id="current-question">Apa satuan dari gaya dalam Sistem Internasional?</p>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="answer-input" class="answer-input" placeholder="Masukkan jawaban..." autocomplete="off">
+                <button id="submit-btn" class="submit-btn">Cek Jawaban</button>
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <button id="hint-btn" class="hint-btn">Tampilkan Petunjuk</button>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen">
+            <div class="header">
+                <h1 class="glow">Permainan Selesai!</h1>
+                <p>Luar biasa! Kamu telah menyelesaikan tantangan ini</p>
+            </div>
+            
+            <div class="end-screen">
+                <div class="final-score" id="final-score">0</div>
+                <p id="result-message">Kamu hebat!</p>
+                <button id="restart-btn" class="btn-primary">Main Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="instructions-modal">
+        <div class="modal-content">
+            <h2 style="color: #4cc9f0; margin-bottom: 20px; text-align: center;">Petunjuk Bermain</h2>
+            <ul style="text-align: left; margin-bottom: 20px; line-height: 1.8;">
+                <li>Setiap pertanyaan membutuhkan jawaban berupa kata kunci fisika</li>
+                <li>Ketik jawaban dengan benar dan klik "Cek Jawaban"</li>
+                <li>Setiap jawaban benar mendapatkan 10 poin</li>
+                <li>Waktu terbatas untuk setiap pertanyaan</li>
+                <li>Kamu memiliki 3 nyawa, jawaban salah mengurangi 1 nyawa</li>
+            </ul>
+            <button id="close-instructions" class="close-btn">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            score: 0,
+            lives: 3,
+            timeLeft: 30,
+            currentQuestionIndex: 0,
+            timer: null,
+            questions: [
+                {
+                    question: "Apa satuan dari gaya dalam Sistem Internasional?",
+                    answer: "Newton",
+                    hint: "Diambil dari nama ilmuwan Inggris"
+                },
+                {
+                    question: "Apa nama hukum yang menyatakan bahwa Gaya = Massa × Percepatan?",
+                    answer: "Hukum Newton Kedua",
+                    hint: "Berhubungan dengan gerak benda"
+                },
+                {
+                    question: "Apa istilah untuk kecepatan perubahan kecepatan?",
+                    answer: "Percepatan",
+                    hint: "Menggambarkan perubahan kecepatan"
+                },
+                {
+                    question: "Apa satuan dari energi dalam Sistem Internasional?",
+                    answer: "Joule",
+                    hint: "Diambil dari nama ilmuwan fisika"
+                },
+                {
+                    question: "Apa nama fenomena di mana cahaya dibelokkan saat melewati medium?",
+                    answer: "Refraksi",
+                    hint: "Terjadi pada lensa dan air"
+                }
+            ]
+        };
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const answerInput = document.getElementById('answer-input');
+        const currentQuestionEl = document.getElementById('current-question');
+        const scoreDisplay = document.getElementById('score-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const feedbackEl = document.getElementById('feedback');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultMessage = document.getElementById('result-message');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const closeInstructions = document.getElementById('close-instructions');
+        const hintBtn = document.getElementById('hint-btn');
+
+        // Initialize game
+        function initGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.currentQuestionIndex = 0;
+            updateDisplays();
+            loadQuestion();
+        }
+
+        // Update displays
+        function updateDisplays() {
+            scoreDisplay.textContent = gameState.score;
+            livesDisplay.textContent = gameState.lives;
+            timerDisplay.textContent = gameState.timeLeft;
+        }
+
+        // Load current question
+        function loadQuestion() {
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
+                endGame();
+                return;
+            }
+            
+            const currentQ = gameState.questions[gameState.currentQuestionIndex];
+            currentQuestionEl.textContent = currentQ.question;
+            answerInput.value = '';
+            feedbackEl.style.display = 'none';
+            gameState.timeLeft = 30;
+            updateDisplays();
+            startTimer();
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(gameState.timer);
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                timerDisplay.textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        // Handle time up
+        function handleTimeUp() {
+            showFeedback('Waktu habis! Jawaban yang benar adalah: ' + gameState.questions[gameState.currentQuestionIndex].answer, false);
+            setTimeout(() => {
+                gameState.currentQuestionIndex++;
+                if (gameState.currentQuestionIndex < gameState.questions.length && gameState.lives > 0) {
+                    loadQuestion();
+                } else {
+                    endGame();
+                }
+            }, 2000);
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim();
+            const correctAnswer = gameState.questions[gameState.currentQuestionIndex].answer;
+            
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                // Correct answer
+                gameState.score += 10;
+                showFeedback(`Benar! Jawaban: ${correctAnswer}`, true);
+                clearInterval(gameState.timer);
+                
+                setTimeout(() => {
+                    gameState.currentQuestionIndex++;
+                    if (gameState.currentQuestionIndex < gameState.questions.length) {
+                        loadQuestion();
+                    } else {
+                        endGame();
+                    }
+                }, 2000);
+            } else {
+                // Incorrect answer
+                gameState.lives--;
+                showFeedback(`Salah! Jawaban yang benar: ${correctAnswer}`, false);
+                updateDisplays();
+                
+                if (gameState.lives <= 0) {
+                    setTimeout(() => {
+                        endGame();
+                    }, 2000);
+                } else {
+                    clearInterval(gameState.timer);
+                    setTimeout(() => {
+                        gameState.currentQuestionIndex++;
+                        if (gameState.currentQuestionIndex < gameState.questions.length) {
+                            loadQuestion();
+                        } else {
+                            endGame();
+                        }
+                    }, 2000);
+                }
+            }
+        }
+
+        // Show feedback
+        function showFeedback(message, isCorrect) {
+            feedbackEl.textContent = message;
+            feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackEl.style.display = 'block';
+        }
+
+        // End game
+        function endGame() {
+            clearInterval(gameState.timer);
+            finalScoreEl.textContent = gameState.score;
+            
+            if (gameState.score >= 40) {
+                resultMessage.textContent = "Sangat Hebat! Kamu benar-benar ahli fisika!";
+            } else if (gameState.score >= 20) {
+                resultMessage.textContent = "Bagus sekali! Teruskan belajar fisika!";
+            } else {
+                resultMessage.textContent = "Belajar lebih giat lagi! Fisika itu seru loh!";
+            }
+            
+            startScreen.style.display = 'none';
+            gameScreen.style.display = 'none';
+            endScreen.style.display = 'block';
+        }
+
+        // Show instructions
+        function showInstructions() {
+            instructionsModal.style.display = 'flex';
+        }
+
+        // Hide instructions
+        function hideInstructions() {
+            instructionsModal.style.display = 'none';
+        }
+
+        // Show hint
+        function showHint() {
+            const currentQ = gameState.questions[gameState.currentQuestionIndex];
+            showFeedback(`Petunjuk: ${currentQ.hint}`, false);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            initGame();
+        });
+
+        submitBtn.addEventListener('click', checkAnswer);
+
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            endScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+            initGame();
+        });
+
+        instructionsBtn.addEventListener('click', showInstructions);
+        closeInstructions.addEventListener('click', hideInstructions);
+        hintBtn.addEventListener('click', showHint);
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize particles when page loads
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>
+<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Word Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            padding: 40px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            background: #f8f9fa;
+            border-color: #3498db;
+        }
+
+        .option-btn.correct {
+            background: #2ecc71;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .option-btn.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            margin: 10px 5px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .feedback-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .correct-feedback {
+            background: #d5f5e3;
+            color: #27ae60;
+            border: 1px solid #2ecc71;
+        }
+
+        .incorrect-feedback {
+            background: #fadbd8;
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .instructions-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .instructions-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .end-screen-content {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .win { color: #27ae60; }
+        .lose { color: #e74c3c; }
+
+        .final-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @media (max-width: 600px) {
+            .screen {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="game-container">
+        <!-- Start Screen -->
+        <div class="screen active" id="start-screen">
+            <div class="header">
+                <h1>🎮 Edukasi Word Game</h1>
+                <p>Uji pengetahuan vocabularimu!</p>
+            </div>
+            
+            <div class="question-card">
+                <p class="question-text">Kamu akan menjawab beberapa pertanyaan pilihan ganda tentang kosakata. Setiap jawaban benar bernilai 10 poin. Kamu punya 5 menit dan 3 nyawa!</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <button class="btn-primary" id="start-btn">Mulai Bermain</button>
+                    <button class="btn-secondary" id="instructions-btn">Instruksi</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="game-screen">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="score-display">0</div>
+                    <div class="stat-label">Skor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lives-display">❤️❤️❤️</div>
+                    <div class="stat-label">Nyawa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timer-display">5:00</div>
+                    <div class="stat-label">Waktu</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="question-text">Memuat soal...</div>
+                
+                <div class="options-grid" id="options-container">
+                    <!-- Options will be inserted here -->
+                </div>
+                
+                <div class="feedback-message" id="feedback-message"></div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-secondary" id="hint-btn">Petunjuk</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div class="screen" id="end-screen">
+            <div class="end-screen-content">
+                <div class="result-icon" id="result-icon">🎉</div>
+                <h2 id="result-title">Selamat!</h2>
+                <p id="result-description">Kamu telah menyelesaikan permainan.</p>
+                
+                <div class="final-score" id="final-score">Skor: 0</div>
+                
+                <div style="margin: 30px 0;">
+                    <button class="btn-primary" id="restart-btn">Main Lagi</button>
+                    <button class="btn-secondary" id="menu-btn">Menu Utama</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="instructions-modal" id="instructions-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2>Instruksi Permainan</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                1. Jawab semua pertanyaan pilihan ganda<br>
+                2. Setiap jawaban benar mendapat 10 poin<br>
+                3. Kamu punya 3 nyawa - jawaban salah mengurangi 1 nyawa<br>
+                4. Waktu berjalan selama 5 menit<br>
+                5. Target skor 70+ untuk menang<br>
+            </p>
+            <p style="margin: 15px 0; line-height: 1.6; color: #e74c3c; font-weight: 500;">
+                Jika nyawa habis atau waktu habis sebelum mencapai target, permainan berakhir!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            score: 0,
+            lives: 3,
+            timeLeft: 300, // 5 minutes in seconds
+            isRunning: false,
+            currentQuestionIndex: 0,
+            questions: [
+                {
+                    question: "Apa sinonim dari kata 'BERSIH'?",
+                    options: ["Kotor", "Jernih", "Hitam", "Pudar"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Antonim dari kata 'TINGGI' adalah?",
+                    options: ["Rendah", "Panjang", "Lebar", "Dalam"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Kata baku dari 'NONGKRONG' adalah?",
+                    options: ["Bersantai", "Berkeliling", "Berdiam diri", "Bermalas-malasan"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Sinonim dari 'CERIA' adalah?",
+                    options: ["Sedih", "Murung", "Gembira", "Marah"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Apa lawan kata dari 'PAGI'?",
+                    options: ["Siang", "Malam", "Senja", "Subuh"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Kata kerja dari 'KEINDAHAN' adalah?",
+                    options: ["Indah", "Mengindahkan", "Kecantikan", "Keindahan"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Sinonim dari 'RAMAI' adalah?",
+                    options: ["Sunyi", "Sepi", "Hening", "Bising"],
+                    correctAnswer: 3
+                },
+                {
+                    question: "Antonim dari 'MAHAL' adalah?",
+                    options: ["Murah", "Mahal", "Besar", "Kecil"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Kata baku dari 'KECE' adalah?",
+                    options: ["Bagus", "Keren", "Cantik", "Tampan"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Sinonim dari 'RAHASIA' adalah?",
+                    options: ["Terbuka", "Samar", "Tertutup", "Sirik"],
+                    correctAnswer: 2
+                }
+            ]
+        };
+
+        // DOM Elements
+        const elements = {
+            startScreen: document.getElementById('start-screen'),
+            gameScreen: document.getElementById('game-screen'),
+            endScreen: document.getElementById('end-screen'),
+            scoreDisplay: document.getElementById('score-display'),
+            livesDisplay: document.getElementById('lives-display'),
+            timerDisplay: document.getElementById('timer-display'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            feedbackMessage: document.getElementById('feedback-message'),
+            progressFill: document.getElementById('progress-fill'),
+            finalScore: document.getElementById('final-score'),
+            resultIcon: document.getElementById('result-icon'),
+            resultTitle: document.getElementById('result-title'),
+            resultDescription: document.getElementById('result-description'),
+            startBtn: document.getElementById('start-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            menuBtn: document.getElementById('menu-btn'),
+            instructionsBtn: document.getElementById('instructions-btn'),
+            closeModal: document.getElementById('close-modal'),
+            instructionsModal: document.getElementById('instructions-modal'),
+            hintBtn: document.getElementById('hint-btn')
+        };
+
+        // Utility functions
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateDisplays() {
+            elements.scoreDisplay.textContent = gameState.score;
+            elements.livesDisplay.textContent = '❤️'.repeat(gameState.lives);
+            elements.timerDisplay.textContent = formatTime(gameState.timeLeft);
+            
+            // Update progress bar
+            const progressPercent = (gameState.currentQuestionIndex / gameState.questions.length) * 100;
+            elements.progressFill.style.width = `${progressPercent}%`;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showFeedback(message, isSuccess) {
+            elements.feedbackMessage.textContent = message;
+            elements.feedbackMessage.className = 'feedback-message show';
+            elements.feedbackMessage.classList.add(isSuccess ? 'correct-feedback' : 'incorrect-feedback');
+            
+            setTimeout(() => {
+                elements.feedbackMessage.classList.remove('show');
+            }, 2000);
+        }
+
+        function createOptionElement(optionText, index) {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = optionText;
+            button.onclick = () => handleAnswer(index);
+            return button;
+        }
+
+        function loadQuestion() {
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
+                endGame();
+                return;
+            }
+
+            const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+            elements.questionText.textContent = currentQuestion.question;
+            
+            // Clear previous options
+            elements.optionsContainer.innerHTML = '';
+            
+            // Add new options
+            currentQuestion.options.forEach((option, index) => {
+                elements.optionsContainer.appendChild(createOptionElement(option, index));
+            });
+        }
+
+        function handleAnswer(selectedIndex) {
+            const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+            const isCorrect = selectedIndex === currentQuestion.correctAnswer;
+            
+            // Disable all buttons after selection
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+                if (parseInt(btn.dataset.index) === currentQuestion.correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            if (isCorrect) {
+                gameState.score += 10;
+                showFeedback('Benar! 🎉', true);
+            } else {
+                gameState.lives--;
+                showFeedback(`Salah! Jawaban benar: ${currentQuestion.options[currentQuestion.correctAnswer]}`, false);
+            }
+
+            updateDisplays();
+
+            setTimeout(() => {
+                gameState.currentQuestionIndex++;
+                
+                if (gameState.lives <= 0 || gameState.currentQuestionIndex >= gameState.questions.length) {
+                    endGame();
+                } else {
+                    loadQuestion();
+                }
+            }, 2000);
+        }
+
+        function startTimer() {
+            if (!gameState.isRunning) return;
+            
+            gameState.timeLeft--;
+            updateDisplays();
+            
+            if (gameState.timeLeft <= 0) {
+                endGame();
+            } else {
+                setTimeout(startTimer, 1000);
+            }
+        }
+
+        function initGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.timeLeft = 300;
+            gameState.currentQuestionIndex = 0;
+            gameState.isRunning = true;
+            
+            updateDisplays();
+            loadQuestion();
+            startTimer();
+        }
+
+        function endGame() {
+            gameState.isRunning = false;
+            
+            // Calculate result
+            const isWin = gameState.score >= 70;
+            
+            elements.resultIcon.textContent = isWin ? '🏆' : '💔';
+            elements.resultTitle.textContent = isWin ? 'Selamat! Kamu Menang!' : 'Permainan Selesai!';
+            elements.resultDescription.textContent = isWin 
+                ? 'Kamu mencapai target skor yang ditentukan!' 
+                : 'Coba lagi dan raih skor lebih tinggi!';
+            
+            elements.finalScore.textContent = `Skor Akhir: ${gameState.score}`;
+            elements.resultIcon.className = `result-icon ${isWin ? 'win' : 'lose'}`;
+            
+            showScreen('end-screen');
+        }
+
+        // Event listeners
+        elements.startBtn.addEventListener('click', () => {
+            showScreen('game-screen');
+            initGame();
+        });
+
+        elements.restartBtn.addEventListener('click', () => {
+            showScreen('start-screen');
+        });
+
+        elements.menuBtn.addEventListener('click', () => {
+            showScreen('start-screen');
+        });
+
+        elements.instructionsBtn.addEventListener('click', () => {
+            elements.instructionsModal.classList.add('active');
+        });
+
+        elements.closeModal.addEventListener('click', () => {
+            elements.instructionsModal.classList.remove('active');
+        });
+
+        elements.hintBtn.addEventListener('click', () => {
+            if (gameState.isRunning) {
+                const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+                const wrongAnswers = currentQuestion.options
+                    .map((opt, idx) => ({ option: opt, index: idx }))
+                    .filter((_, idx) => idx !== currentQuestion.correctAnswer);
+                
+                // Remove one wrong answer as hint
+                if (wrongAnswers.length > 0) {
+                    const randomWrong = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+                    document.querySelectorAll('.option-btn')[randomWrong.index].style.opacity = '0.5';
+                    showFeedback(`Petunjuk: ${randomWrong.option} bukan jawaban yang benar`, false);
+                }
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === elements.instructionsModal) {
+                elements.instructionsModal.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        updateDisplays();
+    </script>
+</body>
+</html>
+</script>
+</body>
+</html>

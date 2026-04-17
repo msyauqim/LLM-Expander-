@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi: Listrik Statis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 2px solid #ff8a00;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .game-area {
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .intro-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .diagram-container {
+            position: relative;
+            height: 300px;
+            background: rgba(30, 30, 50, 0.6);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 2px solid #4a90e2;
+        }
+
+        .electric-field {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px dashed #4a90e2;
+            border-radius: 50%;
+        }
+
+        .ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .ball:hover {
+            transform: scale(1.2);
+        }
+
+        .ball-1 {
+            background: radial-gradient(circle, #ff5252, #b33939);
+            top: 30%;
+            left: 30%;
+            box-shadow: 0 0 20px #ff5252;
+        }
+
+        .ball-2 {
+            background: radial-gradient(circle, #4cd137, #44bd32);
+            top: 70%;
+            left: 70%;
+            box-shadow: 0 0 20px #4cd137;
+        }
+
+        .field-line {
+            position: absolute;
+            background: rgba(74, 144, 226, 0.5);
+            transform-origin: 0 0;
+        }
+
+        .question-section {
+            background: rgba(30, 30, 50, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #4a90e2;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .answer-input:focus {
+            outline: 2px solid #ffcc00;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 10px auto;
+            width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 27, 96, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .explanation {
+            background: rgba(46, 204, 113, 0.2);
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 10px 10px 0;
+            display: none;
+        }
+
+        .problems-section {
+            margin-top: 20px;
+        }
+
+        .problem-item {
+            background: rgba(74, 144, 226, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            border: 1px solid #ffcc00;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Listrik Statis</h1>
+            <div class="subtitle">Hukum Biot-Savart & Induksi Elektromagnetik</div>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-value" id="score">0</div>
+                <div class="stat-label">Skor</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="lives">3</div>
+                <div class="stat-label">Nyawa</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="level">1</div>
+                <div class="stat-label">Level</div>
+            </div>
+        </div>
+
+        <div class="timer">
+            <span id="time">45:00</span>
+        </div>
+
+        <div class="game-area">
+            <div class="intro-section">
+                <h2>Diagram Medan Listrik</h2>
+                <p>Perhatikan diagram di bawah ini untuk memahami arah dan kekuatan medan listrik</p>
+                
+                <div class="diagram-container" id="diagram">
+                    <div class="electric-field"></div>
+                    <div class="ball ball-1" id="ball1"></div>
+                    <div class="ball ball-2" id="ball2"></div>
+                    <!-- Field lines will be generated by JS -->
+                </div>
+            </div>
+
+            <div class="question-section">
+                <div class="question-text" id="question">
+                    Jika gaya medan listrik sama besar tapi arah berlawanan, bagaimana gaya medan listrik tersebut?
+                </div>
+                <input type="text" class="answer-input" id="answerInput" placeholder="Ketik jawabanmu di sini...">
+                <button class="btn" id="checkBtn">Periksa Jawaban</button>
+                
+                <div class="explanation" id="explanation">
+                    <strong>Penjelasan:</strong> Gaya medan listrik akan bernilai negatif karena gaya hidupnya sama namun arahnya berubah.
+                </div>
+            </div>
+
+            <div class="problems-section">
+                <h3>Contoh Soal:</h3>
+                <div class="problem-item">
+                    Dua bola masing-masing massa 1 kg dipasang pada kedua titik sudut lingkaran diameter 60 cm. Hitung gaya medan listrik antara dua bola
+                </div>
+                <div class="problem-item">
+                    Dua bola masing-masing massa 1 kg dipasang pada kedua titik sudut lingkaran diameter 90 cm. Hitung gaya medan listrik antara dua bola
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            timeLeft: 45 * 60, // 45 minutes in seconds
+            currentQuestionIndex: 0,
+            questions: [
+                {
+                    question: "Jika gaya medan listrik sama besar tapi arah berlawanan, bagaimana gaya medan listrik tersebut?",
+                    answer: "negatif",
+                    explanation: "Gaya medan listrik akan bernilai negatif karena gaya hidupnya sama namun arahnya berubah."
+                },
+                {
+                    question: "Apa satuan dari medan listrik?",
+                    answer: "N/C",
+                    explanation: "Satuan medan listrik adalah Newton per Coulomb (N/C)."
+                },
+                {
+                    question: "Bagaimana arah medan listrik dari muatan positif?",
+                    answer: "menjauhi",
+                    explanation: "Medan listrik dari muatan positif selalu menjauhi muatan tersebut."
+                }
+            ]
+        };
+
+        // DOM Elements
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+        const levelEl = document.getElementById('level');
+        const timeEl = document.getElementById('time');
+        const questionEl = document.getElementById('question');
+        const answerInput = document.getElementById('answerInput');
+        const checkBtn = document.getElementById('checkBtn');
+        const explanationEl = document.getElementById('explanation');
+        const diagram = document.getElementById('diagram');
+
+        // Initialize game
+        function initGame() {
+            updateStats();
+            createFieldLines();
+            setupEventListeners();
+            startTimer();
+        }
+
+        // Create electric field lines
+        function createFieldLines() {
+            // Clear existing lines
+            const existingLines = document.querySelectorAll('.field-line');
+            existingLines.forEach(line => line.remove());
+
+            // Create new field lines
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const length = 80 + Math.random() * 40;
+                
+                const line = document.createElement('div');
+                line.className = 'field-line';
+                line.style.width = `${length}px`;
+                line.style.height = '2px';
+                line.style.top = '50%';
+                line.style.left = '50%';
+                line.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
+                
+                diagram.appendChild(line);
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            checkBtn.addEventListener('click', checkAnswer);
+            answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+
+            // Ball interactions
+            document.getElementById('ball1').addEventListener('click', () => {
+                animateBall('ball1');
+                showElectricEffect();
+            });
+            
+            document.getElementById('ball2').addEventListener('click', () => {
+                animateBall('ball2');
+                showElectricEffect();
+            });
+        }
+
+        // Animate ball when clicked
+        function animateBall(ballId) {
+            const ball = document.getElementById(ballId);
+            ball.style.transform = 'scale(1.5)';
+            setTimeout(() => {
+                ball.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Show electric effect
+        function showElectricEffect() {
+            const effect = document.createElement('div');
+            effect.style.position = 'absolute';
+            effect.style.width = '100px';
+            effect.style.height = '100px';
+            effect.style.borderRadius = '50%';
+            effect.style.border = '2px solid #4a90e2';
+            effect.style.top = '50%';
+            effect.style.left = '50%';
+            effect.style.transform = 'translate(-50%, -50%)';
+            effect.style.opacity = '0';
+            effect.style.animation = 'pulse 1s forwards';
+            
+            diagram.appendChild(effect);
+            
+            // Add CSS for pulse animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+                    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            setTimeout(() => {
+                effect.remove();
+                document.head.removeChild(style);
+            }, 1000);
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const userAnswer = answerInput.value.toLowerCase().trim();
+            const correctAnswer = gameState.questions[gameState.currentQuestionIndex].answer.toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                // Correct answer
+                gameState.score += 10;
+                explanationEl.innerHTML = `<strong>Benar!</strong> ${gameState.questions[gameState.currentQuestionIndex].explanation}`;
+                explanationEl.style.display = 'block';
+                explanationEl.style.background = 'rgba(46, 204, 113, 0.2)';
+                
+                // Move to next question
+                setTimeout(() => {
+                    nextQuestion();
+                }, 2000);
+            } else {
+                // Wrong answer
+                gameState.lives--;
+                explanationEl.innerHTML = `<strong>Salah!</strong> Jawaban yang benar: ${gameState.questions[gameState.currentQuestionIndex].answer}<br><strong>Penjelasan:</strong> ${gameState.questions[gameState.currentQuestionIndex].explanation}`;
+                explanationEl.style.display = 'block';
+                explanationEl.style.background = 'rgba(231, 76, 60, 0.2)';
+                
+                if (gameState.lives <= 0) {
+                    endGame(false);
+                }
+            }
+            
+            updateStats();
+            answerInput.value = '';
+        }
+
+        // Move to next question
+        function nextQuestion() {
+            gameState.currentQuestionIndex++;
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
+                gameState.currentQuestionIndex = 0; // Loop back to first question
+                gameState.level++;
+            }
+            
+            questionEl.textContent = gameState.questions[gameState.currentQuestionIndex].question;
+            explanationEl.style.display = 'none';
+            updateStats();
+        }
+
+        // Update stats display
+        function updateStats() {
+            scoreEl.textContent = gameState.score;
+            livesEl.textContent = gameState.lives;
+            levelEl.textContent = gameState.level;
+        }
+
+        // Start game timer
+        function startTimer() {
+            const timer = setInterval(() => {
+                gameState.timeLeft--;
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame(true);
+                    return;
+                }
+                
+                const minutes = Math.floor(gameState.timeLeft / 60);
+                const seconds = gameState.timeLeft % 60;
+                timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // End game
+        function endGame(timeUp) {
+            if (timeUp) {
+                alert(`Waktu habis! Skor akhir kamu: ${gameState.score}`);
+            } else {
+                alert(`Game over! Nyawa habis. Skor akhir kamu: ${gameState.score}`);
+            }
+            
+            // Reset game
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.timeLeft = 45 * 60;
+            gameState.currentQuestionIndex = 0;
+            updateStats();
+            questionEl.textContent = gameState.questions[0].question;
+            explanationEl.style.display = 'none';
+        }
+
+        // Initialize the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>

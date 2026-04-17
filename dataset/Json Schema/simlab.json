@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sim Lab Payload",
+  "description": "Schema payload untuk game_type: sim_lab. Simulasi laboratorium virtual dengan variabel yang bisa diubah siswa dan visualisasi interaktif yang kaya.",
+  "type": "object",
+  "required": ["instruction", "variables", "formula", "sim_steps", "analysis_questions", "scene"],
+  "properties": {
+    "instruction": {
+      "type": "string",
+      "description": "Instruksi percobaan lab virtual"
+    },
+    "scene": {
+      "type": "object",
+      "description": "Deskripsi scene simulasi yang WAJIB dirender secara visual. Scene ini menentukan bagaimana simulasi divisualisasikan di layar.",
+      "required": ["title", "narrative", "context", "interactive_objects", "visual_feedback"],
+      "properties": {
+        "title": { "type": "string" },
+        "narrative": { "type": "string", "description": "Narasi singkat konteks simulasi" },
+        "context": { "type": "string", "description": "Deskripsi setting/lokasi simulasi" },
+        "interactive_objects": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Objek interaktif yang berubah berdasarkan variabel input. SETIAP objek HARUS divisualisasikan.",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "visual_description", "position", "bound_to_variable", "visual_response"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "visual_description": {
+                "type": "string",
+                "description": "Deskripsi DETAIL cara merender objek ini dengan CSS/Canvas. Contoh: 'Bola: div 30px border-radius 50%, radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b), box-shadow: 0 4px 15px rgba(192,57,43,0.5), 0 0 30px rgba(255,107,107,0.3)'"
+              },
+              "position": { "type": "string", "description": "Posisi awal CSS, misal: 'left: 50%; top: 20%'" },
+              "bound_to_variable": { "type": "string", "description": "ID variabel yang mempengaruhi objek ini" },
+              "visual_response": {
+                "type": "string",
+                "description": "Bagaimana tampilan objek berubah saat variabel berubah. Contoh: 'Saat massa naik: skala objek membesar (transform scale 1-2.5). Saat kecepatan naik: tambah trail blur di belakang objek, panjang trail proporsional kecepatan.'"
+              }
+            }
+          }
+        },
+        "visual_feedback": {
+          "type": "array",
+          "description": "Elemen visual yang menunjukkan hasil perhitungan secara real-time",
+          "items": {
+            "type": "object",
+            "required": ["id", "type", "description"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string", "enum": ["value_display", "bar_meter", "trajectory_trail", "vector_arrow", "color_change", "graph_realtime", "gauge", "speedometer"] },
+              "description": { "type": "string", "description": "Detail cara render feedback ini. Contoh untuk bar_meter: 'Bar horizontal 200x20px, fill gradient dari #2ecc71 ke #e74c3c proporsional nilai, label angka di atas bar, animasi transition width 0.3s ease'" },
+              "bound_to": { "type": "string", "description": "ID variabel/equation yang ditampilkan" }
+            }
+          }
+        },
+        "animation_on_run": {
+          "type": "string",
+          "description": "Deskripsi animasi yang terjadi saat siswa menekan tombol 'Jalankan Simulasi'. Contoh: 'Bola bergerak parabola dari kiri ke kanan, kecepatan proporsional v0, ketinggian maks proporsional v0*sin(theta), trail titik-titik transparan mengikuti lintasan, saat menyentuh tanah muncul efek debu (3 partikel kecil menyebar)'"
+        }
+      }
+    },
+    "variables": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["name", "label", "unit", "min", "max", "default", "step"],
+        "properties": {
+          "name": { "type": "string", "description": "Nama variabel (camelCase untuk JS)" },
+          "label": { "type": "string", "description": "Label tampilan bahasa Indonesia" },
+          "unit": { "type": "string" },
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "default": { "type": "number" },
+          "step": { "type": "number" },
+          "role": { "type": "string", "enum": ["independent", "dependent", "constant"], "description": "Peran variabel dalam percobaan" },
+          "slider_color": { "type": "string", "description": "Warna aksen slider, hex. Contoh: #3498db" }
+        }
+      }
+    },
+    "formula": {
+      "type": "object",
+      "required": ["expression", "description"],
+      "properties": {
+        "expression": { "type": "string", "description": "Rumus dalam notasi JS, misal: 0.5 * m * v * v" },
+        "description": { "type": "string", "description": "Penjelasan rumus dalam bahasa Indonesia" },
+        "display_latex": { "type": "string", "description": "Rumus dalam format tampilan, misal: KE = ½mv²" }
+      }
+    },
+    "sim_steps": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "description": "Langkah-langkah percobaan yang harus diikuti siswa",
+      "items": {
+        "type": "object",
+        "required": ["step", "action"],
+        "properties": {
+          "step": { "type": "integer" },
+          "action": { "type": "string" },
+          "expected_observation": { "type": "string", "description": "Apa yang seharusnya diamati siswa" }
+        }
+      }
+    },
+    "analysis_questions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "expected_answer"],
+        "properties": {
+          "id": { "type": "integer" },
+          "question": { "type": "string" },
+          "expected_answer": { "type": "string" },
+          "hint": { "type": "string" }
+        }
+      }
+    }
+  }
+}

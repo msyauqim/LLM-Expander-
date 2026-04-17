@@ -1,0 +1,500 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, RotateCcw, BookOpen, Trophy, Zap } from 'lucide-react';
+
+const NewtonFirstLawGame = () => {
+  const [gameState, setGameState] = useState('menu'); // menu, tutorial, game, quiz, result
+  const [score, setScore] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [objectVelocity, setObjectVelocity] = useState({ x: 0, y: 0 });
+  const [objectPosition, setObjectPosition] = useState({ x: 100, y: 100 });
+  const [appliedForce, setAppliedForce] = useState({ x: 0, y: 0 });
+  const [isMoving, setIsMoving] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [quizScore, setQuizScore] = useState(0);
+  
+  const gameAreaRef = useRef(null);
+
+  const quizQuestions = [
+    {
+      question: "Apa yang terjadi pada benda jika tidak ada gaya total yang bekerja padanya?",
+      options: ["Bergerak semakin cepat", "Berhenti seketika", "Tetap diam atau bergerak lurus beraturan", "Berputar sendiri"],
+      correct: 2
+    },
+    {
+      question: "Contoh penerapan Hukum I Newton dalam kehidupan sehari-hari adalah:",
+      options: ["Mobil melaju dengan kecepatan konstan", "Orang terdorong ke depan saat bus direm mendadak", "Bola menggelinding lalu berhenti", "Kelereng jatuh dari meja"],
+      correct: 1
+    },
+    {
+      question: "Hukum I Newton juga dikenal sebagai:",
+      options: ["Hukum Aksi Reaksi", "Hukum Gravitasi", "Hukum Kelembaman", "Hukum Momentum"],
+      correct: 2
+    }
+  ];
+
+  useEffect(() => {
+    let interval;
+    if (gameState === 'game' && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      setGameState('result');
+    }
+    return () => clearInterval(interval);
+  }, [gameState, timeLeft]);
+
+  useEffect(() => {
+    let animationFrame;
+    if (gameState === 'game' && isMoving) {
+      const animate = () => {
+        setObjectPosition(prev => {
+          const newX = Math.max(0, Math.min(700, prev.x + objectVelocity.x));
+          const newY = Math.max(0, Math.min(400, prev.y + objectVelocity.y));
+          
+          // Apply friction gradually
+          const newVelX = objectVelocity.x * 0.98;
+          const newVelY = objectVelocity.y * 0.98;
+          
+          if (Math.abs(newVelX) < 0.1 && Math.abs(newVelY) < 0.1) {
+            setIsMoving(false);
+          }
+          
+          setObjectVelocity({ x: newVelX, y: newVelY });
+          return { x: newX, y: newY };
+        });
+        animationFrame = requestAnimationFrame(animate);
+      };
+      animate();
+    }
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isMoving, objectVelocity, gameState]);
+
+  const applyForce = (forceX, forceY) => {
+    if (!isMoving) {
+      setAppliedForce({ x: forceX, y: forceY });
+      setObjectVelocity({ x: forceX * 2, y: forceY * 2 });
+      setIsMoving(true);
+      setAttempts(prev => prev + 1);
+      
+      setTimeout(() => {
+        setAppliedForce({ x: 0, y: 0 });
+      }, 500);
+    }
+  };
+
+  const resetGame = () => {
+    setObjectPosition({ x: 100, y: 100 });
+    setObjectVelocity({ x: 0, y: 0 });
+    setAppliedForce({ x: 0, y: 0 });
+    setIsMoving(false);
+    setTimeLeft(30);
+    setScore(0);
+    setAttempts(0);
+  };
+
+  const startGame = () => {
+    setGameState('game');
+    resetGame();
+  };
+
+  const handleQuizSubmit = () => {
+    if (selectedAnswer === quizQuestions[currentQuestion].correct) {
+      setQuizScore(prev => prev + 1);
+    }
+    
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(prev => prev + 1);
+      setSelectedAnswer('');
+    } else {
+      setGameState('result');
+    }
+  };
+
+  const NewtonVisualization = () => (
+    <div className="relative w-full h-96 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg border-2 border-gray-300 overflow-hidden">
+      {/* Grid background */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-20"></div>
+      
+      {/* Object */}
+      <div
+        className={`absolute w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg shadow-lg transition-all duration-100 ${
+          isMoving ? 'animate-pulse' : ''
+        }`}
+        style={{
+          left: `${objectPosition.x}px`,
+          top: `${objectPosition.y}px`,
+          transform: `translate(${appliedForce.x * 5}px, ${appliedForce.y * 5}px)`
+        }}
+      >
+        <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold">
+          🏢
+        </div>
+      </div>
+
+      {/* Velocity vector */}
+      {isMoving && (
+        <div
+          className="absolute w-1 h-1 bg-green-500"
+          style={{
+            left: `${objectPosition.x + 32}px`,
+            top: `${objectPosition.y + 32}px`,
+            width: `${Math.abs(objectVelocity.x) * 10}px`,
+            height: `${Math.abs(objectVelocity.y) * 10}px`,
+            transform: `rotate(${Math.atan2(objectVelocity.y, objectVelocity.x)}rad)`,
+            backgroundColor: 'green',
+            transformOrigin: 'left center'
+          }}
+        ></div>
+      )}
+
+      {/* Force arrow when force is applied */}
+      {appliedForce.x !== 0 || appliedForce.y !== 0 && (
+        <div
+          className="absolute w-1 h-1 bg-red-500"
+          style={{
+            left: `${objectPosition.x + 32}px`,
+            top: `${objectPosition.y + 32}px`,
+            width: `${Math.abs(appliedForce.x) * 20}px`,
+            height: `${Math.abs(appliedForce.y) * 20}px`,
+            transform: `rotate(${Math.atan2(appliedForce.y, appliedForce.x)}rad)`,
+            backgroundColor: 'red',
+            transformOrigin: 'left center'
+          }}
+        ></div>
+      )}
+    </div>
+  );
+
+  const GameMenu = () => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full text-center">
+        <div className="flex items-center justify-center mb-6">
+          <Zap className="w-12 h-12 text-yellow-500 mr-3" />
+          <h1 className="text-4xl font-bold text-gray-800">Newton's First Law</h1>
+        </div>
+        
+        <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Hukum I Newton (Kelembaman)</h2>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            "Sebuah benda akan tetap diam atau bergerak lurus beraturan jika tidak ada gaya total yang bekerja padanya"
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <button
+            onClick={() => setGameState('tutorial')}
+            className="flex items-center justify-center p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors"
+          >
+            <BookOpen className="w-6 h-6 mr-2" />
+            Tutorial
+          </button>
+          <button
+            onClick={startGame}
+            className="flex items-center justify-center p-4 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-colors"
+          >
+            <Play className="w-6 h-6 mr-2" />
+            Mulai Permainan
+          </button>
+        </div>
+
+        <div className="bg-gray-100 rounded-xl p-4">
+          <h3 className="font-semibold text-gray-800 mb-2">Contoh dalam Kehidupan:</h3>
+          <ul className="text-sm text-gray-600 space-y-1">
+            <li>• Penumpang terdorong ke depan saat bus direm mendadak</li>
+            <li>• Bola sepak tetap diam sampai ditendang</li>
+            <li>• Astronot melayang di luar angkasa tanpa gravitasi</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+
+  const TutorialScreen = () => (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 p-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={() => setGameState('menu')}
+            className="flex items-center text-white hover:text-blue-200 transition-colors"
+          >
+            ← Kembali
+          </button>
+          <h1 className="text-3xl font-bold text-white">Tutorial Hukum I Newton</h1>
+          <div></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Konsep Dasar</h2>
+            <div className="space-y-4 text-gray-700">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-blue-800">Kelembaman</h3>
+                <p>Sifat benda untuk mempertahankan keadaannya (diam atau bergerak lurus beraturan)</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-green-800">Gaya Total Nol</h3>
+                <p>Jika jumlah semua gaya yang bekerja pada benda = 0, maka benda tidak mengalami percepatan</p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-purple-800">Inersia</h3>
+                <p>Kecenderungan benda untuk mempertahankan keadaan geraknya</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Simulasi Interaktif</h2>
+            <NewtonVisualization />
+            <div className="mt-4 space-y-2">
+              <button
+                onClick={() => applyForce(2, 0)}
+                className="w-full p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              >
+                Beri Gaya ke Kanan
+              </button>
+              <button
+                onClick={() => applyForce(-2, 0)}
+                className="w-full p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              >
+                Beri Gaya ke Kiri
+              </button>
+              <button
+                onClick={() => applyForce(0, 2)}
+                className="w-full p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              >
+                Beri Gaya ke Bawah
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-white rounded-xl p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-3">Latihan Sederhana</h3>
+          <p className="text-gray-700 mb-4">
+            Coba berikan gaya pada benda dan perhatikan bagaimana benda tersebut bergerak sesuai Hukum I Newton.
+            Setelah gaya dihilangkan, benda akan terus bergerak karena kelembamannya.
+          </p>
+          <button
+            onClick={startGame}
+            className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+          >
+            Lanjut ke Permainan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const GameScreen = () => (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-blue-900 p-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={() => setGameState('menu')}
+            className="flex items-center text-white hover:text-blue-200 transition-colors"
+          >
+            ← Kembali
+          </button>
+          <h1 className="text-3xl font-bold text-white">Permainan Hukum I Newton</h1>
+          <div className="flex items-center space-x-4">
+            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-white">
+              Waktu: {timeLeft}s
+            </div>
+            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-white">
+              Skor: {score}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <NewtonVisualization />
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-3">Kontrol</h3>
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                <div></div>
+                <button
+                  onClick={() => applyForce(0, -2)}
+                  className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                >
+                  ↑
+                </button>
+                <div></div>
+                <button
+                  onClick={() => applyForce(-2, 0)}
+                  className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                >
+                  ←
+                </button>
+                <button
+                  onClick={() => applyForce(0, 0)}
+                  className="p-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                >
+                  ●
+                </button>
+                <button
+                  onClick={() => applyForce(2, 0)}
+                  className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                >
+                  →
+                </button>
+                <div></div>
+                <button
+                  onClick={() => applyForce(0, 2)}
+                  className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                >
+                  ↓
+                </button>
+                <div></div>
+              </div>
+              
+              <button
+                onClick={resetGame}
+                className="w-full p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors flex items-center justify-center"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset
+              </button>
+            </div>
+
+            <div className="bg-white rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-2">Status</h3>
+              <div className="space-y-2 text-sm">
+                <div>Kecepatan X: {objectVelocity.x.toFixed(2)}</div>
+                <div>Kecepatan Y: {objectVelocity.y.toFixed(2)}</div>
+                <div>Posisi X: {objectPosition.x.toFixed(0)}</div>
+                <div>Posisi Y: {objectPosition.y.toFixed(0)}</div>
+                <div className={`font-semibold ${isMoving ? 'text-green-600' : 'text-red-600'}`}>
+                  Status: {isMoving ? 'BERGERAK (Kelembaman)' : 'DIAM'}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+              <h4 className="font-semibold text-yellow-800">Petunjuk:</h4>
+              <p className="text-sm text-yellow-700">
+                Beri gaya pada benda, kemudian lihat bagaimana benda terus bergerak karena kelembamannya!
+                Ini adalah contoh dari Hukum I Newton.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const QuizScreen = () => (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 p-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={() => setGameState('menu')}
+            className="flex items-center text-white hover:text-blue-200 transition-colors"
+          >
+            ← Kembali
+          </button>
+          <h1 className="text-3xl font-bold text-white">Kuis Hukum I Newton</h1>
+          <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-white">
+            Soal {currentQuestion + 1} dari {quizQuestions.length}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {quizQuestions[currentQuestion].question}
+          </h2>
+          
+          <div className="space-y-3 mb-6">
+            {quizQuestions[currentQuestion].options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedAnswer(index)}
+                className={`w-full p-3 text-left rounded-lg transition-colors ${
+                  selectedAnswer === index
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                }`}
+              >
+                {String.fromCharCode(65 + index)}. {option}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleQuizSubmit}
+            disabled={selectedAnswer === ''}
+            className={`w-full p-3 rounded-lg transition-colors ${
+              selectedAnswer !== '' 
+                ? 'bg-green-500 hover:bg-green-600 text-white' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            {currentQuestion < quizQuestions.length - 1 ? 'Lanjutkan' : 'Selesai'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ResultScreen = () => (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 to-emerald-900 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="flex items-center justify-center mb-6">
+          <Trophy className="w-16 h-16 text-yellow-500 mr-3" />
+          <h1 className="text-3xl font-bold text-gray-800">Hasil Kuis</h1>
+        </div>
+        
+        <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Skor Anda</h2>
+          <div className="text-4xl font-bold text-green-600 mb-2">
+            {quizScore}/{quizQuestions.length}
+          </div>
+          <div className="text-gray-600">
+            {quizScore === quizQuestions.length ? 'Sempurna! 🎉' : 
+             quizScore >= quizQuestions.length / 2 ? 'Bagus! 👍' : 'Belajar lagi yuk! 📚'}
+          </div>
+        </div>
+
+        <div className="space-y-3 mb-6">
+          <button
+            onClick={() => setGameState('quiz')}
+            className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+          >
+            Ulangi Kuis
+          </button>
+          <button
+            onClick={() => setGameState('game')}
+            className="w-full p-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+          >
+            Main Lagi
+          </button>
+          <button
+            onClick={() => setGameState('menu')}
+            className="w-full p-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+          >
+            Menu Utama
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="font-sans">
+      {gameState === 'menu' && <GameMenu />}
+      {gameState === 'tutorial' && <TutorialScreen />}
+      {gameState === 'game' && <GameScreen />}
+      {gameState === 'quiz' && <QuizScreen />}
+      {gameState === 'result' && <ResultScreen />}
+    </div>
+  );
+};
+
+export default NewtonFirstLawGame;

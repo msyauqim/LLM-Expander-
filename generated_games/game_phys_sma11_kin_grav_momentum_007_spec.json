@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.1",
+  "game_id": "game_phys_sma11_kin_grav_momentum_007",
+  "game_type": "sim_lab",
+  "metadata": {
+    "title": "Simulasi Momentum Kolisions Bola",
+    "subject": "Fisica",
+    "grade_level": "SMA11",
+    "bab": "Dinamika",
+    "subbab": "Momentum Linear",
+    "topik": "Prinsip Kekekalan Momentum",
+    "difficulty": 4,
+    "estimated_duration_minutes": 15,
+    "learning_objectives": [
+      "Memahami prinsip kekekalan momentum total sistem tertutup",
+      "Menentukan kecepatan benda setelah tabrakan menggunakan persamaan impuls-momentum",
+      "Menganalisis jenis tabrakan (elastis sempurna vs tidak elastis) dari hubungan kecepatannya"
+    ],
+    "language": "id"
+  },
+  "presentation": {
+    "opening": {
+      "id": "open_002",
+      "show_once": true,
+      "title": "Lab Tabrakan Bola di Lapangan",
+      "story": "Di lapangan olahraga, dua bola melayang bebas di udara. Saat satu bola jatuh dan menabrak bola lain yang diam, keduanya saling bereaksi! Kamu akan memprediksi kecepataan mereka setelah taburan hanya dengan menghitung momennya.",
+      "image_description": "Lapangan basket besar dengan dua bola bulat kuning-biru di atas permukaan putih; bola biru bergerak cepat menuju bola kuning yang diam di pojok kanan; sinar-sinar kecil menunjukkan arah gerak kedua bola saat sebelum dan sesudah tabrakan",
+      "hint": {
+        "scope": "global",
+        "trigger": "popup_button",
+        "content": {
+          "title': 'Petunjuk', 'strategy': 'Gunakan hukum kekekalan jumlah momentum sistem.', 'formula': 'm₁v₁ + m₂v₂ = m₁v₁’ + m₂V₂’, dimana V₂’=v₂ jika kolisi tidak elastis.', 'example': 'Misal massa sama, maka kecepatanan berbalik.'}}, \"cta_text": "Mulai Simulasi!"
+        },
+        "visual_element": {
+          "theme_name": "'Basketball Court'",
+          "theme_presto": "sports",
+          "mood\": \"energetic and dynamic\", ": "olor_palette\": {\"primary\":\"#d32f2f\",\"secondary\":\"#00bfa5\",\"background\":\"#ffffff\",\"accent\":\"#ffb74d\",\"text\":\"#212122\"},",
+          "gradient_bg\": \"linear-gradient(to right, #ffd54f 0%,#ffe0b2 10%\", ": "etting_description\":",
+          "art_style\": \"2D cartoon sports style with warm sunset colors\", ": "mbient_elements\": [",
+          "Soft basketball bounce animation on ground": ""
+        },
+        "instructions": {
+          "id": "howto_003",
+          "trigger": {
+            "type": "popup_button",
+            "position": "upper_right",
+            "icon": "info_outline",
+            "label": "Petunjuk"
+          },
+          "steps": [
+            {
+              "step": 1,
+              "text": "Atur massa m₁ dan m₂ serta kecepatannnya v₁ dan v₂."
+            },
+            {
+              "step": 2,
+              "text": "Tekan simpan untuk menghitung kecepataban pasca-tabrakan."
+            },
+            {
+              "step": 3,
+              "text": "Amati bahwa jumlah momentum sebelum dan setelah tabasan selalu sama!"
+            }
+          ],
+          "hint": {},
+          "audio": {}
+        },
+        "payload": {
+          "scenario": "Dua bola di udang bertabrakan secara horizontal. Hitung kecepetan pasca-tabras!",
+          "formula": "m₁v¹ + m₂ᵥ₂ = m¹v¹' + m²v²'",
+          "variables": [
+            "m₁",
+            {
+              "v₁": "m₂",
+              "v₂": "collision_type"
+            }
+          ],
+          "solution_steps": [
+            "Hitung momentum awal sistem M_total = m₁*v₁ + m2*v2",
+            "Hitung momentum akhir sistem M_final = m1*v1' + m2*V2'",
+            "Set M_total = M_final dan cari variabel yang dicari."
+          ],
+          "examples": [
+            {
+              "case": "Tabrakan Elastis Sempurna",
+              "given": {
+                "m1": 2,
+                "v1": 4,
+                "m2": 3,
+                "v2": 0
+              },
+              "calculated": {
+                "v1_prime": 0.8,
+                "v2_prime": 2.4,
+                "total_momentum_before": 8,
+                "total_after": 8
+              }
+            },
+            {
+              "case": "Tumbukan Tak Elastis",
+              "given": {
+                "m1": 2,
+                "v1": 4,
+                "m₂": 3,
+                "v₂": 0
+              },
+              "result": {
+                "v1_prime": -0.4,
+                "v2_prime": 0,
+                "total_momentum": 8
+              }
+            }
+          ]
+        },
+        "win_lose_condition": {
+          "applicable": false,
+          "win": {},
+          "lose": {},
+          "pass": {}
+        },
+        "gameplay_parameters": {
+          "scoring": {
+            "method": "manual_check",
+            "criteria": "Hasil hitung manual harus match dengan nilai yang ditampilkan simulasi.",
+            "weightage": 10
+          },
+          "lives": 3,
+          "time_limit_seconds": 30,
+          "pass_threshold": 0
+        }
+      },
+      "win_loses": {},
+      "hints": []
+    }
+  },
+  "payload": {
+    "instruction": "Lakukan simulasi untuk memahami konsep Prinsip Kekekalan Momentum. Ubah variabel dan amati perubahannya.",
+    "variables": [
+      {
+        "id": "var_1",
+        "name": "Parameter 1",
+        "symbol": "x",
+        "unit": "-",
+        "default": 1.0,
+        "min": 0.1,
+        "max": 10.0,
+        "step": 0.1
+      }
+    ],
+    "formula": {
+      "equation": "y = x",
+      "description": "Hubungan dasar dalam Prinsip Kekekalan Momentum"
+    },
+    "sim_steps": [
+      {
+        "step": 1,
+        "instruction": "Atur nilai parameter sesuai yang ingin diamati."
+      },
+      {
+        "step": 2,
+        "instruction": "Klik Jalankan Simulasi dan amati hasilnya."
+      },
+      {
+        "step": 3,
+        "instruction": "Catat hasil dan bandingkan dengan prediksimu."
+      }
+    ],
+    "analysis_questions": [
+      {
+        "id": "q_1",
+        "question": "Apa yang terjadi pada sistem saat parameter diubah?",
+        "type": "short_answer"
+      }
+    ],
+    "scene": {
+      "title": "Simulasi Prinsip Kekekalan Momentum",
+      "narrative": "Selamat datang di lab virtual Prinsip Kekekalan Momentum!",
+      "context": "Kamu berada di laboratorium untuk mempelajari Prinsip Kekekalan Momentum.",
+      "interactive_objects": [
+        {
+          "id": "obj_1",
+          "label": "Objek Utama",
+          "visual_description": "Kotak 50x50px dengan warna biru",
+          "position": "left: 50%; top: 50%",
+          "bound_to_variable": "var_1",
+          "visual_response": "Ukuran berubah proporsional dengan nilai parameter"
+        }
+      ],
+      "visual_feedback": [
+        {
+          "id": "vf_1",
+          "type": "value_display",
+          "description": "Tampilkan nilai parameter saat ini",
+          "bound_to": "var_1"
+        }
+      ]
+    }
+  },
+  "win_lose_condition": {
+    "applicable": true,
+    "win": {
+      "description": "Siswa menjawab dengan benar",
+      "logic": "correct_count >= pass_threshold",
+      "feedback_text": "Selamat! Kamu berhasil memahami Prinsip Kekekalan Momentum!",
+      "feedback_audio": "sfx_win"
+    },
+    "lose": {
+      "description": "Siswa kehabisan nyawa atau waktu",
+      "logic": "lives <= 0",
+      "feedback_text": "Belum berhasil. Pelajari lagi tentang Prinsip Kekekalan Momentum dan coba lagi!",
+      "feedback_audio": "sfx_lose",
+      "retry_allowed": true
+    }
+  },
+  "gameplay_parameters": {
+    "scoring": {
+      "correct": 10,
+      "wrong": -2
+    },
+    "lives": 3,
+    "time_limit_seconds": 300,
+    "pass_threshold": 70
+  }
+}

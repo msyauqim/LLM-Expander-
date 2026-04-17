@@ -1,0 +1,259 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Game Edukasi Envelope v1.2",
+  "description": "Schema utama envelope untuk semua tipe game edukasi v1.2",
+  "type": "object",
+  "required": ["schema_version", "game_id", "game_type", "metadata", "presentation", "payload", "win_lose_condition", "gameplay_parameters"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.2"
+    },
+    "game_id": {
+      "type": "string",
+      "pattern": "^game_[a-z]+[0-9]*_[a-z_]+_[0-9]{3}$",
+      "description": "ID unik game, format: game_{subject}{grade}_{topic}_{number}",
+      "examples": ["game_phys10_kin_word_001", "game_math11_deriv_puzzle_001"]
+    },
+    "game_type": {
+      "type": "string",
+      "enum": ["word_game", "puzzle_game", "sim_lab"]
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["title", "subject", "grade_level", "bab", "subbab", "topik", "difficulty", "estimated_duration_minutes", "learning_objectives", "language"],
+      "properties": {
+        "title": { "type": "string" },
+        "subject": { "type": "string", "enum": ["Fisika", "Kimia", "Biologi", "Matematika"] },
+        "grade_level": { "type": "string", "enum": ["SMA-10", "SMA-11", "SMA-12"] },
+        "bab": { "type": "string" },
+        "subbab": { "type": "string" },
+        "topik": { "type": "string" },
+        "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "estimated_duration_minutes": { "type": "integer", "minimum": 5, "maximum": 60 },
+        "learning_objectives": { "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 5 },
+        "language": { "type": "string", "const": "id" }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "required": ["opening", "visual_element", "instructions", "hint", "audio"],
+      "properties": {
+        "opening": {
+          "type": "object",
+          "required": ["id", "show_once", "title", "story", "image_description", "cta_text"],
+          "properties": {
+            "id": { "type": "string" },
+            "show_once": { "type": "boolean" },
+            "title": { "type": "string" },
+            "story": { "type": "string", "description": "Narasi pembuka yang menarik" },
+            "image_description": { "type": "string", "description": "Deskripsi ilustrasi pembuka" },
+            "cta_text": { "type": "string", "description": "Teks tombol mulai" }
+          }
+        },
+        "visual_element": {
+          "type": "object",
+          "required": ["theme_name", "theme_preset", "mood", "color_palette", "setting_description", "art_style", "canvas_scene"],
+          "properties": {
+            "theme_name": { "type": "string" },
+            "theme_preset": { "type": "string", "enum": ["classroom", "scifi_neon", "nature", "retro", "minimal", "adventure"] },
+            "mood": { "type": "string" },
+            "color_palette": {
+              "type": "object",
+              "required": ["primary", "secondary", "background", "accent", "text", "gradient_bg"],
+              "properties": {
+                "primary": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                "secondary": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                "background": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                "accent": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                "text": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                "gradient_bg": { "type": "string", "description": "CSS gradient string untuk background utama, misal: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 50%, #0d0d3d 100%)" }
+              }
+            },
+            "setting_description": { "type": "string" },
+            "art_style": { "type": "string" },
+            "ambient_elements": { "type": "array", "items": { "type": "string" } },
+            "canvas_scene": {
+              "type": "object",
+              "description": "Deskripsi detail scene di area simulasi/game. WAJIB digunakan oleh HTML & CSS specialist untuk merender latar belakang yang kaya, bukan canvas kosong.",
+              "required": ["background_layers", "objects", "render_method"],
+              "properties": {
+                "render_method": {
+                  "type": "string",
+                  "enum": ["css_divs", "canvas_2d", "svg", "mixed"],
+                  "description": "Metode render: css_divs=elemen HTML+CSS, canvas_2d=Canvas API, svg=inline SVG, mixed=kombinasi"
+                },
+                "background_layers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "description": "Lapisan background dari belakang ke depan. Setiap layer HARUS di-render sebagai elemen visual.",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "type", "css_description"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "type": { "type": "string", "enum": ["gradient", "pattern", "image_css", "svg_shape", "parallax"] },
+                      "css_description": { "type": "string", "description": "Deskripsi detail cara merender layer ini dengan CSS/SVG. Contoh: 'Langit gradien dari #0a1628 di atas ke #1a3a5c di bawah, dengan 15 bintang kecil (div 2px putih, opacity random 0.3-0.8, posisi acak)'" },
+                      "z_index": { "type": "integer" }
+                    }
+                  }
+                },
+                "objects": {
+                  "type": "array",
+                  "description": "Objek visual statis dalam scene (dekorasi, landmark). Bukan objek interaktif game.",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "shape_description", "position"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "shape_description": { "type": "string", "description": "Deskripsi detail bentuk, warna, dan cara render objek ini menggunakan CSS/SVG. Contoh: 'Pohon: batang cokelat (div 8x40px #5d4037), mahkota hijau bulat (div 30x25px radial-gradient #2e7d32 ke #1b5e20, border-radius 50% 50% 40% 40%)'" },
+                      "position": { "type": "string", "description": "Posisi CSS, misal: 'bottom: 80px; left: 15%'" },
+                      "animation": { "type": "string", "description": "Animasi CSS jika ada. Misal: 'sway 3s ease-in-out infinite'" }
+                    }
+                  }
+                },
+                "particle_effects": {
+                  "type": "array",
+                  "description": "Efek partikel untuk suasana (opsional). Dirender dengan CSS animation atau JS.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": { "type": "string", "enum": ["floating_dots", "sparkle", "rain", "snow", "dust", "bubbles", "firefly", "smoke"] },
+                      "count": { "type": "integer", "minimum": 3, "maximum": 30 },
+                      "css_description": { "type": "string", "description": "Detail CSS untuk partikel: ukuran, warna, opacity, animasi. Contoh: 'Lingkaran 3px, warna #ffffff opacity 0.2-0.5, float naik dari bawah ke atas dalam 8-15s, posisi horizontal random'" }
+                    }
+                  }
+                }
+              }
+            },
+            "ui_components": {
+              "type": "object",
+              "description": "Style guide untuk komponen UI game (tombol, card, panel). Specialist CSS HARUS mengikuti ini.",
+              "properties": {
+                "button_style": { "type": "string", "description": "Deskripsi tampilan tombol. Contoh: 'Rounded 8px, background gradient primary ke secondary, box-shadow glow 0 0 15px primary, hover: scale(1.05) + glow lebih terang'" },
+                "card_style": { "type": "string", "description": "Deskripsi tampilan card/panel. Contoh: 'Background rgba(0,0,0,0.6), border 1px solid primary opacity 0.3, backdrop-filter blur(10px), border-radius 12px'" },
+                "score_display_style": { "type": "string", "description": "Deskripsi tampilan skor/timer" },
+                "input_style": { "type": "string", "description": "Deskripsi tampilan input/slider jika ada" }
+              }
+            }
+          }
+        },
+        "instructions": {
+          "type": "object",
+          "required": ["id", "trigger", "steps"],
+          "properties": {
+            "id": { "type": "string" },
+            "trigger": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "position": { "type": "string" },
+                "icon": { "type": "string" },
+                "label": { "type": "string" }
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["step", "text"],
+                "properties": {
+                  "step": { "type": "integer" },
+                  "text": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "hint": {
+          "type": "object",
+          "required": ["id", "scope", "trigger", "content"],
+          "properties": {
+            "id": { "type": "string" },
+            "scope": { "type": "string", "enum": ["global", "per_question"] },
+            "trigger": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "after_seconds": { "type": "integer" },
+                "dismissible": { "type": "boolean" },
+                "reusable": { "type": "boolean" },
+                "manual_trigger_available": { "type": "boolean" }
+              }
+            },
+            "content": {
+              "type": "object",
+              "required": ["title", "strategy"],
+              "properties": {
+                "title": { "type": "string" },
+                "strategy": { "type": "string" },
+                "formula": { "type": ["string", "null"] },
+                "example": { "type": ["string", "null"] },
+                "hint_image_description": { "type": ["string", "null"] }
+              }
+            }
+          }
+        },
+        "audio": {
+          "type": "object",
+          "required": ["enabled", "tracks"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "tracks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "event", "description"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "event": { "type": "string", "enum": ["on_correct_action", "on_wrong_action", "on_win", "on_lose", "background"] },
+                  "description": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Isi game, struktur tergantung game_type"
+    },
+    "win_lose_condition": {
+      "type": "object",
+      "required": ["applicable"],
+      "properties": {
+        "applicable": { "type": "boolean" },
+        "win": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string" },
+            "logic": { "type": "string" },
+            "feedback_text": { "type": "string" },
+            "feedback_audio": { "type": ["string", "null"] }
+          }
+        },
+        "lose": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string" },
+            "logic": { "type": "string" },
+            "feedback_text": { "type": "string" },
+            "feedback_audio": { "type": ["string", "null"] },
+            "retry_allowed": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "gameplay_parameters": {
+      "type": "object",
+      "required": ["scoring"],
+      "properties": {
+        "scoring": { "type": "object" },
+        "lives": { "type": ["integer", "null"] },
+        "time_limit_seconds": { "type": ["integer", "null"] },
+        "pass_threshold": { "type": ["integer", "null"] }
+      }
+    }
+  }
+}

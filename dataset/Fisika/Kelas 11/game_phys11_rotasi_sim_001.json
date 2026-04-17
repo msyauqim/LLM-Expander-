@@ -1,0 +1,299 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Rotasi"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_dinamika_rotasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Turbin Fisika: Lab Gerak Rotasi",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika",
+      "subbab": "Gerak Rotasi",
+      "topik": "Gerak Rotasi",
+      "difficulty": 4,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat menghubungkan besaran translasi dengan besaran rotasi: posisi–sudut, kecepatan–kecepatan sudut, percepatan–percepatan sudut",
+        "Siswa dapat menghitung momen gaya (torsi) dan menghubungkannya dengan percepatan sudut melalui persamaan τ = I·α",
+        "Siswa dapat menerapkan konsep momen inersia untuk berbagai bentuk benda dan menganalisis pengaruhnya terhadap gerak rotasi"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Rancang Turbin Listrik",
+        "story": "Pembangkit listrik mini membutuhkan turbin yang efisien! Sebagai insinyur muda, tugasmu merancang dan menguji roda turbin. Atur torsi yang diberikan, pilih bentuk dan massa roda, lalu amati gerak rotasinya. Hitung momen inersia dan percepatan sudut untuk memastikan turbin berputar optimal sesuai spesifikasi.",
+        "image_description": "Workshop teknik dengan roda turbin besar di tengah ruangan, lengan torsi mekanik terpasang di sisi, panel kontrol digital menampilkan kecepatan sudut dan data rotasi, lampu LED menyala di latar menandakan listrik yang dihasilkan",
+        "cta_text": "Nyalakan Turbin"
+      },
+      "visual_element": {
+        "theme_name": "Engineering Workshop",
+        "theme_preset": "minimal_mono",
+        "mood": "technical, precise, industrious",
+        "color_palette": {
+          "primary": "#e9c46a",
+          "secondary": "#264653",
+          "background": "#f0ead6",
+          "accent": "#e76f51",
+          "text": "#264653"
+        },
+        "setting_description": "Workshop teknik bergaya industri modern: dinding beton abu-abu, roda turbin logam berkilau di tengah, panel instrumen analog dan digital, pencahayaan lampu sorot kuning hangat.",
+        "art_style": "industrial technical illustration, warm flat design",
+        "ambient_elements": [
+          "Percikan cahaya kecil saat turbin berputar cepat",
+          "Jarum instrumen analog bergerak mengikuti data",
+          "Tanda panah rotasi melingkari roda",
+          "Angka RPM berkedip di panel digital"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Pilih bentuk roda turbin (cakram pejal, cincin, atau batang) untuk menentukan momen inersia." },
+          { "step": 2, "text": "Atur massa (m) dan jari-jari (r) roda menggunakan slider." },
+          { "step": 3, "text": "Atur torsi (τ) yang diberikan pada roda menggunakan slider." },
+          { "step": 4, "text": "Tekan Putar untuk memulai simulasi dan amati percepatan sudut." },
+          { "step": 5, "text": "Panel data menampilkan I, α, ω(t), dan θ(t). Selesaikan tantangan spesifikasi turbin!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 75,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Analogi Rotasi–Translasi",
+          "strategy": "Setiap konsep translasi memiliki padanan rotasi: massa (m) ↔ momen inersia (I), gaya (F) ↔ torsi (τ), percepatan (a) ↔ percepatan sudut (α). Persamaan τ=Iα adalah analog rotasi dari F=ma.",
+          "formula": "τ = r × F = I·α  |  I_cakram = ½mr²  |  I_cincin = mr²  |  ω = ω₀ + α·t  |  θ = ω₀t + ½α·t²",
+          "example": "Cakram pejal m=4 kg, r=0,5 m: I=½×4×0,25=0,5 kg·m². Torsi τ=5 N·m → α=τ/I=5/0,5=10 rad/s². Setelah 3 s: ω=30 rad/s.",
+          "hint_image_description": "Tabel dua kolom: kiri Translasi (F, m, a, v, x), kanan Rotasi (τ, I, α, ω, θ), dihubungkan panah dua arah berlabel 'analogi'"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_spin_start", "event": "on_correct_action", "description": "Suara turbin mulai berputar: dengung mesin meningkat frekuensinya sesuai kecepatan sudut" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara turbin stabil dan lampu LED menyala penuh: bip sukses dan applause singkat" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara turbin melambat dan berhenti: dengung menurun diikuti alarm batas waktu" },
+          { "id": "bgm_loop", "event": "background", "description": "Suara ambient workshop: deru mesin latar halus bercampur musik instrumental tekno ringan, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Laboratorium Gerak Rotasi Turbin",
+        "narrative": "Rancang dan uji roda turbin dengan berbagai bentuk dan parameter. Analisis hubungan torsi, momen inersia, dan percepatan sudut untuk mengoptimalkan kinerja turbin.",
+        "context": "Gerak rotasi benda tegar 2D terhadap sumbu tetap di pusat massa. Gesekan poros diabaikan. Torsi dianggap konstan selama simulasi berlangsung."
+      },
+      "variables": [
+        {
+          "id": "shape",
+          "label": "Bentuk roda",
+          "symbol": "bentuk",
+          "unit": "",
+          "type": "user_input",
+          "options": [
+            { "value": "disk", "label": "Cakram pejal (I = ½mr²)" },
+            { "value": "ring", "label": "Cincin/Silinder tipis (I = mr²)" },
+            { "value": "rod_center", "label": "Batang tipis, sumbu tengah (I = 1/12·mL²)" }
+          ]
+        },
+        {
+          "id": "mass",
+          "label": "Massa roda",
+          "symbol": "m",
+          "unit": "kg",
+          "type": "user_input",
+          "min": 0.5,
+          "max": 20,
+          "default": 4,
+          "step": 0.5
+        },
+        {
+          "id": "radius",
+          "label": "Jari-jari roda",
+          "symbol": "r",
+          "unit": "m",
+          "type": "user_input",
+          "min": 0.1,
+          "max": 2,
+          "default": 0.5,
+          "step": 0.1
+        },
+        {
+          "id": "torque",
+          "label": "Torsi yang diberikan",
+          "symbol": "τ",
+          "unit": "N·m",
+          "type": "user_input",
+          "min": 0.5,
+          "max": 50,
+          "default": 10,
+          "step": 0.5
+        },
+        {
+          "id": "t",
+          "label": "Waktu simulasi",
+          "symbol": "t",
+          "unit": "s",
+          "type": "simulation_time",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "id": "inertia",
+          "label": "Momen inersia",
+          "symbol": "I",
+          "unit": "kg·m²",
+          "type": "computed"
+        },
+        {
+          "id": "alpha",
+          "label": "Percepatan sudut",
+          "symbol": "α",
+          "unit": "rad/s²",
+          "type": "computed"
+        },
+        {
+          "id": "omega",
+          "label": "Kecepatan sudut saat t",
+          "symbol": "ω",
+          "unit": "rad/s",
+          "type": "computed"
+        },
+        {
+          "id": "theta",
+          "label": "Sudut yang ditempuh",
+          "symbol": "θ",
+          "unit": "rad",
+          "type": "computed"
+        },
+        {
+          "id": "v_tangential",
+          "label": "Kecepatan tangensial tepi roda",
+          "symbol": "v_t",
+          "unit": "m/s",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_inertia",
+          "computes": "inertia",
+          "formula": "inertia = 0.5 * mass * radius^2  [cakram]  |  inertia = mass * radius^2  [cincin]  |  inertia = (1/12) * mass * (2*radius)^2  [batang]",
+          "description": "Momen inersia bergantung distribusi massa dan bentuk benda"
+        },
+        {
+          "id": "eq_alpha",
+          "computes": "alpha",
+          "formula": "alpha = torque / inertia",
+          "description": "Percepatan sudut dari torsi dan momen inersia (analog rotasi F=ma)"
+        },
+        {
+          "id": "eq_omega",
+          "computes": "omega",
+          "formula": "omega = alpha * t",
+          "description": "Kecepatan sudut dari percepatan sudut konstan (mulai dari diam)"
+        },
+        {
+          "id": "eq_theta",
+          "computes": "theta",
+          "formula": "theta = 0.5 * alpha * t^2",
+          "description": "Sudut yang ditempuh dari keadaan diam dengan percepatan sudut konstan"
+        },
+        {
+          "id": "eq_vt",
+          "computes": "v_tangential",
+          "formula": "v_tangential = omega * radius",
+          "description": "Kecepatan tangensial titik di tepi roda"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_rotation",
+          "type": "animation",
+          "title": "Animasi Roda Turbin Berputar",
+          "description": "Roda turbin berputar dengan kecepatan sudut yang meningkat sesuai α. Jari-jari roda tergambar sebagai referensi sudut, tanda panah rotasi menunjukkan arah dan kecepatan."
+        },
+        {
+          "id": "viz_omega_t",
+          "type": "graph",
+          "x_axis": "t",
+          "y_axis": "omega",
+          "title": "Grafik Kecepatan Sudut ω terhadap Waktu t"
+        },
+        {
+          "id": "viz_data_panel",
+          "type": "table",
+          "title": "Panel Instrumen Turbin",
+          "description": "Tabel real-time: bentuk, m, r, τ, I, α, ω(t), θ(t), dan v_t yang diperbarui tiap simulasi dijalankan."
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur cakram pejal dengan m = 4 kg dan r = 0,5 m. Hitung momen inersianya, lalu berikan torsi τ = 5 N·m. Berapa percepatan sudut yang dihasilkan? Verifikasi dengan simulator.",
+          "success_condition": "shape == 'disk' AND abs(mass - 4) < 0.2 AND abs(radius - 0.5) < 0.05 AND abs(torque - 5) < 0.3 AND abs(alpha - 10) < 1",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Bandingkan percepatan sudut cakram pejal dan cincin dengan massa dan jari-jari yang SAMA serta torsi yang sama. Manakah yang lebih cepat berputar dan mengapa?",
+          "success_condition": "abs(torque - 10) < 0.5 AND abs(mass - 5) < 0.2 AND abs(radius - 0.4) < 0.05",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur cakram pejal agar mencapai kecepatan sudut ω = 20 rad/s tepat dalam t = 5 detik. Temukan kombinasi torsi dan parameter roda yang memenuhi kondisi ini.",
+          "success_condition": "shape == 'disk' AND abs(omega - 20) < 1 AND abs(t - 5) < 0.5",
+          "points": 30
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan minimal 2 dari 3 tantangan gerak rotasi",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Turbin berhasil! Spesifikasi terpenuhi. Kamu adalah insinyur rotasi yang handal!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat analogi kunci: τ=Iα seperti F=ma. Cakram pejal I=½mr². Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_parameter_change": 1
+      },
+      "lives": null,
+      "time_limit_seconds": 1200,
+      "pass_threshold": 50
+    }
+  }
+}

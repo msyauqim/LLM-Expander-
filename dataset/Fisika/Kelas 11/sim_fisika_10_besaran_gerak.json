@@ -1,0 +1,166 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Trek Besaran Gerak",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Besaran-Besaran Gerak",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_kin_besarangerak_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Trek Besaran Gerak",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Besaran-Besaran Gerak",
+      "topik": "Besaran-Besaran Gerak",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat membedakan perpindahan dan jarak tempuh pada lintasan yang tidak lurus",
+        "Siswa dapat menghitung kecepatan rata-rata dan kelajuan rata-rata suatu benda",
+        "Siswa dapat menjelaskan kondisi di mana kecepatan rata-rata bernilai nol meskipun benda telah bergerak"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Lab Pengukuran di Trek Atletik",
+        "story": "Kamu adalah asisten pelatih di trek atletik sekolah. Atlet berlari dari garis start (A) menuju titik B, lalu berbalik arah kembali ke titik C. Tugasmu adalah mengukur dan membedakan perpindahan, jarak tempuh, kecepatan rata-rata, dan kelajuan rata-rata. Hasil pengukuranmu akan menentukan program latihan atlet!",
+        "image_description": "Trek lari atletik minimalis dengan garis-garis hitam tegas, tiga titik penanda (A, B, C) di atas trek, stopwatch digital di pojok kiri, papan pencatat data di sisi kanan",
+        "cta_text": "Mulai Pengukuran"
+      },
+      "visual_element": {
+        "theme_name": "Minimal Sports Lab",
+        "theme_preset": "minimal_mono",
+        "mood": "focused, precise, analytical",
+        "color_palette": {
+          "primary": "#2c3e50",
+          "secondary": "#7f8c8d",
+          "background": "#f8f9fa",
+          "accent": "#e74c3c",
+          "text": "#2c3e50"
+        },
+        "setting_description": "Trek atletik sederhana dengan desain minimalis hitam-putih-merah, garis grid presisi, papan pencatat data digital, dan stopwatch di tepi trek.",
+        "art_style": "clean minimal flat design dengan tipografi tegas dan palet monokromatik",
+        "ambient_elements": [
+          "Jarum stopwatch berputar perlahan di latar",
+          "Garis trek berkilau sedikit saat atlet melewatinya",
+          "Angka pencatat data berubah secara real-time di papan"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur jarak A ke B (jarak_ab) dengan slider pertama." },
+          { "step": 2, "text": "Atur jarak berbalik dari B ke C (jarak_bc) dengan slider kedua. Isi 0 jika atlet tidak berbalik." },
+          { "step": 3, "text": "Atur total waktu perjalanan dengan slider Waktu Total." },
+          { "step": 4, "text": "Amati nilai Perpindahan, Jarak Total, Kecepatan Rata-rata, dan Kelajuan Rata-rata." },
+          { "step": 5, "text": "Selesaikan dua tantangan untuk lulus sebagai asisten pelatih!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Kecepatan vs Kelajuan Rata-Rata",
+          "strategy": "Perpindahan adalah selisih posisi akhir dan posisi awal (vektor). Jarak adalah total lintasan (skalar). Kecepatan rata-rata = perpindahan ÷ waktu (bisa nol jika benda kembali ke asal). Kelajuan rata-rata = jarak ÷ waktu (selalu positif selama benda bergerak).",
+          "formula": "v̄ = Δx / t,   v̄_laju = d_total / t,   Δx = jarak_AB − jarak_BC",
+          "example": "Atlet lari 60m lalu balik 20m dalam 10s: Perpindahan=40m, Jarak=80m, v̄=4 m/s, Kelajuan=8 m/s.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_beep", "event": "on_correct_action", "description": "Suara bip stopwatch pendek saat parameter diubah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Bunyi peluit pelatih tiga kali sebagai tanda kemenangan" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Pengukuran Besaran Gerak pada Trek Lurus",
+        "narrative": "Simulasikan gerak atlet yang berlari dari A ke B lalu berbalik dari B ke C. Atur jarak masing-masing segmen dan waktu tempuh, lalu amati perbedaan antara perpindahan, jarak, kecepatan rata-rata, dan kelajuan rata-rata.",
+        "context": "Gerak satu dimensi di atas trek lurus; arah A→B ditetapkan positif; benda bergerak A→B dengan jarak jarak_ab, kemudian berbalik B→C dengan jarak jarak_bc ke arah negatif."
+      },
+      "variables": [
+        { "id": "jarak_ab", "label": "Jarak A ke B", "symbol": "d_AB", "unit": "m", "type": "user_input", "min": 0, "max": 60, "default": 40, "step": 1 },
+        { "id": "jarak_bc", "label": "Jarak berbalik B ke C", "symbol": "d_BC", "unit": "m", "type": "user_input", "min": 0, "max": 30, "default": 0, "step": 1 },
+        { "id": "t_total", "label": "Waktu total", "symbol": "t", "unit": "s", "type": "user_input", "min": 1, "max": 60, "default": 10, "step": 1 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t_sim", "unit": "s", "type": "simulation_time", "min": 0, "max": 60 },
+        { "id": "perpindahan", "label": "Perpindahan", "symbol": "Δx", "unit": "m", "type": "computed" },
+        { "id": "jarak_total", "label": "Jarak total", "symbol": "d", "unit": "m", "type": "computed" },
+        { "id": "kecepatan_rata", "label": "Kecepatan rata-rata", "symbol": "v̄", "unit": "m/s", "type": "computed" },
+        { "id": "kelajuan_rata", "label": "Kelajuan rata-rata", "symbol": "v̄_laju", "unit": "m/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_perpindahan", "computes": "perpindahan", "formula": "perpindahan = jarak_ab - jarak_bc", "description": "Perpindahan = posisi akhir minus posisi awal; negatif jika C berada di kiri A" },
+        { "id": "eq_jarak_total", "computes": "jarak_total", "formula": "jarak_total = jarak_ab + jarak_bc", "description": "Jarak total adalah jumlah semua lintasan yang ditempuh tanpa memperhatikan arah" },
+        { "id": "eq_kecepatan", "computes": "kecepatan_rata", "formula": "kecepatan_rata = perpindahan / t_total", "description": "Kecepatan rata-rata = perpindahan dibagi waktu tempuh (dapat bernilai nol atau negatif)" },
+        { "id": "eq_kelajuan", "computes": "kelajuan_rata", "formula": "kelajuan_rata = jarak_total / t_total", "description": "Kelajuan rata-rata = jarak total dibagi waktu tempuh (selalu positif)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Atlet berlari di trek horizontal dari titik A ke B (jarak_ab meter ke kanan), lalu berbalik dari B ke C (jarak_bc meter ke kiri); panah merah menunjukkan perpindahan akhir, label posisi A, B, dan C tampil di atas trek" },
+        { "id": "viz_2", "type": "table", "title": "Ringkasan Besaran Gerak", "description": "Tabel menampilkan perpindahan, jarak total, kecepatan rata-rata, dan kelajuan rata-rata secara real-time saat slider diubah" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur jarak_ab=60 m, jarak_bc=20 m, dan t_total=10 s. Verifikasi bahwa kecepatan rata-rata atlet = 4 m/s dan kelajuan rata-rata = 8 m/s.",
+          "success_condition": "abs(jarak_ab - 60) < 0.5 AND abs(jarak_bc - 20) < 0.5 AND abs(t_total - 10) < 0.5 AND abs(kecepatan_rata - 4) < 0.2 AND abs(kelajuan_rata - 8) < 0.2",
+          "points": 30
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi jarak_ab dan jarak_bc sedemikian sehingga kecepatan rata-rata = 0, tetapi kelajuan rata-rata > 0. (Petunjuk: kapan perpindahan bisa nol namun jarak bukan nol?)",
+          "success_condition": "abs(perpindahan) < 0.5 AND jarak_total > 5",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan kedua tantangan pengukuran besaran gerak",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu lulus sebagai asisten pelatih terbaik. Perpindahan dan kecepatan adalah vektor, jarak dan kelajuan adalah skalar!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: perpindahan = jarak_AB - jarak_BC, kecepatan_rata = perpindahan / waktu. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 720,
+      "pass_threshold": 40
+    }
+  }
+}

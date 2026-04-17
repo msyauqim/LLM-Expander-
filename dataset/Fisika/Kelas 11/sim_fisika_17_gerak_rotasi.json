@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Torsi dan Momen Inersia",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Rotasi",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_din_gerakrotasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Torsi dan Momen Inersia",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika Gerak Partikel",
+      "subbab": "Gerak Rotasi",
+      "topik": "Gerak Rotasi",
+      "difficulty": 3,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat menghitung momen gaya (torsi) berdasarkan besar gaya, panjang lengan momen, dan sudut arah gaya",
+        "Siswa dapat menghitung momen inersia cakram pejal dan percepatan sudut yang dihasilkan torsi",
+        "Siswa dapat menganalisis pengaruh sudut arah gaya terhadap efektivitas torsi yang dihasilkan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Giroskop Laboratorium Futuristik",
+        "story": "Di laboratorium teknologi tinggi masa depan, sebuah giroskop cakram presisi perlu diputar dengan percepatan sudut tertentu. Kamu adalah insinyur rotasi yang harus mengatur gaya, lengan momen, dan sudut aplikasi gaya yang tepat. Salah satu kesalahan perhitungan bisa merusak giroskop senilai miliaran! Hitung torsi dan percepatan sudut dengan teliti.",
+        "image_description": "Cakram metalik futuristik mengambang di atas platform holografik bercahaya neon; anak panah gaya berwarna magenta menunjuk pada tepi cakram; diagram momen gaya berwarna kuning berkilauan; latar laboratorium gelap dengan panel layar digital di sekeliling",
+        "cta_text": "Aktifkan Giroskop"
+      },
+      "visual_element": {
+        "theme_name": "Neon Rotation Lab",
+        "theme_preset": "scifi_neon",
+        "mood": "precise, high-tech, intense",
+        "color_palette": {
+          "primary": "#e040fb",
+          "secondary": "#ffea00",
+          "background": "#0a001a",
+          "accent": "#00e5ff",
+          "text": "#f3e5f5"
+        },
+        "setting_description": "Laboratorium robotika futuristik dengan pencahayaan neon magenta dan cyan, platform holografik mengambang, panel data digital di dinding gelap, dan efek partikel cahaya mengikuti rotasi cakram.",
+        "art_style": "sci-fi neon flat design dengan glow effect ungu-kuning dan grid holografik",
+        "ambient_elements": [
+          "Partikel cahaya neon berputar mengikuti arah rotasi cakram",
+          "Panel data frekuensi rotasi berkedip dan diperbarui secara real-time",
+          "Efek getaran halus pada platform saat percepatan sudut tinggi"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur besar gaya (F) yang diaplikasikan pada tepi cakram." },
+          { "step": 2, "text": "Atur jari-jari cakram (r) sekaligus sebagai lengan momen gaya." },
+          { "step": 3, "text": "Atur sudut antara gaya dan lengan momen (α): 90° = paling efektif." },
+          { "step": 4, "text": "Atur massa cakram (m) untuk melihat pengaruh momen inersia." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk menyelamatkan giroskop!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Torsi dan Gerak Rotasi",
+          "strategy": "Torsi (momen gaya) τ = F·r·sin(α) adalah 'gaya rotasi'. Momen inersia cakram pejal I = ½·m·r². Percepatan sudut α_rot = τ/I. Torsi maksimum terjadi saat sudut gaya = 90° (gaya tegak lurus lengan momen). Semakin besar I (massa atau jari-jari besar), semakin sulit memutar benda.",
+          "formula": "τ = F·r·sin(α),  I = ½·m·r²,  α_rot = τ/I",
+          "example": "F=10N, r=2m, α=90°, m=5kg: τ=10×2×1=20 Nm; I=½×5×4=10 kgm²; α_rot=20/10=2 rad/s².",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_spin", "event": "on_correct_action", "description": "Suara giroskop berputar yang halus dan berdengung saat parameter diubah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara kemenangan elektronik futuristik dengan resonansi cakram berputar sempurna" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Suara alarm kegagalan lab yang tajam dan berulang" },
+          { "id": "bgm", "event": "background", "description": "Musik elektronik bertempo tinggi dengan beat mekanis yang menciptakan suasana laboratorium futuristik, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Torsi dan Percepatan Sudut Cakram",
+        "narrative": "Atur gaya, jari-jari (lengan momen), sudut aplikasi gaya, dan massa cakram. Simulasi menghitung torsi, momen inersia, percepatan sudut, dan kecepatan sudut cakram pada waktu tertentu.",
+        "context": "Cakram pejal homogen dengan sumbu putar di pusat; g = 10 m/s²; momen inersia cakram pejal I = ½·m·r²; torsi dihitung dari F, r, dan sudut antara F dan r."
+      },
+      "variables": [
+        { "id": "gaya", "label": "Besar gaya", "symbol": "F", "unit": "N", "type": "user_input", "min": 1, "max": 50, "default": 10, "step": 1 },
+        { "id": "jari_jari", "label": "Jari-jari cakram", "symbol": "r", "unit": "m", "type": "user_input", "min": 0.1, "max": 5, "default": 2, "step": 0.1 },
+        { "id": "sudut_gaya", "label": "Sudut arah gaya terhadap lengan", "symbol": "α", "unit": "derajat", "type": "user_input", "min": 0, "max": 90, "default": 90, "step": 1 },
+        { "id": "massa", "label": "Massa cakram", "symbol": "m", "unit": "kg", "type": "user_input", "min": 1, "max": 20, "default": 5, "step": 0.5 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 15 },
+        { "id": "torsi", "label": "Momen gaya (torsi)", "symbol": "τ", "unit": "N·m", "type": "computed" },
+        { "id": "alpha_rot", "label": "Percepatan sudut", "symbol": "α_rot", "unit": "rad/s²", "type": "computed" },
+        { "id": "omega_putar", "label": "Kecepatan sudut saat t", "symbol": "ω(t)", "unit": "rad/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_torsi", "computes": "torsi", "formula": "torsi = gaya * jari_jari * sin(sudut_gaya * pi / 180)", "description": "Momen gaya = F × r × sin(α); maksimum saat α=90°, nol saat α=0°" },
+        { "id": "eq_alpha", "computes": "alpha_rot", "formula": "alpha_rot = torsi / (0.5 * massa * jari_jari^2)", "description": "Percepatan sudut = torsi / momen inersia; momen inersia cakram pejal I = ½mr²" },
+        { "id": "eq_omega", "computes": "omega_putar", "formula": "omega_putar = alpha_rot * t", "description": "Kecepatan sudut pada waktu t, dimulai dari diam (GLBB rotasi)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Cakram berputar semakin cepat; anak panah magenta (gaya F) di tepi cakram menunjukkan besar dan sudut gaya; anak panah kuning (torsi τ) menunjukkan efek rotasi; label percepatan sudut tampil di pusat cakram" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "omega_putar", "title": "Kecepatan Sudut vs Waktu (ω-t)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "sudut_gaya", "y_axis": "torsi", "title": "Torsi vs Sudut Gaya (τ-α)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur F=10 N, r=2 m, sudut=90°, m=5 kg. Verifikasi bahwa torsi = 20 N·m dan percepatan sudut = 2 rad/s².",
+          "success_condition": "abs(gaya - 10) < 0.1 AND abs(jari_jari - 2) < 0.05 AND abs(sudut_gaya - 90) < 1 AND abs(massa - 5) < 0.1 AND abs(torsi - 20) < 0.3 AND abs(alpha_rot - 2) < 0.1",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kondisi di mana torsi = 0 N·m meskipun gaya yang diberikan tidak nol. (Petunjuk: perhatikan hubungan antara sudut gaya dan torsi)",
+          "success_condition": "abs(torsi) < 0.2 AND gaya > 0",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Dengan massa=4 kg dan jari_jari=1 m, temukan kombinasi gaya dan sudut_gaya sehingga percepatan sudut cakram tepat = 5 rad/s². (Petunjuk: I = ½×4×1² = 2 kgm², maka τ harus = 10 Nm)",
+          "success_condition": "abs(massa - 4) < 0.1 AND abs(jari_jari - 1) < 0.05 AND abs(alpha_rot - 5) < 0.2",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan gerak rotasi",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Giroskop berfungsi sempurna! Kamu menguasai torsi dan momen inersia. τ = F·r·sinα, α_rot = τ/I!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Giroskop rusak! Ingat: τ = F·r·sin(α) dan α_rot = τ/(½mr²). Sudut 90° menghasilkan torsi maksimum. Coba lagi!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+:root {
+  --primary: #1e3a8a;
+  --secondary: #dc2626;
+  --accent: #059669;
+  --dark-bg: #0f172a;
+  --darker-bg: #020617;
+  --card-bg: rgba(30, 41, 59, 0.8);
+  --text: #e2e8f0;
+  --border: #475569;
+  --glow-primary: #3b82f6;
+  --glow-secondary: #ef4444;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #1e293b 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  transition: all 0.3s ease;
+}
+
+#game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#scene-area {
+  min-height: 500px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+#content-area {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+#score-display, #lives-display, #timer-display {
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+  transition: all 0.3s ease;
+}
+
+#score-display.glow, #lives-display.glow, #timer-display.glow {
+  box-shadow: 0 0 20px var(--glow-primary), 0 0 30px rgba(59, 130, 246, 0.6);
+  transform: scale(1.05);
+}
+
+.start-screen, #game-screen, #end-screen {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #f87171;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--glow-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 3s infinite ease-in-out;
+  box-shadow: 0 0 10px var(--glow-primary);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(10px, -10px); }
+  50% { transform: translate(0, -20px); }
+  75% { transform: translate(-10px, -10px); }
+}
+
+.glow {
+  animation: glow-pulse 2s infinite alternate;
+}
+
+@keyframes glow-pulse {
+  from { box-shadow: 0 0 10px var(--glow-primary); }
+  to { box-shadow: 0 0 25px var(--glow-primary), 0 0 35px rgba(59, 130, 246, 0.8); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+#instructions-btn, #hint-btn {
+  background: var(--accent);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+#instructions-popup, #hint-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+  z-index: 1000;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  backdrop-filter: blur(5px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.active {
+  display: block !important;
+  animation: fadeInScale 0.4s ease forwards;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+#feedback-area {
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.correct {
+  background: rgba(5, 150, 105, 0.3);
+  color: #10b981;
+  border: 1px solid #10b981;
+  animation: pulseCorrect 0.5s ease;
+}
+
+.incorrect {
+  background: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  border: 1px solid #f87171;
+  animation: shake 0.5s ease;
+}
+
+.word-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.word-card.selected {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: var(--glow-primary);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+.word-card.matched {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: #10b981;
+  animation: matchGlow 0.5s ease;
+}
+
+@keyframes matchGlow {
+  0% { box-shadow: 0 0 0 rgba(16, 185, 129, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+}
+
+#progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 15px 0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.5s ease;
+  animation: fillProgress 1s ease forwards;
+}
+
+@keyframes fillProgress {
+  to { width: var(--progress-percent); }
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  margin: 15px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #3b82f6;
+  transform: scale(1.2);
+}
+
+#answer-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 16px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+#answer-input:focus {
+  outline: none;
+  border-color: var(--glow-primary);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+#submit-btn, #next-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+#submit-btn:hover, #next-btn:hover {
+  background: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+#word-bank {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#question-area {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 15px;
+}
+
+.simulation-object {
+  position: absolute;
+  background: var(--primary);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.equilibrium-line {
+  position: absolute;
+  height: 2px;
+  background: rgba(16, 185, 129, 0.6);
+  width: 100%;
+  animation: equilibriumPulse 2s infinite;
+}
+
+@keyframes equilibriumPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  #content-area {
+    grid-template-columns: 1fr;
+  }
+  
+  #game-container {
+    padding: 10px;
+  }
+  
+  .start-screen, #game-screen, #end-screen {
+    padding: 20px 15px;
+  }
+  
+  #scene-area {
+    min-height: 300px;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+<body>
+<div id="game-container">
+  <div id="scene-area">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div id="content-area">
+      <div id="score-display">Skor: 0</div>
+      <div id="lives-display">Nyawa: 3</div>
+      <div id="timer-display">Waktu: 00:00</div>
+      
+      <button id="instructions-btn" class="btn-primary">Petunjuk</button>
+      <button id="hint-btn" class="btn-secondary">Bantuan</button>
+      
+      <div id="start-screen" class="hidden">
+        <h1>Penerapan Hukum Newton 1 - Benda dalam Keadaan Setimbang</h1>
+        <p>Temukan pasangan konsep dan aplikasi hukum Newton 1 dalam kehidupan sehari-hari!</p>
+        <button id="start-btn" class="btn-primary">Mulai</button>
+      </div>
+      
+      <div id="game-screen" class="hidden">
+        <div id="progress-bar"><div class="progress-fill"></div></div>
+        <div id="question-area">
+          <h2>Temukan Pasangan Konsep!</h2>
+          <div id="word-bank">
+            <!-- Word cards akan ditambahkan oleh JS -->
+          </div>
+        </div>
+        <div id="feedback-area"></div>
+        <button id="next-btn" class="btn-primary hidden">Lanjut</button>
+      </div>
+      
+      <div id="end-screen" class="hidden">
+        <h2>Kuis Selesai!</h2>
+        <p>Skor Akhir: <span id="final-score">0</span></p>
+        <p>Waktu: <span id="final-time">00:00</span></p>
+        <button id="restart-btn" class="btn-primary">Ulangi Kuis</button>
+      </div>
+      
+      <div id="instructions-popup" class="hidden">
+        <h3>Petunjuk Permainan</h3>
+        <p>Cocokkan konsep hukum Newton 1 dengan contoh aplikasinya dalam kehidupan sehari-hari.</p>
+        <ul>
+          <li>Klik dua kartu untuk mencocokkan</li>
+          <li>Dapatkan poin untuk setiap pasangan yang benar</li>
+          <li>Jaga nyawa tetap ada untuk melanjutkan permainan</li>
+        </ul>
+        <button onclick="hideInstructions()" class="btn-primary">Tutup</button>
+      </div>
+      
+      <div id="hint-popup" class="hidden">
+        <h3>Bantuan</h3>
+        <p>Hukum Newton 1 menyatakan bahwa benda diam akan tetap diam, dan benda bergerak akan terus bergerak lurus beraturan kecuali ada gaya luar yang bekerja padanya.</p>
+        <p>Contoh: Penumpang bus terdorong ke depan saat bus direm tiba-tiba.</p>
+        <button onclick="hideHint()" class="btn-primary">Tutup</button>
+      </div>
+      
+      <div id="overlay" class="hidden"></div>
+    </div>
+  </div>
+</div>
+<script>
+// Game state variables
+var gameState = 'start';
+var score = 0;
+var lives = 3;
+var timeLeft = 300;
+var currentQuestion = 0;
+var totalQuestions = 8;
+var isRunning = false;
+var currentIndex = 0;
+var questions = [
+    {
+        question: "Apa yang dimaksud dengan hukum Newton 1?",
+        options: ["Benda diam akan tetap diam", "Gaya sebanding dengan percepatan", "Gaya aksi sama dengan reaksi", "Energi tidak dapat diciptakan"],
+        correct: 0,
+        explanation: "Hukum Newton 1 menyatakan bahwa benda diam akan tetap diam, dan benda bergerak lurus beraturan akan tetap bergerak lurus beraturan selama resultan gaya yang bekerja pada benda itu nol."
+    },
+    {
+        question: "Jika resultan gaya pada suatu benda adalah nol, maka benda tersebut...",
+        options: ["Bergerak dipercepat", "Bergerak diperlambat", "Dalam keadaan setimbang", "Tidak bergerak"],
+        correct: 2,
+        explanation: "Ketika resultan gaya nol, benda dalam keadaan setimbang (diam atau bergerak lurus beraturan)."
+    },
+    {
+        question: "Contoh penerapan hukum Newton 1 dalam kehidupan sehari-hari adalah...",
+        options: ["Mobil berbelok", "Penumpang terdorong ke depan saat rem mendadak", "Buah jatuh dari pohon", "Roket meluncur"],
+        correct: 1,
+        explanation: "Saat kendaraan direm mendadak, penumpang cenderung mempertahankan keadaan geraknya karena inersia."
+    },
+    {
+        question: "Inersia adalah...",
+        options: ["Gaya yang bekerja pada benda", "Kelembaman benda terhadap perubahan gerak", "Percepatan benda", "Massa jenis benda"],
+        correct: 1,
+        explanation: "Inersia adalah sifat benda untuk mempertahankan keadaan geraknya (diam atau bergerak lurus beraturan)."
+    },
+    {
+        question: "Sebuah benda dalam keadaan setimbang jika...",
+        options: ["Gaya total > 0", "Gaya total < 0", "Gaya total = 0", "Gaya tidak berpengaruh"],
+        correct: 2,
+        explanation: "Benda dalam keadaan setimbang jika resultan (jumlah) semua gaya yang bekerja padanya adalah nol."
+    },
+    {
+        question: "Manakah yang bukan contoh hukum Newton 1?",
+        options: ["Batu di tanah", "Mobil berjalan konstan", "Balon mengambang", "Roket meluncur"],
+        correct: 3,
+        explanation: "Roket meluncur merupakan contoh hukum Newton 3 (gaya aksi-reaksi), bukan hukum 1."
+    },
+    {
+        question: "Kemampuan benda mempertahankan keadaan diam disebut...",
+        options: ["Akselerasi", "Inersia", "Momentum", "Energi"],
+        correct: 1,
+        explanation: "Inersia adalah kemampuan benda untuk mempertahankan keadaan geraknya termasuk keadaan diam."
+    },
+    {
+        question: "Hukum Newton 1 juga dikenal sebagai...",
+        options: ["Hukum gravitasi", "Hukum aksi-reaksi", "Hukum inersia", "Hukum energi"],
+        correct: 2,
+        explanation: "Hukum Newton 1 disebut juga hukum inersia karena berkaitan dengan sifat kelembaman benda."
+    }
+];
+var answers = [];
+
+// Initialize game
+function initGame() {
+    document.addEventListener('DOMContentLoaded', function() {
+        showStartScreen();
+        
+        // Set up event listeners
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('instructions-btn').addEventListener('click', showInstructions);
+        document.getElementById('hint-btn').addEventListener('click', showHint);
+        document.getElementById('submit-btn').addEventListener('click', checkAnswer);
+        document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        
+        // Initially hide game and end screens
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('instructions-popup').classList.add('hidden');
+        document.getElementById('hint-popup').classList.add('hidden');
+    });
+}
+
+// Show start screen
+function showStartScreen() {
+    document.getElementById('start-screen').classList.remove('hidden');
+    document.getElementById('game-screen').classList.add('hidden');
+    document.getElementById('end-screen').classList.add('hidden');
+    gameState = 'start';
+}
+
+// Start the game
+function startGame() {
+    gameState = 'playing';
+    score = 0;
+    lives = 3;
+    timeLeft = 300;
+    currentIndex = 0;
+    
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('game-screen').classList.remove('hidden');
+    document.getElementById('end-screen').classList.add('hidden');
+    
+    updateScore();
+    updateLives();
+    updateTimer();
+    
+    isRunning = true;
+    startTimer();
+    
+    showQuestion();
+}
+
+// End the game
+function endGame() {
+    isRunning = false;
+    clearInterval(timerInterval);
+    
+    document.getElementById('game-screen').classList.add('hidden');
+    document.getElementById('end-screen').classList.remove('hidden');
+    
+    // Update end screen results
+    const win = score >= 70;
+    document.getElementById('end-title').textContent = win ? "Selamat! Anda Menang!" : "Permainan Selesai";
+    document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
+    document.getElementById('time-remaining').textContent = `Waktu Tersisa: ${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`;
+    
+    gameState = 'end';
+}
+
+// Timer interval variable
+var timerInterval;
+
+// Start the countdown timer
+function startTimer() {
+    timerInterval = setInterval(function() {
+        if (isRunning && timeLeft > 0) {
+            timeLeft--;
+            updateTimer();
+            
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }
+    }, 1000);
+}
+
+// Update timer display
+function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer-display').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Update score display
+function updateScore() {
+    document.getElementById('score-display').textContent = `Skor: ${score}`;
+}
+
+// Update lives display
+function updateLives() {
+    document.getElementById('lives-display').textContent = `Nyawa: ${lives}`;
+}
+
+// Show game instructions
+function showInstructions() {
+    document.getElementById('instructions-popup').classList.remove('hidden');
+}
+
+// Hide game instructions
+function hideInstructions() {
+    document.getElementById('instructions-popup').classList.add('hidden');
+}
+
+// Show hint
+function showHint() {
+    document.getElementById('hint-popup').classList.remove('hidden');
+}
+
+// Hide hint
+function hideHint() {
+    document.getElementById('hint-popup').classList.add('hidden');
+}
+
+// Spawn particle effect
+function spawnParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle', 'glow');
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    document.getElementById('game-container').appendChild(particle);
+    
+    setTimeout(() => {
+        particle.remove();
+    }, 1000);
+}
+
+// Show current question
+function showQuestion() {
+    if (currentIndex >= questions.length) {
+        endGame();
+        return;
+    }
+    
+    const q = questions[currentIndex];
+    document.getElementById('question-area').innerHTML = `
+        <h3>${q.question}</h3>
+        <div class="options-grid">
+            ${q.options.map((opt, idx) => `
+                <button class="option-btn" data-index="${idx}">${opt}</button>
+            `).join('')}
+        </div>
+    `;
+    
+    // Add event listeners to option buttons
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            selectOption(parseInt(this.getAttribute('data-index')));
+        });
+    });
+    
+    // Reset UI states
+    document.getElementById('feedback-area').innerHTML = '';
+    document.getElementById('next-btn').classList.add('hidden');
+    document.getElementById('submit-btn').classList.remove('hidden');
+}
+
+// Select an option
+function selectOption(index) {
+    // Remove previous selections
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Highlight selected option
+    event.target.classList.add('selected');
+    
+    // Store the selected answer
+    answers[currentIndex] = index;
+}
+
+// Check the selected answer
+function checkAnswer() {
+    if (typeof answers[currentIndex] === 'undefined') {
+        showFeedback("Silakan pilih jawaban terlebih dahulu!", 'warning');
+        return;
+    }
+    
+    const q = questions[currentIndex];
+    const selectedIdx = answers[currentIndex];
+    const isCorrect = selectedIdx === q.correct;
+    
+    if (isCorrect) {
+        score += 10;
+        updateScore();
+        showFeedback(`Benar! ${q.explanation}`, 'correct');
+        spawnParticle(window.innerWidth/2, window.innerHeight/2);
+    } else {
+        lives--;
+        updateLives();
+        showFeedback(`Salah! ${q.explanation}`, 'incorrect');
+        
+        if (lives <= 0) {
+            endGame();
+            return;
+        }
+    }
+    
+    // Disable further selection and show next button
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.disabled = true;
+        if (parseInt(btn.getAttribute('data-index')) === q.correct) {
+            btn.classList.add('correct');
+        }
+    });
+    
+    document.getElementById('submit-btn').classList.add('hidden');
+    document.getElementById('next-btn').classList.remove('hidden');
+}
+
+// Show feedback message
+function showFeedback(message, type) {
+    const feedbackEl = document.getElementById('feedback-area');
+    feedbackEl.textContent = message;
+    feedbackEl.className = `feedback ${type}`;
+}
+
+// Move to next question
+function nextQuestion() {
+    currentIndex++;
+    
+    if (currentIndex >= questions.length || score >= 70) {
+        endGame();
+    } else {
+        showQuestion();
+    }
+}
+
+// Shuffle array utility
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Initialize the game when script loads
+initGame();
+</script>
+</body>
+</html>

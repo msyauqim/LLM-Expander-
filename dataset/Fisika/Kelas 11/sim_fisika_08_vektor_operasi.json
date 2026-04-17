@@ -1,0 +1,175 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium Resultan Vektor",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Operasi Vektor",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_operasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Laboratorium Resultan Vektor",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Operasi Vektor",
+      "topik": "Operasi Vektor",
+      "difficulty": 3,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat menjumlahkan dua vektor secara analitis menggunakan metode komponen",
+        "Siswa dapat menentukan besar dan arah resultan dua vektor dengan rumus kosinus dan sinus",
+        "Siswa dapat memprediksi kondisi khusus resultan vektor seperti saling meniadakan atau searah"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pusat Kendali Drone",
+        "story": "Dua drone ekspedisi mendapat sinyal dari markas: masing-masing bergerak dengan kecepatan dan arah berbeda. Sebagai insinyur misi, tugasmu adalah menghitung resultan perpaduan gerak kedua drone agar tim dapat memprediksi posisi akhirnya. Gunakan metode analitis vektor untuk menyelesaikan misi!",
+        "image_description": "Dua drone neon berwarna cyan dan magenta terbang di atas grid holografik bercahaya, anak panah vektor warna-warni menunjukkan arah gerak masing-masing, layar digital menampilkan angka kalkulasi resultan",
+        "cta_text": "Mulai Kalkulasi"
+      },
+      "visual_element": {
+        "theme_name": "Neon Vector Grid",
+        "theme_preset": "scifi_neon",
+        "mood": "intense, analytical, high-tech",
+        "color_palette": {
+          "primary": "#00e5ff",
+          "secondary": "#e040fb",
+          "background": "#0a0a1a",
+          "accent": "#ffea00",
+          "text": "#e0f7fa"
+        },
+        "setting_description": "Ruang kendali futuristik dengan grid holografik neon, panel layar digital berkilauan, dan efek cahaya cyan-magenta yang menciptakan suasana laboratorium teknologi tinggi.",
+        "art_style": "sci-fi neon flat design dengan glow effect dan grid digital",
+        "ambient_elements": [
+          "Grid holografik berdenyut halus saat vektor bergerak",
+          "Partikel cahaya mengalir mengikuti arah anak panah vektor",
+          "Layar kalkulasi berkedip saat nilai resultan diperbarui"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur besar vektor pertama (V1) dan sudut arahnya (θ1) dengan slider." },
+          { "step": 2, "text": "Atur besar vektor kedua (V2) dan sudut arahnya (θ2) dengan slider." },
+          { "step": 3, "text": "Amati vektor resultan R yang ditampilkan beserta besar dan arahnya." },
+          { "step": 4, "text": "Komponen Rx dan Ry dihitung otomatis menggunakan metode analitis." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk menguasai operasi penjumlahan vektor!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Metode Analitis Penjumlahan Vektor",
+          "strategy": "Jumlahkan komponen-komponen vektor secara terpisah: Rx = V1x + V2x dan Ry = V1y + V2y. Besar resultan dihitung dengan Teorema Pythagoras, dan arahnya dengan fungsi arctan. Dua vektor saling meniadakan (R=0) jika besarnya sama tetapi arahnya berlawanan (berbeda 180°).",
+          "formula": "Rx = V1cosθ1 + V2cosθ2,  Ry = V1sinθ1 + V2sinθ2,  R = √(Rx²+Ry²),  α = arctan(Ry/Rx)",
+          "example": "V1=6N θ1=0°, V2=8N θ2=90°: Rx=6+0=6, Ry=0+8=8, R=√(36+64)=√100=10N. Arah: α=arctan(8/6)≈53°.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_update", "event": "on_correct_action", "description": "Suara klik digital pendek saat nilai slider diubah dan resultan diperbarui" },
+          { "id": "sfx_challenge", "event": "on_win", "description": "Suara fanfare elektronik pendek dengan efek neon synth saat tantangan berhasil diselesaikan" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Suara alarm rendah berdenyut dua kali saat waktu habis" },
+          { "id": "bgm", "event": "background", "description": "Musik elektronik bertempo sedang dengan beat digital yang memacu konsentrasi, loop dinamis" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Penjumlahan Dua Vektor",
+        "narrative": "Atur besar dan arah dua vektor secara independen. Simulasi menghitung resultan R secara analitis menggunakan metode komponen, lalu menampilkan besar dan arah resultan beserta visualisasi geometrisnya.",
+        "context": "Bidang koordinat dua dimensi; sudut θ diukur berlawanan arah jarum jam dari sumbu X positif; satuan besar vektor dalam Newton (N)."
+      },
+      "variables": [
+        { "id": "v1", "label": "Besar vektor pertama", "symbol": "V1", "unit": "N", "type": "user_input", "min": 0, "max": 20, "default": 6, "step": 0.5 },
+        { "id": "sudut1", "label": "Sudut vektor pertama", "symbol": "θ1", "unit": "derajat", "type": "user_input", "min": 0, "max": 360, "default": 0, "step": 1 },
+        { "id": "v2", "label": "Besar vektor kedua", "symbol": "V2", "unit": "N", "type": "user_input", "min": 0, "max": 20, "default": 8, "step": 0.5 },
+        { "id": "sudut2", "label": "Sudut vektor kedua", "symbol": "θ2", "unit": "derajat", "type": "user_input", "min": 0, "max": 360, "default": 90, "step": 1 },
+        { "id": "rx", "label": "Komponen resultan horizontal", "symbol": "Rx", "unit": "N", "type": "computed" },
+        { "id": "ry", "label": "Komponen resultan vertikal", "symbol": "Ry", "unit": "N", "type": "computed" },
+        { "id": "resultan", "label": "Besar resultan", "symbol": "R", "unit": "N", "type": "computed" },
+        { "id": "arah_resultan", "label": "Arah resultan", "symbol": "α", "unit": "derajat", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_rx", "computes": "rx", "formula": "rx = v1 * cos(sudut1 * pi / 180) + v2 * cos(sudut2 * pi / 180)", "description": "Komponen horizontal resultan: jumlah komponen X kedua vektor" },
+        { "id": "eq_ry", "computes": "ry", "formula": "ry = v1 * sin(sudut1 * pi / 180) + v2 * sin(sudut2 * pi / 180)", "description": "Komponen vertikal resultan: jumlah komponen Y kedua vektor" },
+        { "id": "eq_resultan", "computes": "resultan", "formula": "resultan = sqrt(rx^2 + ry^2)", "description": "Besar resultan dihitung dengan Teorema Pythagoras" },
+        { "id": "eq_arah", "computes": "arah_resultan", "formula": "arah_resultan = atan2(ry, rx) * 180 / pi", "description": "Arah resultan dalam derajat terhadap sumbu X positif" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Dua anak panah vektor (V1 cyan, V2 magenta) dari titik asal; anak panah resultan R berwarna kuning ditampilkan; metode ujung-ke-pangkal (tip-to-tail) diilustrasikan dengan panah salin-geser; label besar dan sudut masing-masing vektor tampil" },
+        { "id": "viz_2", "type": "graph", "x_axis": "sudut2", "y_axis": "resultan", "title": "Besar Resultan terhadap Sudut θ2 (V1 dan θ1 tetap)" },
+        { "id": "viz_3", "type": "table", "title": "Ringkasan Komponen dan Resultan", "description": "Tabel menampilkan V1, θ1, V2, θ2, Rx, Ry, R, dan α secara real-time" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur V1=6 N pada θ1=0° dan V2=8 N pada θ2=90°. Tentukan besar resultan kedua vektor tersebut.",
+          "success_condition": "abs(v1 - 6) < 0.1 AND abs(sudut1 - 0) < 1 AND abs(v2 - 8) < 0.1 AND abs(sudut2 - 90) < 1 AND abs(resultan - 10) < 0.5",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi dua vektor dengan besar yang sama tetapi arah berlawanan sehingga besar resultan R = 0 N.",
+          "success_condition": "abs(resultan) < 0.5 AND v1 > 0 AND v2 > 0 AND abs(v1 - v2) < 0.1",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur V1=10 N pada θ1=30° dan V2=10 N pada θ2=150°. Amati arah resultan yang terbentuk dan verifikasi bahwa resultan mengarah tepat ke θ=90°.",
+          "success_condition": "abs(v1 - 10) < 0.1 AND abs(sudut1 - 30) < 1 AND abs(v2 - 10) < 0.1 AND abs(sudut2 - 150) < 1 AND abs(arah_resultan - 90) < 3",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan operasi vektor",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Misi sukses! Drone berhasil dilacak. Kamu menguasai operasi penjumlahan vektor secara analitis!",
+        "feedback_audio": "sfx_challenge"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Misi gagal! Ingat: jumlahkan komponen X dan Y secara terpisah, lalu hitung R = √(Rx²+Ry²). Coba lagi!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

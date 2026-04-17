@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const LabVektorku = () => {
+  // Game state variables
+  const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'end'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(5);
+  const [isRunning, setIsRunning] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [feedback, setFeedback] = useState('');
+
+  // Sample vector questions
+  const sampleQuestions = [
+    {
+      id: 1,
+      question: "Berapa magnitudo vektor A = (3, 4)?",
+      options: ["5", "7", "12", "√7"],
+      correct: 0
+    },
+    {
+      id: 2,
+      question: "Arah vektor B = (-1, 1) terhadap sumbu x positif adalah?",
+      options: ["45°", "135°", "225°", "315°"],
+      correct: 1
+    },
+    {
+      id: 3,
+      question: "Jika A = (2, 3) dan B = (1, -1), maka A + B = ?",
+      options: ["(3, 2)", "(1, 4)", "(3, 4)", "(2, -3)"],
+      correct: 0
+    },
+    {
+      id: 4,
+      question: "Hasil dot product dari A = (2, 3) dan B = (4, 1) adalah?",
+      options: ["11", "8", "14", "5"],
+      correct: 0
+    },
+    {
+      id: 5,
+      question: "Vektor satuan dari A = (3, 4) adalah?",
+      options: ["(3/5, 4/5)", "(3, 4)", "(1, 1)", "(0.6, 0.8)"],
+      correct: 0
+    }
+  ];
+
+  // Initialize game
+  const initGame = useCallback(() => {
+    setQuestions(sampleQuestions);
+    setScore(0);
+    setLives(3);
+    setTimeLeft(60);
+    setCurrentQuestion(0);
+    setCurrentIndex(0);
+    setAnswers([]);
+    setSelectedAnswer(null);
+    setFeedback('');
+  }, []);
+
+  // Start game
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+  };
+
+  // End game
+  const endGame = () => {
+    setGameState('end');
+    setIsRunning(false);
+  };
+
+  // Update score
+  const updateScore = (points) => {
+    setScore(prev => prev + points);
+  };
+
+  // Update timer
+  const updateTimer = () => {
+    if (timeLeft > 0) {
+      setTimeLeft(prev => prev - 1);
+    } else {
+      endGame();
+    }
+  };
+
+  // Show feedback
+  const showFeedback = (isCorrect) => {
+    setFeedback(isCorrect ? 'Benar!' : 'Salah!');
+    setTimeout(() => setFeedback(''), 1500);
+  };
+
+  // Handle answer selection
+  const handleAnswerSelect = (index) => {
+    if (!isRunning || selectedAnswer !== null) return;
+    
+    setSelectedAnswer(index);
+    const isCorrect = index === questions[currentIndex].correct;
+    
+    if (isCorrect) {
+      updateScore(10);
+      showFeedback(true);
+    } else {
+      setLives(prev => prev - 1);
+      showFeedback(false);
+    }
+    
+    // Move to next question after delay
+    setTimeout(() => {
+      if (currentIndex < totalQuestions - 1) {
+        setCurrentIndex(prev => prev + 1);
+        setSelectedAnswer(null);
+      } else {
+        endGame();
+      }
+    }, 1500);
+  };
+
+  // Timer effect
+  useEffect(() => {
+    let timer;
+    if (isRunning && gameState === 'playing' && timeLeft > 0) {
+      timer = setInterval(updateTimer, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(timer);
+  }, [isRunning, gameState, timeLeft]);
+
+  // Check lives
+  useEffect(() => {
+    if (lives <= 0) {
+      endGame();
+    }
+  }, [lives]);
+
+  // Toggle instructions
+  const toggleInstructions = () => {
+    setShowInstructions(!showInstructions);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden relative">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-30 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${3 + Math.random() * 4}s`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main game container */}
+      <div id="game-container" className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        
+        {/* Start Screen */}
+        {gameState === 'start' && (
+          <div id="start-screen" className="text-center max-w-2xl mx-auto p-8 backdrop-blur-lg bg-white/10 rounded-2xl border border-white/20 shadow-2xl">
+            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Lab Vektorku
+            </h1>
+            <p className="text-xl mb-8 text-gray-300">
+              Uji pengetahuanmu tentang vektor dalam permainan interaktif ini!
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex justify-between items-center bg-black/20 p-4 rounded-lg">
+                <span className="text-gray-300">Total Soal:</span>
+                <span className="font-bold text-blue-400">{totalQuestions}</span>
+              </div>
+              <div className="flex justify-between items-center bg-black/20 p-4 rounded-lg">
+                <span className="text-gray-300">Waktu:</span>
+                <span className="font-bold text-green-400">{timeLeft}s</span>
+              </div>
+            </div>
+
+            <button
+              onClick={startGame}
+              className="btn-primary bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              Mulai Permainan
+            </button>
+
+            <button
+              id="instructions-btn"
+              onClick={toggleInstructions}
+              className="mt-4 btn-secondary bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300"
+            >
+              Petunjuk
+            </button>
+          </div>
+        )}
+
+        {/* Instructions Modal */}
+        {showInstructions && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl max-w-md w-full border border-white/20 shadow-2xl">
+              <h3 className="text-2xl font-bold mb-4 text-blue-400">Petunjuk Permainan</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Jawab semua soal vektor secepat mungkin</li>
+                <li>• Setiap jawaban benar memberikan 10 poin</li>
+                <li>• Jawaban salah mengurangi nyawa</li>
+                <li>• Gunakan waktu sebaik-baiknya!</li>
+              </ul>
+              <button
+                onClick={toggleInstructions}
+                className="mt-6 w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Game Screen */}
+        {gameState === 'playing' && (
+          <div id="game-screen" className="w-full max-w-4xl mx-auto">
+            {/* Game stats bar */}
+            <div className="flex justify-between items-center mb-6 p-4 bg-black/20 rounded-xl backdrop-blur-sm border border-white/10">
+              <div id="score-display" className="text-center">
+                <div className="text-sm text-gray-300">Skor</div>
+                <div className="text-2xl font-bold text-yellow-400">{score}</div>
+              </div>
+              <div id="lives-display" className="text-center">
+                <div className="text-sm text-gray-300">Nyawa</div>
+                <div className="text-2xl font-bold text-red-400">{lives} ❤️</div>
+              </div>
+              <div id="timer-display" className="text-center">
+                <div className="text-sm text-gray-300">Waktu</div>
+                <div className={`text-2xl font-bold ${timeLeft < 10 ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
+                  {timeLeft}s
+                </div>
+              </div>
+            </div>
+
+            {/* Question area */}
+            <div id="scene-area" className="bg-black/20 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+              <div id="content-area" className="mb-6">
+                <h2 className="text-2xl font-bold mb-4 text-center text-blue-300">
+                  Soal #{currentIndex + 1}
+                </h2>
+                <p className="text-lg text-center mb-8 text-gray-200">
+                  {questions[currentIndex]?.question}
+                </p>
+              </div>
+
+              {/* Answer choices */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {questions[currentIndex]?.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={selectedAnswer !== null}
+                    className={`card p-4 rounded-xl border transition-all duration-300 transform hover:scale-105 ${
+                      selectedAnswer === index
+                        ? index === questions[currentIndex].correct
+                          ? 'bg-green-500/20 border-green-400 text-green-400'
+                          : 'bg-red-500/20 border-red-400 text-red-400'
+                        : 'bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40 text-white'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold">
+                        {String.fromCharCode(65 + index)}
+                      </div>
+                      <span>{option}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Feedback */}
+              {feedback && (
+                <div className={`text-center text-xl font-bold mb-4 ${
+                  feedback === 'Benar!' ? 'text-green-400' : 'text-red-400'
+                }`}>
+                  {feedback}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* End Screen */}
+        {gameState === 'end' && (
+          <div id="end-screen" className="text-center max-w-2xl mx-auto p-8 backdrop-blur-lg bg-white/10 rounded-2xl border border-white/20 shadow-2xl">
+            <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Permainan Selesai!
+            </h1>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex justify-between items-center bg-black/20 p-4 rounded-lg">
+                <span className="text-gray-300">Skor Akhir:</span>
+                <span className="font-bold text-yellow-400 text-2xl">{score}</span>
+              </div>
+              <div className="flex justify-between items-center bg-black/20 p-4 rounded-lg">
+                <span className="text-gray-300">Soal Terjawab:</span>
+                <span className="font-bold text-blue-400">{currentIndex}/{totalQuestions}</span>
+              </div>
+              <div className="flex justify-between items-center bg-black/20 p-4 rounded-lg">
+                <span className="text-gray-300">Waktu Tersisa:</span>
+                <span className="font-bold text-green-400">{timeLeft}s</span>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={startGame}
+                className="btn-primary bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Main Lagi
+              </button>
+              
+              <button
+                onClick={() => setGameState('start')}
+                className="btn-secondary bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 ml-4"
+              >
+                Menu Utama
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default LabVektorku;
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Vektorku - Game Vektor Fisika</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            padding: 40px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #start-screen {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a2e"/><path d="M0 0L100 100M100 0L0 100" stroke="%23333" stroke-width="1"/></svg>');
+            background-size: 30px 30px;
+        }
+
+        #game-screen {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2316213e"/><circle cx="20" cy="20" r="2" fill="%234cc9f0" opacity="0.3"/><circle cx="80" cy="80" r="2" fill="%23f72585" opacity="0.3"/></svg>');
+            background-size: 50px 50px;
+        }
+
+        #end-screen {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a2e"/><path d="M0 50Q50 30 100 50T200 50" stroke="%234361ee" stroke-width="1" fill="none"/></svg>');
+            background-size: 40px 40px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #4cc9f0, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a9d6e5;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #a9d6e5;
+            border: 1px solid #4cc9f0;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(76, 201, 240, 0.2);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a9d6e5;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+
+        #scene-area {
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .vector-line {
+            position: absolute;
+            height: 4px;
+            background: #4cc9f0;
+            transform-origin: left center;
+            box-shadow: 0 0 10px rgba(76, 201, 240, 0.7);
+        }
+
+        .vector-head {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #4cc9f0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        #content-area {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px 0;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #f1faee;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4cc9f0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #3a0ca3;
+            background: rgba(25, 25, 45, 0.8);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .incorrect {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(25, 25, 45, 0.95);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a9d6e5;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(76, 201, 240, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(76, 201, 240, 0.8);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #4cc9f0;
+            border-radius: 50%;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        .card {
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+
+        .result-summary {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #f72585;
+            margin: 20px 0;
+        }
+
+        .timer-display {
+            font-size: 1.2rem;
+            color: #f72585;
+            font-weight: bold;
+        }
+
+        .lives-display {
+            color: #ff6b6b;
+        }
+
+        .score-display {
+            color: #4cc9f0;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Particle Effects -->
+        <div id="particles"></div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>Lab Vektorku</h1>
+            <p class="subtitle">Uji pengetahuanmu tentang vektor fisika! Jawab pertanyaan-pertanyaan berikut dengan tepat dan dapatkan skor tertinggi.</p>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">Soal</div>
+                    <div class="stat-value" id="total-questions">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Nyawa</div>
+                    <div class="stat-value lives-display" id="lives-display">3</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Skor</div>
+                    <div class="stat-value score-display" id="score-display">0</div>
+                </div>
+            </div>
+            
+            <button id="start-btn" class="btn-primary glow">Mulai Permainan</button>
+            <button id="instructions-btn" class="btn-secondary">Petunjuk</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">Sisa Waktu</div>
+                    <div class="stat-value timer-display" id="timer-display">30s</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Nyawa</div>
+                    <div class="stat-value lives-display" id="lives-display-game">3</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Skor</div>
+                    <div class="stat-value score-display" id="score-display-game">0</div>
+                </div>
+            </div>
+
+            <div id="scene-area">
+                <!-- Vector visualization will be drawn here -->
+            </div>
+
+            <div id="content-area">
+                <div class="question-text" id="question-text">Menunggu pertanyaan...</div>
+                
+                <div class="input-group">
+                    <label for="answer-input">Jawaban:</label>
+                    <input type="text" id="answer-input" placeholder="Masukkan jawabanmu...">
+                </div>
+                
+                <button id="submit-btn" class="btn-primary">Periksa Jawaban</button>
+                
+                <div id="feedback" class="feedback hidden"></div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen hidden">
+            <h2>Permainan Selesai!</h2>
+            <div class="result-summary">
+                <div class="final-score" id="final-score">0</div>
+                <p class="subtitle" id="result-message">Kerja bagus! Kamu telah menyelesaikan tantangan vektor.</p>
+            </div>
+            
+            <div class="card">
+                <p><strong>Statistik:</strong></p>
+                <p>Skor Akhir: <span id="end-score">0</span></p>
+                <p>Sisa Nyawa: <span id="end-lives">0</span></p>
+                <p>Waktu Terpakai: <span id="time-used">0</span>s</p>
+            </div>
+            
+            <button id="restart-btn" class="btn-primary">Main Lagi</button>
+            <button id="instructions-btn-end" class="btn-secondary">Lihat Petunjuk</button>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div id="instructions-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Petunjuk Permainan</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>1. Jawab pertanyaan tentang konsep vektor dalam fisika</p>
+                    <p>2. Setiap jawaban benar memberikan 10 poin</p>
+                    <p>3. Jawaban salah mengurangi 1 nyawa</p>
+                    <p>4. Gunakan waktu sebaik mungkin!</p>
+                    <p>5. Topik meliputi: penjumlahan vektor, penguraian komponen, besar dan arah vektor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State Variables
+        let gameState = 'menu'; // menu, playing, ended
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 30;
+        let timerInterval;
+        let currentQuestionIndex = 0;
+        
+        // Questions Database
+        const questions = [
+            {
+                question: "Vektor A memiliki komponen Ax = 3 dan Ay = 4. Berapa besar vektor A?",
+                answer: "5",
+                hint: "Gunakan rumus |A| = √(Ax² + Ay²)"
+            },
+            {
+                question: "Dua vektor A = 3i + 4j dan B = 2i - j. Berapa hasil dari A + B?",
+                answer: "5i+3j",
+                hint: "Jumlahkan komponen i dan j secara terpisah"
+            },
+            {
+                question: "Vektor dengan besar 10 satuan membentuk sudut 30° terhadap sumbu x. Berapa komponen x-nya?",
+                answer: "5√3",
+                hint: "Komponen x = besar × cos(sudut)"
+            },
+            {
+                question: "Jika A = 5i + 12j, berapa besar vektor A?",
+                answer: "13",
+                hint: "Gunakan rumus Pythagoras"
+            },
+            {
+                question: "Berapa besar vektor nol?",
+                answer: "0",
+                hint: "Vektor nol tidak memiliki arah"
+            }
+        ];
+
+        // DOM Elements
+        const gameContainer = document.getElementById('game-container');
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const instructionsBtnEnd = document.getElementById('instructions-btn-end');
+        const closeModalBtn = document.querySelector('.close-btn');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const questionText = document.getElementById('question-text');
+        const answerInput = document.getElementById('answer-input');
+        const feedbackDiv = document.getElementById('feedback');
+        const timerDisplay = document.getElementById('timer-display');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const sceneArea = document.getElementById('scene-area');
+        const finalScore = document.getElementById('final-score');
+        const resultMessage = document.getElementById('result-message');
+
+        // Initialize game
+        function initGame() {
+            document.getElementById('total-questions').textContent = questions.length;
+            createParticles();
+        }
+
+        // Start game
+        function startGame() {
+            gameState = 'playing';
+            score = 0;
+            lives = 3;
+            currentQuestionIndex = 0;
+            
+            updateDisplays();
+            showGameScreen();
+            loadQuestion();
+            
+            startTimer();
+        }
+
+        // Show game screen
+        function showGameScreen() {
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            endScreen.classList.add('hidden');
+        }
+
+        // Load current question
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+            
+            const q = questions[currentQuestionIndex];
+            questionText.textContent = q.question;
+            answerInput.value = '';
+            feedbackDiv.classList.add('hidden');
+            
+            drawVectorVisualization(q);
+        }
+
+        // Draw vector visualization
+        function drawVectorVisualization(question) {
+            sceneArea.innerHTML = '';
+            
+            // Simple visualization for demonstration
+            const vectorLine = document.createElement('div');
+            vectorLine.className = 'vector-line';
+            vectorLine.style.width = '150px';
+            vectorLine.style.top = '150px';
+            vectorLine.style.left = '50px';
+            
+            const vectorHead = document.createElement('div');
+            vectorHead.className = 'vector-head';
+            vectorHead.style.left = '200px';
+            vectorHead.style.top = '147px';
+            
+            sceneArea.appendChild(vectorLine);
+            sceneArea.appendChild(vectorHead);
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            timerDisplay.textContent = `${timeLeft}s`;
+            if (timeLeft <= 10) {
+                timerDisplay.style.color = '#ff6b6b';
+            } else {
+                timerDisplay.style.color = '#f72585';
+            }
+        }
+
+        // Handle time up
+        function handleTimeUp() {
+            showFeedback('Waktu habis! Pindah ke soal berikutnya.', false);
+            setTimeout(() => {
+                nextQuestion();
+            }, 1500);
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                score += 10;
+                showFeedback('Jawaban benar! +10 poin', true);
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1500);
+            } else {
+                lives--;
+                showFeedback(`Jawaban salah! Jawaban benar: ${questions[currentQuestionIndex].answer}`, false);
+                
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        endGame();
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 2000);
+                }
+            }
+            
+            updateDisplays();
+        }
+
+        // Show feedback
+        function showFeedback(message, isCorrect) {
+            feedbackDiv.textContent = message;
+            feedbackDiv.className = 'feedback';
+            feedbackDiv.classList.remove('hidden');
+            
+            if (isCorrect) {
+                feedbackDiv.classList.add('correct');
+            } else {
+                feedbackDiv.classList.add('incorrect');
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+                startTimer();
+            } else {
+                endGame();
+            }
+        }
+
+        // End game
+        function endGame() {
+            clearInterval(timerInterval);
+            gameState = 'ended';
+            
+            finalScore.textContent = score;
+            
+            if (score >= questions.length * 10 * 0.8) {
+                resultMessage.textContent = 'Hebat! Kamu adalah ahli vektor!';
+            } else if (score >= questions.length * 10 * 0.5) {
+                resultMessage.textContent = 'Bagus! Terus latih kemampuan vektormu.';
+            } else {
+                resultMessage.textContent = 'Terus belajar dan coba lagi!';
+            }
+            
+            document.getElementById('end-score').textContent = score;
+            document.getElementById('end-lives').textContent = lives;
+            document.getElementById('time-used').textContent = 30 * questions.length - timeLeft;
+            
+            showEndScreen();
+        }
+
+        // Show end screen
+        function showEndScreen() {
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+        }
+
+        // Update displays
+        function updateDisplays() {
+            document.getElementById('score-display').textContent = score;
+            document.getElementById('lives-display').textContent = lives;
+            document.getElementById('score-display-game').textContent = score;
+            document.getElementById('lives-display-game').textContent = lives;
+        }
+
+        // Show instructions
+        function showInstructions() {
+            instructionsModal.classList.remove('hidden');
+        }
+
+        // Hide instructions
+        function hideInstructions() {
+            instructionsModal.classList.add('hidden');
+        }
+
+        // Create background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            particlesContainer.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        submitBtn.addEventListener('click', checkAnswer);
+        restartBtn.addEventListener('click', startGame);
+        instructionsBtn.addEventListener('click', showInstructions);
+        instructionsBtnEnd.addEventListener('click', showInstructions);
+        closeModalBtn.addEventListener('click', hideInstructions);
+
+        // Allow Enter key to submit
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>
+<script>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const LabVektorku = () => {
+  // Game state management
+  const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'results'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [isRunning, setIsRunning] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [feedback, setFeedback] = useState('');
+
+  // Mock questions data for vector word game
+  const questions = [
+    {
+      id: 1,
+      word: "VEKTOR",
+      definition: "Besaran yang memiliki besar dan arah",
+      options: ["VEKTOR", "SKALAR", "GAYA", "PERCEPATAN"],
+      correct: 0
+    },
+    {
+      id: 2,
+      word: "SKALAR",
+      definition: "Besaran yang hanya memiliki besar tanpa arah",
+      options: ["KECEPATAN", "SKALAR", "PERPINDAHAN", "GAYA"],
+      correct: 1
+    },
+    {
+      id: 3,
+      word: "RESULTAN",
+      definition: "Penjumlahan dua atau lebih vektor",
+      options: ["KOMPONEN", "RESULTAN", "PROYEKSI", "UNIT"],
+      correct: 1
+    },
+    {
+      id: 4,
+      word: "KOMPONEN",
+      definition: "Bagian dari vektor dalam arah tertentu",
+      options: ["MAGNITUDO", "KOMPONEN", "ARAH", "VEKTOR"],
+      correct: 1
+    },
+    {
+      id: 5,
+      word: "MAGNITUDO",
+      definition: "Besar atau panjang dari suatu vektor",
+      options: ["MAGNITUDO", "DIREKSI", "KOMPONEN", "UNIT"],
+      correct: 0
+    }
+  ];
+
+  // Initialize game
+  const initGame = useCallback(() => {
+    setScore(0);
+    setLives(3);
+    setTimeLeft(300);
+    setCurrentQuestion(0);
+    setTotalQuestions(questions.length);
+    setCurrentIndex(0);
+    setAnswers([]);
+    setFeedback('');
+  }, [questions.length]);
+
+  // Start game
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+  };
+
+  // End game
+  const endGame = () => {
+    setIsRunning(false);
+    setGameState('results');
+  };
+
+  // Update score
+  const updateScore = (points) => {
+    setScore(prev => Math.max(0, prev + points));
+  };
+
+  // Handle answer selection
+  const handleAnswer = (selectedOption, questionIndex) => {
+    const question = questions[questionIndex];
+    const isCorrect = selectedOption === question.correct;
+    
+    if (isCorrect) {
+      updateScore(10);
+      setFeedback('Benar! 🎉');
+    } else {
+      setLives(prev => Math.max(0, prev - 1));
+      setFeedback('Salah! ❌');
+    }
+    
+    // Move to next question or end game
+    setTimeout(() => {
+      setFeedback('');
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      } else {
+        endGame();
+      }
+    }, 1500);
+  };
+
+  // Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
+
+  // Format time display
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Show instructions
+  const showInstructions = () => setShowInstructions(true);
+  const hideInstructions = () => setShowInstructions(false);
+
+  // Show hint
+  const showHint = () => setShowHint(true);
+  const hideHint = () => setShowHint(false);
+
+  // Render different screens based on game state
+  const renderScreen = () => {
+    switch (gameState) {
+      case 'menu':
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white">
+            <div className="text-center space-y-8 p-8">
+              <h1 className="text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                Lab Vektorku
+              </h1>
+              <p className="text-xl text-gray-300 max-w-md mx-auto">
+                Uji pengetahuanmu tentang konsep vektor dalam fisika melalui permainan kata interaktif!
+              </p>
+              <div className="space-y-4">
+                <button
+                  onClick={startGame}
+                  className="btn-primary px-8 py-4 text-xl font-semibold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg transform hover:scale-105 transition-all duration-200 shadow-lg"
+                >
+                  Mulai Permainan
+                </button>
+                <button
+                  onClick={showInstructions}
+                  className="btn-secondary px-6 py-3 ml-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200"
+                >
+                  Petunjuk
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'playing':
+        const currentQ = questions[currentQuestion];
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+            {/* Game Header */}
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 mb-6 border border-white/10">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex space-x-6">
+                    <div className="score-display bg-emerald-600 px-4 py-2 rounded-lg">
+                      <span className="font-bold">Skor: {score}</span>
+                    </div>
+                    <div className="lives-display bg-red-600 px-4 py-2 rounded-lg">
+                      <span className="font-bold">Nyawa: {lives}</span>
+                    </div>
+                    <div className="timer-display bg-blue-600 px-4 py-2 rounded-lg">
+                      <span className="font-bold">Waktu: {formatTime(timeLeft)}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={showInstructions}
+                    className="instructions-btn bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition-colors duration-200"
+                  >
+                    Petunjuk
+                  </button>
+                </div>
+                
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
+                  ></div>
+                </div>
+                <div className="text-center mt-2 text-gray-300">
+                  Soal {currentQuestion + 1} dari {totalQuestions}
+                </div>
+              </div>
+
+              {/* Question Area */}
+              <div className="scene-area bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-white mb-4">Tebak Kata Vektor!</h2>
+                  <p className="text-lg text-gray-300 mb-6">{currentQ.definition}</p>
+                  <div className="text-4xl font-mono font-bold text-cyan-400 mb-6">
+                    {currentQ.word.split('').map((char, index) => (
+                      <span key={index} className="inline-block mx-1 glow particle">
+                        {char}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Answer Options */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {currentQ.options.map((option, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleAnswer(index, currentQuestion)}
+                      className="card bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 p-4 rounded-lg border border-white/20 hover:border-white/40 transition-all duration-200 transform hover:scale-105 text-white font-semibold"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Feedback */}
+                {feedback && (
+                  <div className={`mt-6 text-center text-xl font-bold ${
+                    feedback.includes('Benar') ? 'text-green-400' : 'text-red-400'
+                  } fade-in`}>
+                    {feedback}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'results':
+        const isWin = score >= 70;
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+            <div className="text-center space-y-8 p-8 max-w-2xl mx-auto">
+              <h1 className={`text-5xl font-bold mb-4 ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                {isWin ? '🎉 Selamat!' : '😅 Coba Lagi!'}
+              </h1>
+              <div className="bg-black/20 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+                <h2 className="text-3xl font-bold mb-6">Hasil Akhir</h2>
+                <div className="space-y-4 text-left">
+                  <div className="flex justify-between items-center p-4 bg-white/10 rounded-lg">
+                    <span>Skor Akhir:</span>
+                    <span className="font-bold text-xl">{score}/100</span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-white/10 rounded-lg">
+                    <span>Nyawa Tersisa:</span>
+                    <span className="font-bold text-xl">{lives}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-white/10 rounded-lg">
+                    <span>Waktu Tersisa:</span>
+                    <span className="font-bold text-xl">{formatTime(timeLeft)}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-white/10 rounded-lg">
+                    <span>Status:</span>
+                    <span className={`font-bold text-xl ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                      {isWin ? 'Lulus' : 'Perlu Latihan'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="space-x-4">
+                <button
+                  onClick={startGame}
+                  className="btn-primary px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg transition-all duration-200"
+                >
+                  Main Lagi
+                </button>
+                <button
+                  onClick={() => setGameState('menu')}
+                  className="btn-secondary px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200"
+                >
+                  Menu Utama
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="game-container min-h-screen">
+      {renderScreen()}
+      
+      {/* Instructions Modal */}
+      {showInstructions && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-md mx-4 border border-white/20">
+            <h2 className="text-2xl font-bold text-white mb-4">Petunjuk Permainan</h2>
+            <div className="text-gray-300 space-y-3">
+              <p>• Tebak kata yang sesuai dengan definisi vektor yang diberikan</p>
+              <p>• Pilih jawaban yang benar dari opsi yang tersedia</p>
+              <p>• Setiap jawaban benar memberi 10 poin</p>
+              <p>• Jawaban salah mengurangi 1 nyawa</p>
+              <p>• Lengkapkan semua soal sebelum waktu habis</p>
+              <p>• Target skor ≥ 70 untuk menang</p>
+            </div>
+            <button
+              onClick={hideInstructions}
+              className="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-2 rounded-lg transition-all duration-200"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hint Modal */}
+      {showHint && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-md mx-4 border border-white/20">
+            <h2 className="text-2xl font-bold text-white mb-4">Petunjuk Tambahan</h2>
+            <div className="text-gray-300 space-y-3">
+              <p>• Fokus pada konsep dasar vektor dalam fisika</p>
+              <p>• Ingat bahwa vektor memiliki besar dan arah</p>
+              <p>• Gunakan proses eliminasi untuk jawaban yang tidak yakin</p>
+              <p>• Manajemen waktu dengan bijak</p>
+            </div>
+            <button
+              onClick={hideHint}
+              className="mt-6 w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-2 rounded-lg transition-all duration-200"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LabVektorku;
+</script>
+</body>
+</html>

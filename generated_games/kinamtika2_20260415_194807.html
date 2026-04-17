@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #1a2a6c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+        }
+
+        #game-container {
+            width: 95vw;
+            max-width: 800px;
+            height: 85vh;
+            background: rgba(25, 25, 35, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(15, 15, 25, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .score-display, .lives-display, .timer-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+            min-width: 120px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #scene-area {
+            height: calc(100% - 120px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #content-area {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .card {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #1E90FF, #FF6347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #1E90FF;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #e0e0ff;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1E90FF 0%, #0066cc 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #FF6347 0%, #cc4d3a 100%);
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-primary:active, .btn-secondary:active {
+            transform: translateY(1px);
+        }
+
+        .question {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            background: rgba(60, 60, 80, 0.7);
+            border: 1px solid rgba(100, 100, 200, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            background: rgba(80, 80, 120, 0.8);
+            transform: scale(1.03);
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.3) !important;
+            border-color: #2ecc71 !important;
+            animation: pulse 0.5s;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.3) !important;
+            border-color: #e74c3c !important;
+            animation: shake 0.5s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #1E90FF; }
+            to { box-shadow: 0 0 20px #1E90FF, 0 0 30px rgba(30, 144, 255, 0.6); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #start-screen, #game-screen, #end-screen {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .instructions-content {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .instructions-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .instructions-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions-content::-webkit-scrollbar-thumb {
+            background: #1E90FF;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.body;
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        });
+    </script>
+
+    <div id="game-container">
+        <div class="header">
+            <div id="score-display" class="score-display">Skor: 0</div>
+            <div id="lives-display" class="lives-display">Nyawa: 3</div>
+            <div id="timer-display" class="timer-display">Waktu: 30s</div>
+        </div>
+        
+        <div id="scene-area">
+            <div id="start-screen">
+                <div class="card fade-in">
+                    <h1>🎮 Game Edukasi</h1>
+                    <p>Uji pengetahuanmu dalam permainan interaktif ini! Jawab pertanyaan sebanyak mungkin dalam waktu yang tersedia.</p>
+                    
+                    <div class="instructions-content">
+                        <h2>Cara Bermain:</h2>
+                        <p>• Pilih jawaban yang benar dari pilihan yang tersedia</p>
+                        <p>• Setiap jawaban benar memberikan 10 poin</p>
+                        <p>• Jawaban salah akan mengurangi 1 nyawa</p>
+                        <p>• Selesaikan sebanyak mungkin soal sebelum waktu habis!</p>
+                    </div>
+                    
+                    <button id="start-btn" class="btn-primary glow">Mulai Bermain</button>
+                    <button id="instructions-btn" class="btn-secondary">Lihat Instruksi</button>
+                </div>
+            </div>
+            
+            <div id="game-screen" class="hidden">
+                <div class="card fade-in">
+                    <div class="question">Apa ibukota Indonesia?</div>
+                    <div class="options">
+                        <button class="option-btn">Bandung</button>
+                        <button class="option-btn">Surabaya</button>
+                        <button class="option-btn">Jakarta</button>
+                        <button class="option-btn">Medan</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="end-screen" class="hidden">
+                <div class="card fade-in">
+                    <h1>Permainan Selesai!</h1>
+                    <p id="final-score">Skor Akhir: 0</p>
+                    <p id="performance-message">Kerja bagus!</p>
+                    <button id="restart-btn" class="btn-primary">Main Lagi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            score: 0,
+            lives: 3,
+            timeLeft: 30,
+            timer: null,
+            currentQuestion: 0,
+            questions: [
+                {
+                    question: "Apa ibukota Indonesia?",
+                    options: ["Bandung", "Surabaya", "Jakarta", "Medan"],
+                    answer: 2
+                },
+                {
+                    question: "Berapa hasil dari 8 x 7?",
+                    options: ["54", "56", "58", "60"],
+                    answer: 1
+                },
+                {
+                    question: "Siapa presiden pertama Indonesia?",
+                    options: ["Soeharto", "Soekarno", "Jokowi", "Habibie"],
+                    answer: 1
+                },
+                {
+                    question: "Apa elemen kimia dengan simbol O?",
+                    options: ["Oksigen", "Emas", "Besi", "Karbon"],
+                    answer: 0
+                },
+                {
+                    question: "Berapa jumlah sisi pada kubus?",
+                    options: ["4", "6", "8", "12"],
+                    answer: 1
+                }
+            ]
+        };
+
+        // DOM Elements
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const instructionsBtn = document.getElementById('instructions-btn');
+
+        // Initialize game
+        function initGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.timeLeft = 30;
+            gameState.currentQuestion = 0;
+            updateDisplays();
+        }
+
+        // Start game
+        function startGame() {
+            initGame();
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            loadQuestion();
+            startTimer();
+        }
+
+        // End game
+        function endGame() {
+            clearInterval(gameState.timer);
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            document.getElementById('final-score').textContent = `Skor Akhir: ${gameState.score}`;
+            
+            let message = '';
+            if (gameState.score >= 40) message = 'Prestasi Luar Biasa!';
+            else if (gameState.score >= 30) message = 'Kerja Bagus!';
+            else if (gameState.score >= 20) message = 'Cukup Baik!';
+            else message = 'Terus Belajar!';
+            
+            document.getElementById('performance-message').textContent = message;
+        }
+
+        // Update score
+        function updateScore(points) {
+            gameState.score += points;
+            updateDisplays();
+        }
+
+        // Update timer
+        function updateTimer() {
+            timerDisplay.textContent = `Waktu: ${gameState.timeLeft}s`;
+        }
+
+        // Update displays
+        function updateDisplays() {
+            scoreDisplay.textContent = `Skor: ${gameState.score}`;
+            livesDisplay.textContent = `Nyawa: ${gameState.lives}`;
+            updateTimer();
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(gameState.timer);
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimer();
+                
+                if (gameState.timeLeft <= 0 || gameState.lives <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // Load question
+        function loadQuestion() {
+            if (gameState.currentQuestion >= gameState.questions.length) {
+                gameState.currentQuestion = 0; // Reset for demo
+            }
+            
+            const q = gameState.questions[gameState.currentQuestion];
+            const questionEl = gameScreen.querySelector('.question');
+            const optionBtns = gameScreen.querySelectorAll('.option-btn');
+            
+            questionEl.textContent = q.question;
+            
+            optionBtns.forEach((btn, index) => {
+                btn.textContent = q.options[index];
+                btn.className = 'option-btn'; // Reset classes
+                btn.onclick = () => handleAnswer(index, q.answer);
+            });
+        }
+
+        // Handle answer
+        function handleAnswer(selectedIndex, correctIndex) {
+            const optionBtns = gameScreen.querySelectorAll('.option-btn');
+            
+            if (selectedIndex === correctIndex) {
+                // Correct answer
+                optionBtns[selectedIndex].classList.add('correct');
+                updateScore(10);
+            } else {
+                // Incorrect answer
+                optionBtns[selectedIndex].classList.add('incorrect');
+                optionBtns[correctIndex].classList.add('correct');
+                gameState.lives--;
+                updateDisplays();
+            }
+            
+            // Disable buttons after selection
+            optionBtns.forEach(btn => btn.disabled = true);
+            
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                if (gameState.currentQuestion < gameState.questions.length && gameState.lives > 0) {
+                    loadQuestion();
+                } else {
+                    endGame();
+                }
+            }, 1500);
+        }
+
+        // Show feedback
+        function showFeedback(isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.textContent = isCorrect ? 'Benar!' : 'Salah!';
+            feedback.style.position = 'fixed';
+            feedback.style.top = '50%';
+            feedback.style.left = '50%';
+            feedback.style.transform = 'translate(-50%, -50%)';
+            feedback.style.backgroundColor = isCorrect ? '#2ecc71' : '#e74c3c';
+            feedback.style.color = 'white';
+            feedback.style.padding = '20px 40px';
+            feedback.style.borderRadius = '10px';
+            feedback.style.fontSize = '1.5rem';
+            feedback.style.fontWeight = 'bold';
+            feedback.style.zIndex = '1000';
+            feedback.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            feedback.style.animation = 'fadeIn 0.5s, fadeOut 0.5s 1.5s';
+            
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.remove();
+            }, 2000);
+        }
+
+        // Show instructions
+        function showInstructions() {
+            alert("Cara Bermain:\n\n• Pilih jawaban yang benar dari pilihan yang tersedia\n• Setiap jawaban benar memberikan 10 poin\n• Jawaban salah akan mengurangi 1 nyawa\n• Selesaikan sebanyak mungkin soal sebelum waktu habis!");
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        instructionsBtn.addEventListener('click', showInstructions);
+
+        // Add CSS for fadeOut animation dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize game on load
+        initGame();
+    </script>
+</body>
+</html>
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Fisika - Word Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 45, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .screen {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+            text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #f72585;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #f72585, #b5179e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.4);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .question-card {
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 2px solid #4361ee;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid #4361ee;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #f72585;
+            box-shadow: 0 0 10px rgba(247, 37, 133, 0.5);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .correct {
+            background: rgba(43, 194, 83, 0.3);
+            border: 1px solid #2bc253;
+            color: #75fb4c;
+        }
+
+        .incorrect {
+            background: rgba(247, 37, 133, 0.3);
+            border: 1px solid #f72585;
+            color: #ff6b6b;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 15px;
+            background: rgba(67, 97, 238, 0.2);
+            border: 2px solid #4361ee;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: rgba(67, 97, 238, 0.4);
+            transform: scale(1.03);
+        }
+
+        .option-btn.selected {
+            background: rgba(247, 37, 133, 0.4);
+            border-color: #f72585;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4361ee, #f72585);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: #f72585;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(76, 201, 240, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(76, 201, 240, 0.5); }
+            to { box-shadow: 0 0 20px rgba(76, 201, 240, 0.8); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            .screen {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>🧪 Game Edukasi Fisika</h1>
+            <h2>Kelas 10 - Word Game</h2>
+            <p style="margin: 20px 0; line-height: 1.6; font-size: 1.1rem;">
+                Uji pengetahuanmu tentang konsep-konsep dasar fisika! Jawab pertanyaan dengan tepat dan kumpulkan skor tertinggi.
+            </p>
+            <button id="start-btn" class="btn-primary">Mulai Permainan</button>
+            <button id="instructions-btn" class="btn-secondary">Instruksi</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="score-display">0</div>
+                    <div class="stat-label">Skor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lives-display">3</div>
+                    <div class="stat-label">Nyawa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timer-display">60</div>
+                    <div class="stat-label">Waktu</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div id="game-container">
+                <div class="question-card">
+                    <div class="question-text" id="question-text">Memuat soal...</div>
+                    <input type="text" id="answer-input" class="answer-input" placeholder="Ketikkan jawabanmu...">
+                    <button id="submit-btn" class="btn-primary">Periksa Jawaban</button>
+                    <div id="feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen hidden">
+            <h1>🏆 Selesai!</h1>
+            <div class="card">
+                <h2>Skor Akhir: <span id="final-score">0</span></h2>
+                <p id="performance-text">Performa kamu...</p>
+            </div>
+            <button id="restart-btn" class="btn-primary">Main Lagi</button>
+            <button id="menu-btn" class="btn-secondary">Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="instructions-modal hidden">
+        <div class="modal-content">
+            <h2>Instruksi Permainan</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                • Kamu akan diberikan pertanyaan tentang konsep fisika<br>
+                • Ketikkan jawaban yang benar dalam kotak yang tersedia<br>
+                • Setiap jawaban benar memberimu 10 poin<br>
+                • Jawaban salah mengurangi 1 nyawa<br>
+                • Waktu berjalan terus, jawab secepat mungkin!<br>
+                • Tujuan: Kumpulkan skor setinggi mungkin sebelum waktu habis
+            </p>
+            <button id="close-instructions" class="close-btn">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const closeInstructions = document.getElementById('close-instructions');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const questionText = document.getElementById('question-text');
+        const answerInput = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const feedback = document.getElementById('feedback');
+        const progressFill = document.getElementById('progress-fill');
+        const finalScore = document.getElementById('final-score');
+        const performanceText = document.getElementById('performance-text');
+        const restartBtn = document.getElementById('restart-btn');
+        const menuBtn = document.getElementById('menu-btn');
+
+        // Game Data
+        const questions = [
+            {
+                question: "Apa satuan dasar dari massa dalam Sistem Internasional?",
+                answer: "kilogram",
+                options: ["meter", "kilogram", "detik", "ampere"]
+            },
+            {
+                question: "Apa nama hukum fisika yang menyatakan bahwa gaya aksi sama dengan gaya reaksi?",
+                answer: "hukum ketiga newton",
+                options: ["hukum pertama newton", "hukum kedua newton", "hukum ketiga newton", "hukum gravitasi"]
+            },
+            {
+                question: "Apa satuan dari energi kinetik?",
+                answer: "joule",
+                options: ["watt", "joule", "newton", "pascal"]
+            },
+            {
+                question: "Apa istilah untuk perubahan kecepatan terhadap waktu?",
+                answer: "percepatan",
+                options: ["kecepatan", "percepatan", "gaya", "momentum"]
+            },
+            {
+                question: "Siapa ilmuwan yang merumuskan hukum gravitasi universal?",
+                answer: "isaac newton",
+                options: ["galileo galilei", "isaac newton", "albert einstein", "stephen hawking"]
+            },
+            {
+                question: "Apa satuan dari frekuensi?",
+                answer: "hertz",
+                options: ["hertz", "watt", "joule", "ohm"]
+            },
+            {
+                question: "Apa istilah untuk jumlah total jarak yang ditempuh dibagi waktu?",
+                answer: "kelajuan rata-rata",
+                options: ["kecepatan rata-rata", "kelajuan rata-rata", "percepatan", "momentum"]
+            },
+            {
+                question: "Apa nama alat ukur tekanan?",
+                answer: "barometer",
+                options: ["termometer", "barometer", "manometer", "speedometer"]
+            }
+        ];
+
+        // Game State
+        let gameState = {
+            score: 0,
+            lives: 3,
+            timeLeft: 60,
+            currentQuestionIndex: 0,
+            timerInterval: null,
+            gameActive: false
+        };
+
+        // Initialize Game
+        function initGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.timeLeft = 60;
+            gameState.currentQuestionIndex = 0;
+            updateDisplays();
+            loadQuestion();
+        }
+
+        // Update Displays
+        function updateDisplays() {
+            scoreDisplay.textContent = gameState.score;
+            livesDisplay.textContent = gameState.lives;
+            timerDisplay.textContent = gameState.timeLeft;
+            progressFill.style.width = `${(gameState.currentQuestionIndex / questions.length) * 100}%`;
+        }
+
+        // Load Question
+        function loadQuestion() {
+            if (gameState.currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+
+            const currentQuestion = questions[gameState.currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+            answerInput.value = '';
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.style.opacity = '0';
+        }
+
+        // Check Answer
+        function checkAnswer() {
+            if (!gameState.gameActive) return;
+
+            const currentQuestion = questions[gameState.currentQuestionIndex];
+            const userAnswer = answerInput.value.toLowerCase().trim();
+            const correctAnswer = currentQuestion.answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                // Correct answer
+                gameState.score += 10;
+                feedback.textContent = 'Benar! 🎉';
+                feedback.className = 'feedback correct';
+                feedback.style.opacity = '1';
+                
+                setTimeout(() => {
+                    gameState.currentQuestionIndex++;
+                    updateDisplays();
+                    loadQuestion();
+                }, 1500);
+            } else {
+                // Incorrect answer
+                gameState.lives--;
+                feedback.textContent = `Salah! Jawaban benar: ${currentQuestion.answer}`;
+                feedback.className = 'feedback incorrect';
+                feedback.style.opacity = '1';
+                
+                setTimeout(() => {
+                    feedback.style.opacity = '0';
+                }, 2000);
+            }
+
+            updateDisplays();
+
+            if (gameState.lives <= 0) {
+                endGame();
+            }
+        }
+
+        // Timer Function
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeLeft--;
+                updateDisplays();
+
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // Start Game
+        function startGame() {
+            initGame();
+            gameState.gameActive = true;
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            startTimer();
+        }
+
+        // End Game
+        function endGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.timerInterval);
+            
+            // Calculate performance
+            const percentage = (gameState.score / (questions.length * 10)) * 100;
+            finalScore.textContent = gameState.score;
+            
+            if (percentage >= 80) {
+                performanceText.textContent = "Luar biasa! Kamu sangat hebat dalam fisika!";
+            } else if (percentage >= 60) {
+                performanceText.textContent = "Bagus sekali! Terus belajar dan tingkatkan lagi!";
+            } else if (percentage >= 40) {
+                performanceText.textContent = "Cukup baik, tetapi masih bisa ditingkatkan!";
+            } else {
+                performanceText.textContent = "Perlu lebih banyak belajar, tetap semangat!";
+            }
+            
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+        }
+
+        // Show Instructions
+        function showInstructions() {
+            instructionsModal.classList.remove('hidden');
+        }
+
+        // Hide Instructions
+        function hideInstructions() {
+            instructionsModal.classList.add('hidden');
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        instructionsBtn.addEventListener('click', showInstructions);
+        closeInstructions.addEventListener('click', hideInstructions);
+        submitBtn.addEventListener('click', checkAnswer);
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        restartBtn.addEventListener('click', startGame);
+        menuBtn.addEventListener('click', () => {
+            endScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+
+        // Initialize
+        initGame();
+    </script>
+</body>
+</html>
+<script>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const WordGame = () => {
+  const [gameState, setGameState] = useState('menu'); // menu, playing, results
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [isRunning, setIsRunning] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [feedback, setFeedback] = useState({ visible: false, correct: false });
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [progress, setProgress] = useState(0);
+
+  // Mock questions data
+  const questions = [
+    {
+      id: 1,
+      question: "What is the opposite of 'happy'?",
+      options: ['Sad', 'Angry', 'Excited', 'Tired'],
+      correct: 'Sad'
+    },
+    {
+      id: 2,
+      question: "Which word means 'to make better'?",
+      options: ['Worsen', 'Improve', 'Destroy', 'Ignore'],
+      correct: 'Improve'
+    },
+    {
+      id: 3,
+      question: "What is a synonym for 'beautiful'?",
+      options: ['Ugly', 'Awful', 'Gorgeous', 'Terrible'],
+      correct: 'Gorgeous'
+    },
+    {
+      id: 4,
+      question: "Which word describes something that has never happened before?",
+      options: ['Ancient', 'New', 'Unique', 'Common'],
+      correct: 'Unique'
+    },
+    {
+      id: 5,
+      question: "What does 'generous' mean?",
+      options: ['Selfish', 'Kind and giving', 'Angry', 'Lazy'],
+      correct: 'Kind and giving'
+    },
+    {
+      id: 6,
+      question: "Which word means 'to examine carefully'?",
+      options: ['Ignore', 'Scan', 'Inspect', 'Overlook'],
+      correct: 'Inspect'
+    },
+    {
+      id: 7,
+      question: "What is the past tense of 'go'?",
+      options: ['Gone', 'Went', 'Going', 'Goes'],
+      correct: 'Went'
+    },
+    {
+      id: 8,
+      question: "Which word means 'very happy'?",
+      options: ['Depressed', 'Joyful', 'Angry', 'Confused'],
+      correct: 'Joyful'
+    }
+  ];
+
+  // Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft => timeLeft - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
+
+  // Update progress
+  useEffect(() => {
+    setProgress((currentQuestion / questions.length) * 100);
+  }, [currentQuestion, questions.length]);
+
+  const startGame = () => {
+    setGameState('playing');
+    setScore(0);
+    setLives(3);
+    setTimeLeft(300);
+    setCurrentQuestion(0);
+    setIsRunning(true);
+  };
+
+  const endGame = useCallback(() => {
+    setIsRunning(false);
+    setGameState('results');
+  }, []);
+
+  const handleAnswer = (answer) => {
+    setSelectedAnswer(answer);
+    
+    const isCorrect = answer === questions[currentQuestion].correct;
+    
+    if (isCorrect) {
+      setScore(prev => prev + 10);
+      setFeedback({ visible: true, correct: true });
+    } else {
+      setLives(prev => prev - 1);
+      setFeedback({ visible: true, correct: false });
+      
+      if (lives <= 1) {
+        setTimeout(() => endGame(), 1000);
+        return;
+      }
+    }
+
+    setTimeout(() => {
+      setFeedback({ visible: false, correct: false });
+      setSelectedAnswer('');
+      
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      } else {
+        endGame();
+      }
+    }, 1500);
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const resetGame = () => {
+    setGameState('menu');
+    setScore(0);
+    setLives(3);
+    setTimeLeft(300);
+    setCurrentQuestion(0);
+    setIsRunning(false);
+    setProgress(0);
+  };
+
+  const showFeedbackElement = feedback.visible ? (
+    <div className={`fixed inset-0 flex items-center justify-center z-50 ${feedback.correct ? 'bg-green-500' : 'bg-red-500'} bg-opacity-80`}>
+      <div className="text-white text-6xl font-bold animate-pulse">
+        {feedback.correct ? '+10' : '-1 Life'}
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white">
+      {/* Instructions Modal */}
+      {showInstructions && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-purple-500">
+            <h2 className="text-2xl font-bold mb-4 text-purple-300">How to Play</h2>
+            <ul className="space-y-2 text-gray-200">
+              <li>• Answer word-based questions correctly</li>
+              <li>• Each correct answer gives +10 points</li>
+              <li>• Wrong answers cost 1 life</li>
+              <li>• Game ends when time runs out or lives reach 0</li>
+              <li>• Reach 70+ points to win!</li>
+            </ul>
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-2 px-4 rounded-lg transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hint Modal */}
+      {showHint && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-yellow-500">
+            <h2 className="text-2xl font-bold mb-4 text-yellow-300">Hint</h2>
+            <p className="text-gray-200 mb-4">
+              Pay attention to context clues in the question. Think about synonyms, antonyms, and word relationships.
+            </p>
+            <button
+              onClick={() => setShowHint(false)}
+              className="mt-4 w-full bg-yellow-600 hover:bg-yellow-700 py-2 px-4 rounded-lg transition-colors"
+            >
+              Got It!
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showFeedbackElement}
+
+      {/* Start Screen */}
+      {gameState === 'menu' && (
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+          <div className="text-center space-y-8 max-w-2xl w-full">
+            <div className="space-y-4">
+              <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Word Master
+              </h1>
+              <p className="text-xl text-gray-300">Test your vocabulary skills!</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-purple-500">
+                <div className="text-2xl font-bold text-purple-300">{questions.length}</div>
+                <div className="text-sm text-gray-300">Questions</div>
+              </div>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-green-500">
+                <div className="text-2xl font-bold text-green-300">5:00</div>
+                <div className="text-sm text-gray-300">Time Limit</div>
+              </div>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-red-500">
+                <div className="text-2xl font-bold text-red-300">3</div>
+                <div className="text-sm text-gray-300">Lives</div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={startGame}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-xl text-xl transition-all transform hover:scale-105"
+              >
+                Start Game
+              </button>
+              
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg transition-colors"
+                >
+                  Instructions
+                </button>
+                <button
+                  onClick={() => setShowHint(true)}
+                  className="bg-yellow-600 hover:bg-yellow-700 py-2 px-4 rounded-lg transition-colors"
+                >
+                  Hint
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Game Screen */}
+      {gameState === 'playing' && (
+        <div className="p-4 max-w-4xl mx-auto">
+          {/* Game Stats */}
+          <div className="flex justify-between items-center mb-6 bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+            <div className="flex space-x-6">
+              <div className="text-center">
+                <div className="text-sm text-gray-300">Score</div>
+                <div className="text-2xl font-bold text-green-400">{score}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-gray-300">Lives</div>
+                <div className="text-2xl font-bold text-red-400">{lives}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-gray-300">Time</div>
+                <div className="text-2xl font-bold text-blue-400">{formatTime(timeLeft)}</div>
+              </div>
+            </div>
+            
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setShowHint(true)}
+                className="bg-yellow-600 hover:bg-yellow-700 py-2 px-4 rounded-lg transition-colors"
+              >
+                Hint
+              </button>
+              <button
+                onClick={endGame}
+                className="bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg transition-colors"
+              >
+                End Game
+              </button>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mb-6 bg-gray-700 rounded-full h-2">
+            <div 
+              className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          {/* Question Card */}
+          <div className="bg-gray-800 bg-opacity-50 rounded-xl p-8 border border-purple-500 mb-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2">Question {currentQuestion + 1} of {questions.length}</h2>
+              <p className="text-xl text-gray-200">{questions[currentQuestion]?.question}</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {questions[currentQuestion]?.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswer(option)}
+                  disabled={feedback.visible}
+                  className={`p-4 rounded-lg border-2 transition-all transform hover:scale-105 ${
+                    selectedAnswer === option
+                      ? option === questions[currentQuestion].correct
+                        ? 'border-green-500 bg-green-500 bg-opacity-20'
+                        : 'border-red-500 bg-red-500 bg-opacity-20'
+                      : 'border-gray-600 hover:border-purple-500 bg-gray-700 hover:bg-gray-600'
+                  }`}
+                >
+                  <span className="text-lg">{option}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Results Screen */}
+      {gameState === 'results' && (
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+          <div className="text-center space-y-8 max-w-2xl w-full">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-bold">
+                {score >= 70 ? (
+                  <span className="text-green-400">🎉 Victory! 🎉</span>
+                ) : (
+                  <span className="text-red-400">Game Over</span>
+                )}
+              </h1>
+              <p className="text-xl text-gray-300">
+                {score >= 70 ? 'Congratulations! You mastered the words!' : 'Better luck next time! Keep practicing!'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-green-500">
+                <div className="text-3xl font-bold text-green-300">{score}</div>
+                <div className="text-sm text-gray-300">Final Score</div>
+              </div>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-blue-500">
+                <div className="text-3xl font-bold text-blue-300">{timeLeft}s</div>
+                <div className="text-sm text-gray-300">Time Left</div>
+              </div>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg border border-purple-500">
+                <div className="text-3xl font-bold text-purple-300">{Math.round((score / (questions.length * 10)) * 100)}%</div>
+                <div className="text-sm text-gray-300">Accuracy</div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={resetGame}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-xl text-xl transition-all transform hover:scale-105"
+              >
+                Play Again
+              </button>
+              
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg transition-colors"
+                >
+                  Instructions
+                </button>
+                <button
+                  onClick={() => setShowHint(true)}
+                  className="bg-yellow-600 hover:bg-yellow-700 py-2 px-4 rounded-lg transition-colors"
+                >
+                  Hint
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default WordGame;
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Hukum Bernoulli dan Venturimeter",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Fluida Dinamis",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_fluida_bernoulli_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Hukum Bernoulli dan Venturimeter",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Fluida",
+      "subbab": "Fluida Dinamis",
+      "topik": "Hukum Bernoulli dan Venturimeter",
+      "difficulty": 3,
+      "estimated_duration_minutes": 25,
+      "learning_objectives": [
+        "Siswa dapat menerapkan persamaan Bernoulli untuk menghitung perubahan tekanan akibat perubahan kecepatan aliran",
+        "Siswa dapat menganalisis prinsip kerja venturimeter berdasarkan hubungan tekanan dan kecepatan pada pipa menyempit",
+        "Siswa dapat menghubungkan persamaan kontinuitas dengan persamaan Bernoulli dalam sistem pipa horizontal",
+        "Siswa dapat menjelaskan mengapa kecepatan tinggi menghasilkan tekanan rendah pada fluida bergerak"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Stasiun Orbit Bernoulli",
+        "story": "Di stasiun luar angkasa masa depan, sistem pendingin reaktor mengandalkan pipa venturimeter untuk memantau laju aliran zat pendingin. Sensor tekanan di dua titik pipa memberikan data, tetapi komputer utama rusak! Kamu adalah insinyur fluida yang harus menghitung ulang kecepatan aliran dan tekanan secara manual menggunakan Hukum Bernoulli, sebelum reaktor overheat dalam waktu 25 menit!",
+        "image_description": "Interior stasiun luar angkasa futuristik dengan pipa transparan berwarna biru neon yang menyempit di tengah; sensor tekanan digital berwarna magenta di dua titik pipa; latar jendela oval menampilkan nebula ungu-biru luar angkasa; panel holografik menampilkan grafik tekanan berkedip",
+        "cta_text": "Aktifkan Sensor"
+      },
+      "visual_element": {
+        "theme_name": "Stasiun Orbit Bernoulli",
+        "theme_preset": "space_cosmic",
+        "mood": "urgent, precise, futuristic",
+        "color_palette": {
+          "primary": "#7b1fa2",
+          "secondary": "#00b0ff",
+          "background": "#0d0221",
+          "accent": "#e040fb",
+          "text": "#e8eaf6"
+        },
+        "setting_description": "Stasiun luar angkasa dengan lorong pipa transparan membiru bercahaya; layar holografik menampilkan data tekanan real-time; jendela luar angkasa menampilkan nebula kosmis dan bintang berkedip.",
+        "art_style": "sci-fi flat design dengan glow effect ungu-biru, grid holografik, dan efek partikel bintang latar",
+        "ambient_elements": [
+          "Partikel cahaya biru mengalir sepanjang pipa, bergerak lebih cepat di bagian sempit",
+          "Layar tekanan P₁ dan P₂ berkedip dan diperbarui saat parameter berubah",
+          "Latar bintang luar angkasa bergerak sangat lambat menciptakan efek kedalaman"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa jenis fluida (ρ), tekanan awal (P₁), dan kecepatan di titik 1 (v₁)." },
+          { "step": 2, "text": "Atur luas penampang pipa di titik 1 (A₁) dan titik 2 (A₂) untuk menentukan rasio penyempitan." },
+          { "step": 3, "text": "Simulasi menghitung v₂ dari persamaan kontinuitas, lalu P₂ dari Hukum Bernoulli secara otomatis." },
+          { "step": 4, "text": "Amati: pipa yang menyempit (A₂ < A₁) meningkatkan kecepatan namun menurunkan tekanan." },
+          { "step": 5, "text": "Selesaikan tiga tantangan kalibrasi sensor untuk menyelamatkan reaktor stasiun!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Hukum Bernoulli pada Pipa Horizontal",
+          "strategy": "Hukum Bernoulli: P + ½ρv² + ρgh = konstan. Pada pipa horizontal (h sama), suku ρgh sama di kedua titik, sehingga P₁ + ½ρv₁² = P₂ + ½ρv₂². Gunakan kontinuitas dulu: v₂ = v₁×(A₁/A₂). Substitusikan ke Bernoulli untuk dapat P₂. Kecepatan besar → tekanan kecil (prinsip venturimeter).",
+          "formula": "v₂ = v₁·(A₁/A₂) ;  P₂ = P₁ + ½·ρ·(v₁² − v₂²)",
+          "example": "ρ=1000, v₁=2 m/s, A₁=0,04 m², A₂=0,01 m², P₁=200000 Pa → v₂=2×(0,04/0,01)=8 m/s; P₂=200000+½×1000×(4−64)=200000−30000=170000 Pa.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_scan", "event": "on_correct_action", "description": "Suara beep sensor kalibrasi yang lembut dan confirmatory saat nilai diubah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara kemenangan elektronik kosmis dengan nada ascending dan efek warp engine yang stabil" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara alarm reaktor merah yang berdenyut cepat menandakan kegagalan kalibrasi" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient elektronik bertempo sedang dengan drone kosmis dan perkusi synth bergaya space station, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Bernoulli pada Pipa Venturimeter Horizontal",
+        "narrative": "Atur parameter fluida dan geometri pipa. Simulasi menghitung kecepatan di titik 2 menggunakan persamaan kontinuitas, kemudian menghitung tekanan di titik 2 menggunakan Hukum Bernoulli untuk pipa horizontal.",
+        "context": "Fluida ideal (tak viskos, tak termampatkan); pipa horizontal (h₁ = h₂ = 0, suku gravitasi ditiadakan); sistem pipa tertutup dua penampang; referensi: P dalam Pascal, v dalam m/s, A dalam m²."
+      },
+      "variables": [
+        { "id": "rho", "label": "Massa jenis fluida", "symbol": "ρ", "unit": "kg/m³", "type": "user_input", "min": 700, "max": 13600, "default": 1000, "step": 100 },
+        { "id": "p1", "label": "Tekanan di titik 1", "symbol": "P₁", "unit": "Pa", "type": "user_input", "min": 50000, "max": 500000, "default": 200000, "step": 5000 },
+        { "id": "v1", "label": "Kecepatan aliran di titik 1", "symbol": "v₁", "unit": "m/s", "type": "user_input", "min": 0.5, "max": 15, "default": 2, "step": 0.5 },
+        { "id": "a1", "label": "Luas penampang pipa titik 1", "symbol": "A₁", "unit": "m²", "type": "user_input", "min": 0.005, "max": 0.2, "default": 0.04, "step": 0.005 },
+        { "id": "a2", "label": "Luas penampang pipa titik 2", "symbol": "A₂", "unit": "m²", "type": "user_input", "min": 0.002, "max": 0.1, "default": 0.01, "step": 0.002 },
+        { "id": "v2", "label": "Kecepatan aliran di titik 2", "symbol": "v₂", "unit": "m/s", "type": "computed" },
+        { "id": "p2", "label": "Tekanan di titik 2", "symbol": "P₂", "unit": "Pa", "type": "computed" },
+        { "id": "delta_p", "label": "Selisih tekanan (P₁ − P₂)", "symbol": "ΔP", "unit": "Pa", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_v2", "computes": "v2", "formula": "v2 = v1 * (a1 / a2)", "description": "Kecepatan di titik 2 dari persamaan kontinuitas: A₁v₁ = A₂v₂ → v₂ = v₁·(A₁/A₂)" },
+        { "id": "eq_p2", "computes": "p2", "formula": "p2 = p1 + 0.5 * rho * (v1^2 - v2^2)", "description": "Tekanan di titik 2 dari Hukum Bernoulli pada pipa horizontal: P₂ = P₁ + ½ρ(v₁²−v₂²)" },
+        { "id": "eq_dp", "computes": "delta_p", "formula": "delta_p = p1 - p2", "description": "Selisih tekanan antar titik; positif berarti P₁ > P₂ (tekanan turun di titik sempit)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Pipa transparan horizontal menyempit dari kiri (A₁) ke kanan (A₂); partikel cahaya biru bergerak lebih cepat dan rapat di bagian sempit; manometer digital berwarna magenta menampilkan P₁ dan P₂ di atas masing-masing titik; ketinggian kolom tekanan venturimeter ditampilkan secara visual" },
+        { "id": "viz_2", "type": "graph", "x_axis": "a2", "y_axis": "p2", "title": "Tekanan P₂ vs Luas Penampang A₂ (P₂–A₂)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "v1", "y_axis": "delta_p", "title": "Selisih Tekanan vs Kecepatan Awal (ΔP–v₁)" },
+        { "id": "viz_4", "type": "table", "title": "Ringkasan Parameter Bernoulli", "description": "Tabel menampilkan nilai v₁, v₂, P₁, P₂, dan ΔP untuk setiap konfigurasi yang dicoba pengguna" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur ρ=1000 kg/m³, P₁=200000 Pa, v₁=2 m/s, A₁=0,04 m², A₂=0,01 m². Verifikasi bahwa v₂=8 m/s dan P₂=170000 Pa.",
+          "success_condition": "abs(rho - 1000) < 10 AND abs(p1 - 200000) < 1000 AND abs(v1 - 2) < 0.1 AND abs(a1 - 0.04) < 0.002 AND abs(a2 - 0.01) < 0.001 AND abs(v2 - 8) < 0.2 AND abs(p2 - 170000) < 1000",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan ρ=1000 kg/m³ dan A₁=0,06 m², A₂=0,02 m², temukan v₁ sehingga selisih tekanan ΔP = P₁ − P₂ = 72000 Pa. (Petunjuk: v₂ = 3v₁, sehingga ΔP = ½ρ(v₂²−v₁²) = ½×1000×8v₁²)",
+          "success_condition": "abs(rho - 1000) < 10 AND abs(a1 - 0.06) < 0.002 AND abs(a2 - 0.02) < 0.001 AND abs(delta_p - 72000) < 2000",
+          "points": 35
+        },
+        {
+          "id": "ch_003",
+          "task": "Rancang venturimeter untuk zat pendingin raksa (ρ=13600 kg/m³): atur P₁=300000 Pa, v₁=1 m/s, A₁=0,05 m². Temukan A₂ sehingga tekanan P₂ turun menjadi 218000 Pa.",
+          "success_condition": "abs(rho - 13600) < 100 AND abs(p1 - 300000) < 2000 AND abs(v1 - 1) < 0.1 AND abs(a1 - 0.05) < 0.002 AND abs(p2 - 218000) < 3000",
+          "points": 30
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan kalibrasi Bernoulli",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Reaktor terselamatkan! Sensor terkalibrasi. Kamu menguasai Hukum Bernoulli: P₁+½ρv₁²=P₂+½ρv₂² dan venturimeter. Kecepatan tinggi selalu berarti tekanan rendah!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan kalibrasi yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Reaktor overheat! Ingat: gunakan kontinuitas dulu v₂=v₁(A₁/A₂), lalu Bernoulli P₂=P₁+½ρ(v₁²−v₂²). Pipa sempit = kecepatan naik = tekanan turun. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 1200,
+      "pass_threshold": 50
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Detektor Komponen Vektor",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Representasi Vektor",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_representasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Detektor Komponen Vektor",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Representasi Vektor",
+      "topik": "Representasi Vektor",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menguraikan vektor menjadi komponen horizontal dan vertikal menggunakan aturan trigonometri",
+        "Siswa dapat menghitung besar komponen vektor dengan rumus Vx = V cos θ dan Vy = V sin θ",
+        "Siswa dapat memverifikasi bahwa rekonstruksi vektor dari komponennya menghasilkan besaran semula"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Misi Robot Antariksa",
+        "story": "Robot penjelajah antariksamu telah mendarat di planet baru! Untuk bergerak menuju pangkalan, robot harus mengurai vektor pergerakannya menjadi dua komponen: maju-mundur dan kiri-kanan. Bantu robot mengurai vektornya menggunakan kaidah trigonometri agar misi berhasil!",
+        "image_description": "Robot berbentuk kapsul mengambang di atas permukaan planet berwarna ungu gelap, dua anak panah biru (komponen X dan Y) muncul dari tubuh robot, bintang-bintang berkilauan di latar langit kosmik",
+        "cta_text": "Aktifkan Detektor"
+      },
+      "visual_element": {
+        "theme_name": "Cosmic Vector Lab",
+        "theme_preset": "space_cosmic",
+        "mood": "futuristic, scientific, focused",
+        "color_palette": {
+          "primary": "#8e44ad",
+          "secondary": "#2980b9",
+          "background": "#0d0d2b",
+          "accent": "#00e5ff",
+          "text": "#e8eaf6"
+        },
+        "setting_description": "Laboratorium antariksa di dalam stasiun luar angkasa dengan layar holografik biru ungu, papan koordinat bercahaya neon, dan bintang-bintang bergerak di latar jendela.",
+        "art_style": "sci-fi flat design dengan efek cahaya neon dan hologram",
+        "ambient_elements": [
+          "Partikel cahaya melayang di sekitar papan koordinat holografik",
+          "Denyutan lampu indikator pada panel robot",
+          "Bintang-bintang bergerak lambat di latar jendela stasiun"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur besar vektor (V) dengan slider Besaran Vektor." },
+          { "step": 2, "text": "Atur sudut arah θ dengan slider Sudut (0°–360°)." },
+          { "step": 3, "text": "Amati komponen Vx dan Vy yang dihitung otomatis." },
+          { "step": 4, "text": "Periksa nilai rekonstruksi: V_rekonstruksi harus sama dengan V semula." },
+          { "step": 5, "text": "Selesaikan dua tantangan untuk membantu robot mencapai pangkalan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Penguraian Vektor dengan Trigonometri",
+          "strategy": "Setiap vektor dapat diurai menjadi dua komponen tegak lurus. Komponen horizontal (Vx) menggunakan cosinus dan komponen vertikal (Vy) menggunakan sinus. Untuk memverifikasi, rekonstruksi besaran dengan Teorema Pythagoras harus menghasilkan nilai awal.",
+          "formula": "Vx = V·cos θ,  Vy = V·sin θ,  V = √(Vx² + Vy²)",
+          "example": "V=10 m/s, θ=30°: Vx = 10·cos30° = 10·0,866 = 8,66 m/s; Vy = 10·sin30° = 10·0,5 = 5 m/s. Rekonstruksi: √(8,66²+5²) = √100 = 10 m/s ✓",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara bip elektronik pendek bernada tinggi saat parameter diubah dan komponen diperbarui" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara alarm kemenangan futuristik dengan efek synthesizer saat semua tantangan selesai" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient luar angkasa yang tenang dengan synthesizer berdenyut pelan, loop panjang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Lab Penguraian Komponen Vektor",
+        "narrative": "Atur besar dan arah vektor pergerakan robot, lalu amati komponen Vx dan Vy yang dihasilkan. Verifikasi bahwa rekonstruksi dari komponen-komponen tersebut menghasilkan besaran semula.",
+        "context": "Bidang koordinat dua dimensi; θ diukur berlawanan arah jarum jam dari sumbu X positif; semua satuan dalam m/s."
+      },
+      "variables": [
+        { "id": "v", "label": "Besaran vektor", "symbol": "V", "unit": "m/s", "type": "user_input", "min": 1, "max": 20, "default": 10, "step": 0.5 },
+        { "id": "theta", "label": "Sudut arah", "symbol": "θ", "unit": "derajat", "type": "user_input", "min": 0, "max": 360, "default": 30, "step": 1 },
+        { "id": "vx", "label": "Komponen horizontal", "symbol": "Vx", "unit": "m/s", "type": "computed" },
+        { "id": "vy", "label": "Komponen vertikal", "symbol": "Vy", "unit": "m/s", "type": "computed" },
+        { "id": "v_rekonstruksi", "label": "Rekonstruksi besaran", "symbol": "V'", "unit": "m/s", "type": "computed" },
+        { "id": "sudut_rekonstruksi", "label": "Rekonstruksi sudut", "symbol": "θ'", "unit": "derajat", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_vx", "computes": "vx", "formula": "vx = v * cos(theta * pi / 180)", "description": "Komponen horizontal vektor menggunakan fungsi kosinus" },
+        { "id": "eq_vy", "computes": "vy", "formula": "vy = v * sin(theta * pi / 180)", "description": "Komponen vertikal vektor menggunakan fungsi sinus" },
+        { "id": "eq_v_rekonstruksi", "computes": "v_rekonstruksi", "formula": "v_rekonstruksi = sqrt(vx^2 + vy^2)", "description": "Rekonstruksi besaran vektor dari komponennya menggunakan Teorema Pythagoras" },
+        { "id": "eq_sudut_rekonstruksi", "computes": "sudut_rekonstruksi", "formula": "sudut_rekonstruksi = atan2(vy, vx) * 180 / pi", "description": "Rekonstruksi sudut arah dari komponen Vx dan Vy" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Anak panah vektor V dari titik asal; dua anak panah komponen berwarna berbeda (biru untuk Vx horizontal, hijau untuk Vy vertikal) digambar sebagai proyeksi; segitiga siku-siku terbentuk dengan jelas" },
+        { "id": "viz_2", "type": "graph", "x_axis": "theta", "y_axis": "vx", "title": "Komponen Vx terhadap Sudut θ" },
+        { "id": "viz_3", "type": "table", "title": "Rekap Komponen dan Rekonstruksi", "description": "Tabel menampilkan V, θ, Vx, Vy, V' (rekonstruksi), dan θ' (rekonstruksi) secara real-time" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur V=10 m/s dan θ=60°, lalu verifikasi bahwa nilai Vx ≈ 5 m/s dan Vy ≈ 8,66 m/s sesuai perhitungan trigonometri.",
+          "success_condition": "v == 10 AND theta == 60 AND abs(vx - 5.0) < 0.5 AND abs(vy - 8.66) < 0.5",
+          "points": 30
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan V=15 m/s, temukan sudut θ sedemikian sehingga komponen Vx persis sama dengan komponen Vy (sudut istimewa).",
+          "success_condition": "abs(v - 15) < 0.1 AND abs(vx - vy) < 0.5 AND theta > 0",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan kedua tantangan penguraian komponen vektor",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Robot berhasil sampai ke pangkalan. Kamu menguasai penguraian komponen vektor!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: Vx = V·cosθ dan Vy = V·sinθ. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 720,
+      "pass_threshold": 40
+    }
+  }
+}

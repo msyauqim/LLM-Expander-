@@ -1,0 +1,176 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Intensitas dan Taraf Intensitas Bunyi",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gelombang Bunyi",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_bunyi_intensitas_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Intensitas dan Taraf Intensitas Bunyi",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Gelombang, Bunyi, dan Cahaya",
+      "subbab": "Gelombang Bunyi",
+      "topik": "Intensitas dan Taraf Intensitas Bunyi",
+      "difficulty": 2,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menghitung intensitas bunyi pada jarak tertentu dari sumber titik menggunakan I = P/(4πr²)",
+        "Siswa dapat mengkonversi intensitas bunyi ke taraf intensitas dalam desibel menggunakan TI = 10 log(I/I₀)",
+        "Siswa dapat menganalisis hubungan antara jarak dari sumber dan perubahan taraf intensitas bunyi"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Studio Rekaman Sekolah Seni",
+        "story": "Di sekolah seni Nusantara, tim teknik audio harus memastikan tingkat kebisingan di berbagai sudut ruangan tidak melebihi batas aman pendengaran (85 dB). Dari pengeras suara tunggal di tengah panggung, mereka perlu menghitung seberapa keras bunyi yang terdengar di setiap jarak. Kamu adalah teknisi audio yang bertugas menentukan zona aman di ruangan tersebut!",
+        "image_description": "Ruang konser modern bergaya Nusantara: pengeras suara di tengah panggung berwarna emas; gelombang konsentris memancar ke segala arah; kursi penonton di berbagai jarak dengan meter kebisingan digital berwarna hijau-kuning-merah; dinding dengan motif ukiran akustik",
+        "cta_text": "Mulai Kalibrasi Audio"
+      },
+      "visual_element": {
+        "theme_name": "Studio Audio Nusantara",
+        "theme_preset": "classroom",
+        "mood": "professional, analytical, precise",
+        "color_palette": {
+          "primary": "#4527a0",
+          "secondary": "#f57f17",
+          "background": "#fafafa",
+          "accent": "#00897b",
+          "text": "#212121"
+        },
+        "setting_description": "Ruang konser modern dengan akustik unggulan; dinding berwarna krem dengan panel akustik berpola batik; panel pengukur taraf intensitas digital berwarna ungu-oranye di berbagai posisi.",
+        "art_style": "ilustrasi flat modern bergaya infografis akustik dengan skema warna profesional dan ikon gelombang suara stylized",
+        "ambient_elements": [
+          "Lingkaran gelombang bunyi memancar dari sumber mengecil intensitasnya seiring jarak",
+          "Indikator warna meter dB berubah dari hijau (aman) ke kuning (waspada) ke merah (berbahaya) sesuai nilai TI",
+          "Pantulan gelombang halus dari dinding ruangan yang digambarkan sebagai panah tipis"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur daya sumber bunyi (P) dalam Watt." },
+          { "step": 2, "text": "Atur jarak pengukuran pertama (r₁) dari sumber dalam meter." },
+          { "step": 3, "text": "Atur jarak pengukuran kedua (r₂) untuk membandingkan intensitas pada dua posisi berbeda." },
+          { "step": 4, "text": "Simulasi menghitung intensitas (I₁, I₂) dan taraf intensitas (TI₁, TI₂) dalam dB secara otomatis." },
+          { "step": 5, "text": "Selesaikan tantangan untuk menentukan zona aman pendengaran di ruangan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Intensitas dan Taraf Intensitas Bunyi",
+          "strategy": "Intensitas I = P/(4πr²) menyebar ke seluruh permukaan bola. Jika jarak berlipat dua, intensitas berkurang menjadi seperempat. Taraf intensitas TI = 10 log(I/I₀) dalam dB, dengan I₀ = 10⁻¹² W/m² (ambang pendengaran). Setiap kali jarak berlipat dua, TI turun sekitar 6 dB.",
+          "formula": "I = P / (4π·r²) ;  TI = 10·log₁₀(I / 10⁻¹²) dB",
+          "example": "P=4π W ≈ 12,57 W, r=1 m: I=1 W/m²; TI=10log(10¹²)=120 dB. Pada r=2 m: I=0,25 W/m²; TI=10log(2,5×10¹¹)≈114 dB.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_beep", "event": "on_correct_action", "description": "Bunyi beep meter audio yang naik tonalitasnya saat TI meningkat" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi singkat gamelan modern yang bersih menandakan studio siap beroperasi dengan aman" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara alarm merah studio yang berdenyut tanda level bunyi melebihi ambang batas" },
+          { "id": "bgm", "event": "background", "description": "Musik jazz instrumental tenang khas ruang rekaman, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Intensitas dan Taraf Intensitas Bunyi dari Sumber Titik",
+        "narrative": "Atur daya sumber dan dua jarak pengukuran. Simulasi menghitung intensitas dan taraf intensitas bunyi di kedua posisi, serta selisih TI antara keduanya.",
+        "context": "Model sumber titik isotropik: daya menyebar merata ke seluruh permukaan bola; tidak ada pantulan atau penyerapan; I₀ = 10⁻¹² W/m²; log yang digunakan adalah log basis 10; π = 3.14159."
+      },
+      "variables": [
+        { "id": "P_daya", "label": "Daya sumber bunyi", "symbol": "P", "unit": "W", "type": "user_input", "min": 0.001, "max": 1000, "default": 12.566, "step": 0.1 },
+        { "id": "r1", "label": "Jarak pengukuran pertama", "symbol": "r₁", "unit": "m", "type": "user_input", "min": 0.5, "max": 100, "default": 1, "step": 0.5 },
+        { "id": "r2", "label": "Jarak pengukuran kedua", "symbol": "r₂", "unit": "m", "type": "user_input", "min": 0.5, "max": 100, "default": 10, "step": 0.5 },
+        { "id": "I1", "label": "Intensitas pada jarak r₁", "symbol": "I₁", "unit": "W/m²", "type": "computed" },
+        { "id": "I2", "label": "Intensitas pada jarak r₂", "symbol": "I₂", "unit": "W/m²", "type": "computed" },
+        { "id": "TI1", "label": "Taraf intensitas pada r₁", "symbol": "TI₁", "unit": "dB", "type": "computed" },
+        { "id": "TI2", "label": "Taraf intensitas pada r₂", "symbol": "TI₂", "unit": "dB", "type": "computed" },
+        { "id": "delta_TI", "label": "Selisih taraf intensitas (TI₁ − TI₂)", "symbol": "ΔTI", "unit": "dB", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_I1", "computes": "I1", "formula": "I1 = P_daya / (4 * 3.14159 * r1^2)", "description": "Intensitas di jarak r₁: daya dibagi luas permukaan bola berjari-jari r₁" },
+        { "id": "eq_I2", "computes": "I2", "formula": "I2 = P_daya / (4 * 3.14159 * r2^2)", "description": "Intensitas di jarak r₂: daya dibagi luas permukaan bola berjari-jari r₂" },
+        { "id": "eq_TI1", "computes": "TI1", "formula": "TI1 = 10 * log10(I1 / 0.000000000001)", "description": "Taraf intensitas di r₁ dalam dB; I₀ = 10⁻¹² W/m²" },
+        { "id": "eq_TI2", "computes": "TI2", "formula": "TI2 = 10 * log10(I2 / 0.000000000001)", "description": "Taraf intensitas di r₂ dalam dB; I₀ = 10⁻¹² W/m²" },
+        { "id": "eq_dTI", "computes": "delta_TI", "formula": "delta_TI = TI1 - TI2", "description": "Selisih taraf intensitas antara dua posisi; meningkat saat r₁ < r₂" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Tampak atas ruangan: sumber titik di tengah memancarkan lingkaran gelombang; dua penanda jarak r₁ dan r₂ ditampilkan dengan meter dB berwarna; meter berubah warna hijau-kuning-merah sesuai nilai TI; lingkaran gelombang memudar semakin jauh dari sumber" },
+        { "id": "viz_2", "type": "graph", "x_axis": "r1", "y_axis": "TI1", "title": "Taraf Intensitas vs Jarak dari Sumber (TI–r)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "r1", "y_axis": "I1", "title": "Intensitas vs Jarak (I–r)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur P = 4π W (≈12,566 W) dan r₁ = 1 m. Verifikasi bahwa I₁ = 1 W/m² dan TI₁ = 120 dB.",
+          "success_condition": "abs(P_daya - 12.566) < 0.05 AND abs(r1 - 1) < 0.05 AND abs(I1 - 1) < 0.05 AND abs(TI1 - 120) < 1",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan P = 4π W, temukan jarak r₁ di mana taraf intensitas TI₁ = 100 dB. (Petunjuk: TI=100 dB berarti I=10⁻² W/m², gunakan I=P/4πr² untuk hitung r).",
+          "success_condition": "abs(P_daya - 12.566) < 0.05 AND abs(TI1 - 100) < 1",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur r₁ = 5 m dan r₂ = 20 m dengan daya bebas pilihan. Verifikasi bahwa selisih taraf intensitas ΔTI = TI₁ − TI₂ ≈ 12 dB (karena jarak berlipat 4 kali).",
+          "success_condition": "abs(r1 - 5) < 0.1 AND abs(r2 - 20) < 0.1 AND abs(delta_TI - 12) < 1.5",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan intensitas bunyi",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Studio berhasil dikalibrasi! Kamu menguasai I=P/4πr² dan TI=10log(I/I₀). Zona aman pendengaran telah ditentukan dengan tepat!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: I = P/(4πr²) dan TI = 10 log(I/10⁻¹²). Jarak berlipat dua → I berkurang 4× → TI turun 6 dB. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Tekanan Hidrostatis dan Hukum Pascal",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Fluida Statis",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_fluida_tekananpascal_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Tekanan Hidrostatis dan Hukum Pascal",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Fluida",
+      "subbab": "Fluida Statis",
+      "topik": "Tekanan Hidrostatis dan Hukum Pascal",
+      "difficulty": 2,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menghitung tekanan hidrostatis pada kedalaman tertentu dalam fluida diam",
+        "Siswa dapat menerapkan Hukum Pascal untuk menghitung gaya angkat pada dongkrak hidrolik",
+        "Siswa dapat menganalisis hubungan linier antara kedalaman dan tekanan hidrostatis"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Bengkel Hidrolik Nusantara",
+        "story": "Di sebuah bengkel di Surabaya, seorang montir perlu mengangkat truk besar menggunakan dongkrak hidrolik. Sistem hidrolik bekerja berdasarkan Hukum Pascal — tekanan pada fluida tertutup diteruskan merata ke segala arah. Kamu adalah teknisi yang harus menghitung tekanan pada setiap titik dan memastikan dongkrak bekerja dengan aman!",
+        "image_description": "Bengkel mekanik bergaya Nusantara modern dengan dongkrak hidrolik besar mengangkat truk merah; tabung kaca berisi cairan biru transparan; anak panah tekanan berwarna oranye di berbagai kedalaman; latar dinding bata merah dengan perkakas bengkel berjajar",
+        "cta_text": "Mulai Bengkel"
+      },
+      "visual_element": {
+        "theme_name": "Hidrolik Bengkel Nusantara",
+        "theme_preset": "nusantara",
+        "mood": "practical, industrial, grounded",
+        "color_palette": {
+          "primary": "#e65100",
+          "secondary": "#0288d1",
+          "background": "#fff8f0",
+          "accent": "#43a047",
+          "text": "#212121"
+        },
+        "setting_description": "Bengkel mekanik modern bergaya Nusantara dengan peralatan hidrolik, tabung cairan bening berlabel, dan manometer digital berwarna oranye-biru terpasang di dinding bata.",
+        "art_style": "flat illustration bergaya infografis teknik dengan aksen motif batik pada bingkai panel informasi",
+        "ambient_elements": [
+          "Gelembung kecil bergerak perlahan naik dalam tabung cairan biru",
+          "Jarum manometer bergerak halus saat parameter kedalaman diubah",
+          "Efek kilap permukaan cairan yang tenang di bagian atas tabung"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa jenis fluida (ρ) sesuai jenis cairan yang digunakan dalam sistem." },
+          { "step": 2, "text": "Atur kedalaman titik ukur (h) untuk melihat tekanan hidrostatis di titik tersebut." },
+          { "step": 3, "text": "Pada bagian Dongkrak Pascal, atur luas piston kecil (A₁), luas piston besar (A₂), dan gaya dorong (F₁)." },
+          { "step": 4, "text": "Amati gaya angkat (F₂) yang dihasilkan dan rasio keuntungan mekanisnya." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk lulus sebagai teknisi bengkel!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Tekanan Hidrostatis dan Hukum Pascal",
+          "strategy": "Tekanan hidrostatis P = ρ×g×h hanya bergantung pada kedalaman (h) dan massa jenis fluida (ρ), bukan bentuk atau volume wadah. Hukum Pascal: tekanan pada fluida tertutup diteruskan sama besar ke segala arah. Pada dongkrak hidrolik, F₁/A₁ = F₂/A₂ — piston kecil menghasilkan gaya besar di piston besar.",
+          "formula": "P = ρ·g·h ;  F₂ = F₁ × (A₂/A₁)",
+          "example": "ρ=1000 kg/m³, g=10 m/s², h=5 m → P=50000 Pa. Jika A₁=0,02 m², A₂=0,4 m², F₁=200 N → F₂=200×(0,4/0,02)=4000 N.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara klik mekanis kepuasan saat nilai parameter diubah dan manometer bergerak" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara klakson bengkel gembira diikuti deru mesin dongkrak yang berhasil mengangkat" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara alarm peringatan bengkel yang berdengung singkat dua kali" },
+          { "id": "bgm", "event": "background", "description": "Musik keroncong jazz instrumental santai bertempo sedang khas bengkel sibuk, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Tekanan Hidrostatis dan Dongkrak Hidrolik Pascal",
+        "narrative": "Atur massa jenis fluida dan kedalaman untuk melihat tekanan hidrostatis. Kemudian atur parameter dongkrak hidrolik untuk menghitung gaya angkat berdasarkan Hukum Pascal.",
+        "context": "Fluida diam dalam wadah tertutup; g = 10 m/s²; tekanan atmosfer diabaikan (tekanan gauge); sistem hidrolik ideal tanpa kebocoran."
+      },
+      "variables": [
+        { "id": "rho", "label": "Massa jenis fluida", "symbol": "ρ", "unit": "kg/m³", "type": "user_input", "min": 800, "max": 13600, "default": 1000, "step": 100 },
+        { "id": "h", "label": "Kedalaman titik ukur", "symbol": "h", "unit": "m", "type": "user_input", "min": 0.1, "max": 20, "default": 3, "step": 0.1 },
+        { "id": "a1", "label": "Luas piston kecil", "symbol": "A₁", "unit": "m²", "type": "user_input", "min": 0.001, "max": 0.1, "default": 0.02, "step": 0.001 },
+        { "id": "a2", "label": "Luas piston besar", "symbol": "A₂", "unit": "m²", "type": "user_input", "min": 0.05, "max": 2.0, "default": 0.4, "step": 0.05 },
+        { "id": "f1", "label": "Gaya dorong pada piston kecil", "symbol": "F₁", "unit": "N", "type": "user_input", "min": 10, "max": 500, "default": 100, "step": 10 },
+        { "id": "p_hidro", "label": "Tekanan hidrostatis", "symbol": "P", "unit": "Pa", "type": "computed" },
+        { "id": "f2", "label": "Gaya angkat piston besar", "symbol": "F₂", "unit": "N", "type": "computed" },
+        { "id": "rasio_gaya", "label": "Keuntungan mekanis hidrolik", "symbol": "F₂/F₁", "unit": "", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_phidro", "computes": "p_hidro", "formula": "p_hidro = rho * 10 * h", "description": "Tekanan hidrostatis = massa jenis × percepatan gravitasi (10 m/s²) × kedalaman" },
+        { "id": "eq_f2", "computes": "f2", "formula": "f2 = f1 * (a2 / a1)", "description": "Hukum Pascal: rasio gaya sebanding dengan rasio luas penampang piston" },
+        { "id": "eq_rasio", "computes": "rasio_gaya", "formula": "rasio_gaya = a2 / a1", "description": "Keuntungan mekanis = rasio luas piston besar terhadap piston kecil" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Penampang samping tabung fluida: gradien warna biru semakin gelap seiring kedalaman; anak panah tekanan P di titik kedalaman h; di sisi kanan ditampilkan piston kecil dan besar dari dongkrak hidrolik dengan label F₁ dan F₂ bergerak naik" },
+        { "id": "viz_2", "type": "graph", "x_axis": "h", "y_axis": "p_hidro", "title": "Tekanan Hidrostatis vs Kedalaman (P–h)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "a2", "y_axis": "f2", "title": "Gaya Angkat vs Luas Piston Besar (F₂–A₂)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur ρ = 1000 kg/m³ dan h = 5 m. Verifikasi bahwa tekanan hidrostatis yang terhitung = 50000 Pa.",
+          "success_condition": "abs(rho - 1000) < 10 AND abs(h - 5) < 0.05 AND abs(p_hidro - 50000) < 500",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan A₁ = 0.02 m² dan A₂ = 0.4 m², atur F₁ agar gaya angkat F₂ = 4000 N. Berapa nilai F₁ yang diperlukan?",
+          "success_condition": "abs(a1 - 0.02) < 0.001 AND abs(a2 - 0.4) < 0.01 AND abs(f2 - 4000) < 50",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Gunakan fluida raksa (ρ = 13600 kg/m³). Temukan kedalaman h agar tekanan hidrostatis setara dengan tekanan air sedalam 10 m (yaitu 100000 Pa).",
+          "success_condition": "abs(rho - 13600) < 100 AND abs(p_hidro - 100000) < 1500",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan fluida statis",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Bengkel berhasil! Dongkrak bekerja sempurna. Kamu menguasai tekanan hidrostatis dan Hukum Pascal. P = ρgh dan F₂ = F₁×(A₂/A₁)!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktumu habis! Ingat: P = ρ×g×h untuk tekanan hidrostatis, dan F₂/F₁ = A₂/A₁ untuk Hukum Pascal. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

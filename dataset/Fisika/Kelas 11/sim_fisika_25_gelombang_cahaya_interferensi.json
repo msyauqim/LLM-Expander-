@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Interferensi Cahaya Celah Ganda Young",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gelombang Cahaya",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_cahaya_interferensi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Interferensi Cahaya Celah Ganda Young",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Gelombang, Bunyi, dan Cahaya",
+      "subbab": "Gelombang Cahaya",
+      "topik": "Interferensi Cahaya pada Celah Ganda Young",
+      "difficulty": 3,
+      "estimated_duration_minutes": 25,
+      "learning_objectives": [
+        "Siswa dapat menghitung posisi garis terang dan gelap pada pola interferensi celah ganda Young",
+        "Siswa dapat menghitung jarak antar garis terang (fringe spacing) menggunakan persamaan Δy = λL/d",
+        "Siswa dapat menganalisis pengaruh panjang gelombang, jarak celah, dan jarak layar terhadap pola interferensi",
+        "Siswa dapat membedakan kondisi interferensi konstruktif (garis terang) dan destruktif (garis gelap)"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Observatorium Cahaya Bintang",
+        "story": "Di observatorium orbital masa depan, ilmuwan menggunakan interferometer celah ganda untuk menganalisis cahaya bintang jauh. Pola pita terang dan gelap yang muncul di detektor mengandung informasi tentang panjang gelombang cahaya. Kamu adalah operator interferometer yang harus mengkalibrasi detektor dengan tepat menggunakan persamaan interferensi Young, sebelum teleskop melewati jendela pengamatan!",
+        "image_description": "Interior observatorium orbital dengan interferometer celah ganda bercahaya ungu; dua celah sempit memancarkan cahaya laser biru-ungu; pita terang dan gelap bergantian tampil di detektor berwarna putih-biru; jendela oval menampilkan bintang-bintang di luar angkasa; panel data panjang gelombang berwarna spektrum pelangi",
+        "cta_text": "Kalibrasi Detektor"
+      },
+      "visual_element": {
+        "theme_name": "Observatorium Interferometer Orbital",
+        "theme_preset": "space_cosmic",
+        "mood": "precise, scientific, awe-inspiring",
+        "color_palette": {
+          "primary": "#4a148c",
+          "secondary": "#00b0ff",
+          "background": "#050a1a",
+          "accent": "#e040fb",
+          "text": "#e8eaf6"
+        },
+        "setting_description": "Observatorium orbital dengan dinding gelap bertabur bintang; interferometer celah ganda bercahaya ungu di pusat; layar detektor putih menampilkan pita-pita interferensi berwarna spektrum; nebula kosmis di latar jendela.",
+        "art_style": "sci-fi minimalis dengan gradien ungu-biru luar angkasa, pita interferensi spektrum warna-warni, dan garis grid referensi bercahaya",
+        "ambient_elements": [
+          "Pita terang dan gelap pada layar detektor bergeser saat parameter jarak celah diubah",
+          "Berkas cahaya laser tipis berwarna sesuai panjang gelombang yang dipilih memancar dari celah",
+          "Bintang-bintang di latar berkedip sangat halus menciptakan kedalaman luar angkasa"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur panjang gelombang cahaya (λ) dalam nanometer (nm) — cahaya tampak: 400–700 nm." },
+          { "step": 2, "text": "Atur jarak antar celah (d) dalam milimeter (mm)." },
+          { "step": 3, "text": "Atur jarak dari celah ke layar (L) dalam meter." },
+          { "step": 4, "text": "Atur orde garis terang yang ingin dihitung (m = 0, 1, 2, ...)." },
+          { "step": 5, "text": "Simulasi menghitung jarak fringe (Δy), posisi garis terang (y_m), dan garis gelap (y_gelap). Selesaikan tantangan kalibrasi!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Interferensi Celah Ganda Young",
+          "strategy": "Pada percobaan Young, cahaya melewati dua celah dan berinterferensi di layar. Garis TERANG (konstruktif) terjadi saat beda lintasan = mλ, posisinya y_terang = mλL/d. Garis GELAP (destruktif) terjadi saat beda lintasan = (m+½)λ, posisinya y_gelap = (m+½)λL/d. Jarak antar garis terang (fringe spacing) Δy = λL/d — semakin panjang λ atau L, semakin renggang; semakin besar d, semakin rapat.",
+          "formula": "Δy = λL/d ;  y_terang = m·λL/d ;  y_gelap = (m+½)·λL/d",
+          "example": "λ=550 nm=5,5×10⁻⁷ m, d=0,5 mm=5×10⁻⁴ m, L=1,5 m: Δy=5,5×10⁻⁷×1,5/5×10⁻⁴=1,65×10⁻³ m=1,65 mm. Garis terang orde 2: y=2×1,65=3,3 mm.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_calibrate", "event": "on_correct_action", "description": "Suara klik kalibrasi optik yang halus saat parameter diubah dan pola interferensi bergeser" },
+          { "id": "sfx_win", "event": "on_win", "description": "Nada elektronik ascending futuristik menandakan interferometer berhasil dikalibrasi sempurna" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara alarm observatorium yang berdenyut dua kali menandakan kalibrasi gagal" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient kosmis bertempo sangat lambat dengan drone yang dalam dan melodi synth luar angkasa, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_optics",
+      "scenario": {
+        "title": "Simulasi Pola Interferensi Celah Ganda Young",
+        "narrative": "Atur panjang gelombang, jarak antar celah, jarak layar, dan orde garis terang. Simulasi menghitung fringe spacing, posisi garis terang orde-m, dan posisi garis gelap antara orde m dan m+1.",
+        "context": "Model celah ganda ideal (lebar celah diabaikan); cahaya koheren monokromatik; sudut kecil (sin θ ≈ tan θ ≈ θ); λ dalam meter setelah konversi dari nm; d dalam meter setelah konversi dari mm; hasil y dalam mm untuk kemudahan pembacaan."
+      },
+      "variables": [
+        { "id": "lambda_nm", "label": "Panjang gelombang cahaya", "symbol": "λ", "unit": "nm", "type": "user_input", "min": 380, "max": 700, "default": 550, "step": 10 },
+        { "id": "d_mm", "label": "Jarak antar celah", "symbol": "d", "unit": "mm", "type": "user_input", "min": 0.1, "max": 2.0, "default": 0.5, "step": 0.05 },
+        { "id": "L", "label": "Jarak celah ke layar", "symbol": "L", "unit": "m", "type": "user_input", "min": 0.5, "max": 3.0, "default": 1.5, "step": 0.1 },
+        { "id": "m", "label": "Orde garis terang", "symbol": "m", "unit": "", "type": "user_input", "min": 0, "max": 5, "default": 1, "step": 1 },
+        { "id": "delta_y_mm", "label": "Jarak antar garis terang (fringe spacing)", "symbol": "Δy", "unit": "mm", "type": "computed" },
+        { "id": "y_terang_mm", "label": "Posisi garis terang orde-m", "symbol": "y_m", "unit": "mm", "type": "computed" },
+        { "id": "y_gelap_mm", "label": "Posisi garis gelap antara orde m dan m+1", "symbol": "y_gelap", "unit": "mm", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_dy", "computes": "delta_y_mm", "formula": "delta_y_mm = (lambda_nm * 0.000000001 * L) / (d_mm * 0.001) * 1000", "description": "Fringe spacing Δy = λL/d, hasil dalam mm setelah konversi satuan" },
+        { "id": "eq_yterang", "computes": "y_terang_mm", "formula": "y_terang_mm = m * delta_y_mm", "description": "Posisi garis terang orde-m = m × Δy; orde 0 selalu di pusat (y=0)" },
+        { "id": "eq_ygelap", "computes": "y_gelap_mm", "formula": "y_gelap_mm = (m + 0.5) * delta_y_mm", "description": "Posisi garis gelap antara orde m dan m+1 = (m+0,5) × Δy" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Tampak samping: dua celah di kiri memancarkan berkas cahaya yang berinterferensi; layar detektor di kanan menampilkan pita terang-gelap bergantian; posisi y_terang_mm dan y_gelap_mm ditandai garis horizontal berwarna; pita bergeser saat parameter diubah" },
+        { "id": "viz_2", "type": "graph", "x_axis": "lambda_nm", "y_axis": "delta_y_mm", "title": "Fringe Spacing vs Panjang Gelombang (Δy–λ)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "d_mm", "y_axis": "delta_y_mm", "title": "Fringe Spacing vs Jarak Celah (Δy–d)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur λ=550 nm, d=0,5 mm, L=1,5 m. Verifikasi fringe spacing Δy ≈ 1,65 mm dan posisi garis terang orde 2 (m=2) berada di y ≈ 3,3 mm.",
+          "success_condition": "abs(lambda_nm - 550) < 5 AND abs(d_mm - 0.5) < 0.02 AND abs(L - 1.5) < 0.05 AND abs(m - 2) < 0.1 AND abs(delta_y_mm - 1.65) < 0.1 AND abs(y_terang_mm - 3.3) < 0.2",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan L=2 m dan d=0,4 mm, tentukan panjang gelombang λ yang menghasilkan fringe spacing Δy = 2,5 mm. (Petunjuk: λ = Δy×d/L)",
+          "success_condition": "abs(L - 2) < 0.05 AND abs(d_mm - 0.4) < 0.02 AND abs(delta_y_mm - 2.5) < 0.15",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Cahaya merah (λ=650 nm) dan cahaya ungu (λ=400 nm) digunakan bergantian pada celah d=1 mm, L=1 m. Hitung selisih fringe spacing antara keduanya. (Petunjuk: ΔSpacing = ΔyMerah − ΔyUngu)",
+          "success_condition": "abs(d_mm - 1) < 0.05 AND abs(L - 1) < 0.05 AND ((abs(lambda_nm - 650) < 5 AND abs(delta_y_mm - 0.65) < 0.05) OR (abs(lambda_nm - 400) < 5 AND abs(delta_y_mm - 0.4) < 0.05))",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan interferensi Young",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Interferometer terkalibrasi! Kamu menguasai interferensi Young: Δy=λL/d. Panjang gelombang lebih besar atau layar lebih jauh → pita lebih renggang!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Kalibrasi gagal! Ingat: Δy=λL/d, y_terang=mΔy, y_gelap=(m+½)Δy. λ dan L besar → pita renggang; d besar → pita rapat. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 1200,
+      "pass_threshold": 50
+    }
+  }
+}

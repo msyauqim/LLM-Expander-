@@ -1,0 +1,1779 @@
+[
+    { 
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+        "judul_game": "Eksplorasi Sistem Termodinamika",
+        "jenjang": "SMA-11",
+        "mata_pelajaran": "Fisika",
+        "topik": "Sistem dan Lingkungan, Sifat-Sifat Sistem Termodinamika",
+        "tingkat_kesulitan": 2,
+        "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma11_konsepdasartermodinamika_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Eksplorasi Sistem Termodinamika",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Konsep Dasar Termodinamika",
+                "topik": "Sistem dan Lingkungan, Sifat-Sifat Sistem Termodinamika",
+                "difficulty": 2,
+                "estimated_duration_minutes": 15,
+                "learning_objectives": [
+                    "Memahami perbedaan sistem dan lingkungan dalam termodinamika",
+                    "Mengidentifikasi jenis sistem (terbuka, tertutup, terisolasi)",
+                    "Memahami sifat-sifat sistem seperti tekanan, volume, dan suhu"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Laboratorium Termodinamika",
+                    "story": "Kamu adalah seorang ilmuwan muda yang sedang meneliti perilaku gas dalam sebuah wadah. Atur kondisi sistem dan amati bagaimana perubahan memengaruhi lingkungan.",
+                    "image_description": "Laboratorium dengan tabung gas transparan dan alat ukur suhu serta tekanan",
+                    "cta_text": "Mulai Eksperimen"
+                },
+                "visual_element": {
+                    "theme_name": "Lab Termodinamika",
+                    "theme_preset": "scifi_neon",
+                    "mood": "eksperimen ilmiah futuristik",
+                    "color_palette": {
+                        "primary": "#1E3A8A",
+                        "secondary": "#06B6D4",
+                        "background": "#0F172A",
+                        "accent": "#F59E0B",
+                        "text": "#E2E8F0"
+                    },
+                    "setting_description": "Laboratorium modern dengan alat pengukur tekanan, suhu, dan volume",
+                    "art_style": "semi-realistic sci-fi",
+                    "ambient_elements": [
+                        "animasi partikel gas",
+                        "suara mesin laboratorium",
+                        "indikator digital berkedip"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Atur parameter suhu, volume, dan jenis sistem"
+                        },
+                        {
+                            "step": 2,
+                            "text": "Amati perubahan tekanan dan interaksi dengan lingkungan"
+                        },
+                        {
+                            "step": 3,
+                            "text": "Selesaikan tantangan berdasarkan kondisi yang diminta"
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Petunjuk Termodinamika",
+                        "strategy": "Perhatikan hubungan antara suhu, tekanan, dan volume. Ingat jenis sistem memengaruhi pertukaran energi.",
+                        "formula": "P ∝ T/V",
+                        "example": "Jika suhu naik dalam volume tetap, maka tekanan akan meningkat.",
+                        "hint_image_description": "Diagram hubungan tekanan, suhu, dan volume"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_lab",
+                            "event": "background",
+                            "description": "Suara ambient laboratorium"
+                        },
+                        {
+                            "id": "correct",
+                            "event": "on_correct_action",
+                            "description": "Suara notifikasi benar"
+                        },
+                        {
+                            "id": "wrong",
+                            "event": "on_wrong_action",
+                            "description": "Suara error ringan"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_basic",
+                "scenario": {
+                    "title": "Gas dalam Wadah",
+                    "narrative": "Atur kondisi sistem gas dan amati perubahan sifatnya.",
+                    "context": "Sebuah gas ideal berada dalam wadah dengan kondisi yang dapat diubah."
+                },
+                "variables": [
+                    {
+                        "id": "T",
+                        "label": "Suhu",
+                        "symbol": "T",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 200,
+                        "max": 600,
+                        "default": 300,
+                        "step": 10
+                    },
+                    {
+                        "id": "V",
+                        "label": "Volume",
+                        "symbol": "V",
+                        "unit": "L",
+                        "type": "user_input",
+                        "min": 1,
+                        "max": 10,
+                        "default": 5,
+                        "step": 0.5
+                    },
+                    {
+                        "id": "P",
+                        "label": "Tekanan",
+                        "symbol": "P",
+                        "unit": "atm",
+                        "type": "computed"
+                    },
+                    {
+                        "id": "system_type",
+                        "label": "Jenis Sistem",
+                        "type": "user_selection",
+                        "options": ["terbuka", "tertutup", "terisolasi"]
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_ideal_gas",
+                        "computes": "P",
+                        "formula": "P = T / V",
+                        "description": "Hubungan sederhana tekanan, suhu, dan volume"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "graph",
+                        "x_axis": "V",
+                        "y_axis": "P",
+                        "title": "Tekanan vs Volume"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Partikel gas bergerak dalam wadah, semakin cepat saat suhu naik"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur kondisi agar tekanan mencapai 100 atm",
+                        "success_condition": "abs(P - 100) < 5",
+                        "hint": "Gunakan hubungan P = T/V",
+                        "points": 20
+                    },
+                    {
+                        "id": "ch_002",
+                        "task": "Pilih jenis sistem yang tidak bertukar energi maupun materi",
+                        "success_condition": "system_type == 'terisolasi'",
+                        "hint": "Sistem terisolasi tidak berinteraksi dengan lingkungan",
+                        "points": 10
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Semua tantangan berhasil diselesaikan",
+                    "logic": "all_challenges_completed == true",
+                    "feedback_text": "Eksperimen berhasil! Kamu memahami konsep dasar termodinamika.",
+                    "feedback_audio": null
+                },
+                "lose": {
+                    "description": "Gagal menyelesaikan tantangan",
+                    "logic": "time_up == true",
+                    "feedback_text": "Eksperimen belum berhasil. Coba lagi dengan strategi berbeda.",
+                    "feedback_audio": null,
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 10,
+                    "wrong": -2,
+                    "bonus_time": 5
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Bermain dengan Diagram p-V",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Diagram p-V",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma11_pvdiagram_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Bermain dengan Diagram p-V",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Proses-Proses Termodinamika",
+                "topik": "Diagram p-V",
+                "difficulty": 2,
+                "estimated_duration_minutes": 10,
+                "learning_objectives": [
+                    "Memahami hubungan tekanan dan volume",
+                    "Membaca dan menganalisis diagram p-V"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Diagram p-V",
+                    "story": "Analisis perubahan tekanan dan volume gas dalam berbagai proses.",
+                    "image_description": "Grafik p-V",
+                    "cta_text": "Mulai"
+                },
+                "visual_element": {
+                    "theme_name": "lab_thermo",
+                    "theme_preset": "minimal_mono",
+                    "mood": "analitis",
+                "color_palette": {
+                    "primary": "#1E88E5",
+                    "secondary": "#90CAF9",
+                    "background": "#FFFFFF",
+                    "accent": "#1565C0",
+                    "text": "#212121"
+                },
+                "setting_description": "Laboratorium fisika",
+                "art_style": "clean diagram",
+                "ambient_elements": ["grid", "axis"]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+                    "steps": [
+                        { "step": 1, "text": "Ubah tekanan dan volume" },
+                        { "step": 2, "text": "Amati perubahan grafik p-V" }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+                    "content": {
+                        "title": "Hint",
+                        "strategy": "Perhatikan luas area",
+                        "formula": "W = luas di bawah kurva",
+                        "example": "Kurva lebih luas = usaha lebih besar",
+                        "hint_image_description": null
+                    }
+                },
+                "audio": { "enabled": false, "tracks": [] }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_pv",
+                "scenario": {
+                    "title": "Gas dalam Silinder",
+                    "narrative": "Amati perubahan tekanan dan volume gas.",
+                    "context": "Gas ideal dalam piston."
+                },
+                "variables": [
+                    { "id": "p", "label": "Tekanan", "symbol": "p", "unit": "Pa", "type": "user_input", "min": 100000, "max": 500000, "default": 200000, "step": 10000 },
+                    { "id": "v", "label": "Volume", "symbol": "V", "unit": "m3", "type": "user_input", "min": 0.01, "max": 1, "default": 0.1, "step": 0.01 }
+                ],
+                "equations": [],
+                "visualizations": [
+                    { "id": "viz_1", "type": "graph", "x_axis": "v", "y_axis": "p", "title": "Diagram p-V" }
+                ],
+                "challenges": []
+            },
+            "win_lose_condition": { 
+                "applicable": false 
+            },
+            "gameplay_parameters": {
+                "scoring": { "correct": 10, "wrong": -2, "bonus_time": 5 },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Empat Proses Termodinamika",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Empat Proses Termodinamika",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output" :{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma11_empatproses_simlab_003",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Empat Proses Termodinamika",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Proses-Proses Termodinamika",
+                "topik": "Empat Proses Termodinamika",
+                "difficulty": 3,
+                "estimated_duration_minutes": 12,
+                "learning_objectives": [
+                "Membedakan isobarik, isokhorik, isotermik, adiabatik"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                "id": "opening_001",
+                "show_once": true,
+                "title": "4 Proses",
+                "story": "Bandingkan berbagai proses gas.",
+                "image_description": "Diagram proses",
+                "cta_text": "Mulai"
+                },
+                "visual_element": {
+                "theme_name": "comparison_lab",
+                "theme_preset": "classroom",
+                "mood": "edukatif",
+                "color_palette": {
+                    "primary": "#43A047",
+                    "secondary": "#A5D6A7",
+                    "background": "#F1F8E9",
+                    "accent": "#2E7D32",
+                    "text": "#1B5E20"
+                },
+                "setting_description": "Kelas fisika",
+                "art_style": "diagram edukasi",
+                "ambient_elements": ["labels"]
+                },
+                "instructions": {
+                "id": "howto_001",
+                "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+                "steps": [
+                    { "step": 1, "text": "Pilih jenis proses" },
+                    { "step": 2, "text": "Amati perubahan variabel" }
+                ]
+                },
+                "hint": {
+                "id": "hint_001",
+                "scope": "global",
+                "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+                "content": {
+                    "title": "Hint",
+                    "strategy": "Perhatikan variabel yang konstan",
+                    "formula": null,
+                    "example": "Isobarik → tekanan tetap",
+                    "hint_image_description": null
+                }
+                },
+                "audio": { "enabled": false, "tracks": [] }
+            },
+            "payload": {
+                "sim_subtype": "thermo_processes",
+                "scenario": {
+                "title": "Eksperimen Proses",
+                "narrative": "Bandingkan 4 proses utama.",
+                "context": "Gas ideal"
+                },
+                "variables": [
+                { "id": "mode", "label": "Proses", "type": "user_choice", "options": ["isobarik", "isokhorik", "isotermik", "adiabatik"] }
+                ],
+                "equations": [],
+                "visualizations": [
+                { "id": "viz_1", "type": "graph", "x_axis": "V", "y_axis": "p", "title": "Perbandingan Proses" }
+                ],
+                "challenges": []
+            },
+            "win_lose_condition": { "applicable": false },
+            "gameplay_parameters": {
+                "scoring": { "correct": 10, "wrong": -2, "bonus_time": 5 },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+            }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Reversibel vs Irreversibel",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Proses Reversibel dan Ireversibel",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma11_reversibel_simlab_004",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Reversibel vs Irreversibel",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Proses-Proses Termodinamika",
+                "topik": "Proses Reversibel dan Ireversibel",
+                "difficulty": 3,
+                "estimated_duration_minutes": 10,
+                "learning_objectives": [
+                    "Memahami perbedaan proses reversibel dan irreversibel"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                "id": "opening_001",
+                "show_once": true,
+                "title": "Reversibel vs Irreversibel",
+                "story": "Bandingkan efisiensi proses.",
+                "image_description": "Mesin panas",
+                "cta_text": "Mulai"
+                },
+                "visual_element": {
+                "theme_name": "heat_engine",
+                "theme_preset": "space_cosmic",
+                "mood": "konseptual",
+                "color_palette": {
+                    "primary": "#8E24AA",
+                    "secondary": "#CE93D8",
+                    "background": "#1A237E",
+                    "accent": "#BA68C8",
+                    "text": "#EDE7F6"
+                },
+                "setting_description": "Mesin termal futuristik",
+                "art_style": "sci-fi",
+                "ambient_elements": ["particles"]
+                },
+                "instructions": {
+                "id": "howto_001",
+                "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+                "steps": [
+                    { "step": 1, "text": "Pilih jenis proses" },
+                    { "step": 2, "text": "Bandingkan hasil" }
+                ]
+                },
+                "hint": {
+                "id": "hint_001",
+                "scope": "global",
+                "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+                "content": {
+                    "title": "Hint",
+                    "strategy": "Reversibel = ideal, irreversibel = nyata",
+                    "formula": null,
+                    "example": "Gesekan → irreversibel",
+                    "hint_image_description": null
+                }
+                },
+                "audio": { "enabled": false, "tracks": [] }
+            },
+            "payload": {
+                "sim_subtype": "reversibility",
+                "scenario": {
+                "title": "Efisiensi Mesin",
+                "narrative": "Bandingkan dua proses.",
+                "context": "Mesin kalor"
+                },
+                "variables": [
+                { "id": "mode", "label": "Jenis Proses", "type": "user_choice", "options": ["reversibel", "irreversibel"] }
+                ],
+                "equations": [],
+                "visualizations": [
+                { "id": "viz_1", "type": "animation", "description": "Perbandingan proses" }
+                ],
+                "challenges": []
+            },
+            "win_lose_condition": { "applicable": false },
+            "gameplay_parameters": {
+                "scoring": { "correct": 10, "wrong": -2, "bonus_time": 5 },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Usaha pada Gas Ideal",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Usaha dan Gas Ideal",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma11_usahagasideal_simlab_002",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Usaha pada Gas Ideal",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Proses-Proses Termodinamika",
+                "topik": "Usaha dan Gas Ideal",
+                "difficulty": 2,
+                "estimated_duration_minutes": 10,
+                "learning_objectives": [
+                    "Memahami usaha pada gas",
+                    "Menggunakan persamaan gas ideal"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Usaha Gas Ideal",
+                    "story": "Hitung usaha yang dilakukan gas saat mengembang.",
+                    "image_description": "Piston bergerak",
+                    "cta_text": "Mulai"
+                },
+                "visual_element": {
+                    "theme_name": "thermo_engine",
+                    "theme_preset": "scifi_neon",
+                    "mood": "eksperimen",
+                    "color_palette": {
+                        "primary": "#00ACC1",
+                        "secondary": "#80DEEA",
+                        "background": "#0D1B2A",
+                        "accent": "#26C6DA",
+                        "text": "#E0F7FA"
+                    },
+                    "setting_description": "Mesin termal",
+                    "art_style": "futuristic",
+                    "ambient_elements": ["glow"]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+                    "steps": [
+                        { "step": 1, "text": "Ubah volume" },
+                        { "step": 2, "text": "Amati usaha" }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+                    "content": {
+                        "title": "Hint",
+                        "strategy": "Gunakan integral tekanan terhadap volume",
+                        "formula": "W = pΔV",
+                        "example": "Volume naik → usaha positif",
+                        "hint_image_description": null
+                    }
+                },
+                "audio": { "enabled": false, "tracks": [] }
+            },
+            "payload": {
+                "sim_subtype": "gas_ideal",
+                "scenario": {
+                    "title": "Ekspansi Gas",
+                    "narrative": "Gas memuai dalam piston.",
+                    "context": "Gas ideal dalam silinder."
+                },
+                "variables": [
+                    { "id": "p", "label": "Tekanan", "symbol": "p", "unit": "Pa", "type": "constant", "default": 200000 },
+                    { "id": "v", "label": "Volume", "symbol": "V", "unit": "m3", "type": "user_input", "min": 0.1, "max": 1, "default": 0.2, "step": 0.05 },
+                    { "id": "w", "label": "Usaha", "symbol": "W", "unit": "J", "type": "computed" }
+                ],
+                "equations": [
+                    { "id": "eq_work", "computes": "w", "formula": "w = p*(v-0.1)", "description": "Usaha gas" }
+                ],
+                "visualizations": [
+                    { "id": "viz_1", "type": "animation", "description": "Piston bergerak" }
+                ],
+                "challenges": []
+            },
+            "win_lose_condition": { "applicable": false },
+            "gameplay_parameters": {
+                "scoring": { "correct": 10, "wrong": -2, "bonus_time": 5 },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+            }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Simulasi Mesin Kalor dan Pompa Kalor",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Mesin Kalor dan Pompa Kalor",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisikaSMA11_mesinkalor_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Simulasi Mesin Kalor dan Pompa Kalor",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Mesin Kalor dan Pompa Kalor",
+                "topik": "Efisiensi Mesin Kalor dan Koefisien Performa Pompa Kalor",
+                "difficulty": 3,
+                "estimated_duration_minutes": 15,
+                "learning_objectives": [
+                    "Memahami konsep mesin kalor dan pompa kalor",
+                    "Menghitung efisiensi mesin kalor",
+                    "Menganalisis koefisien performa (COP) pompa kalor",
+                    "Membandingkan kinerja mesin kalor dan pompa kalor"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Misi Insinyur Energi",
+                    "story": "Kamu adalah seorang insinyur yang ditugaskan untuk mengoptimalkan mesin kalor dan pompa kalor di sebuah fasilitas energi. Atur parameter suhu dan energi untuk mencapai efisiensi terbaik!",
+                    "image_description": "Sebuah pembangkit energi dengan mesin uap dan sistem pendingin modern",
+                    "cta_text": "Mulai Simulasi"
+                },
+                "visual_element": {
+                    "theme_name": "Industrial Energy Lab",
+                    "theme_preset": "scifi_neon",
+                    "mood": "teknologis dan analitis",
+                    "color_palette": {
+                        "primary": "#00ADB5",
+                        "secondary": "#393E46",
+                        "background": "#222831",
+                        "accent": "#FFD369",
+                        "text": "#EEEEEE"
+                    },
+                    "setting_description": "Laboratorium energi futuristik dengan mesin kalor dan sistem pendingin",
+                    "art_style": "2D futuristik dengan panel kontrol interaktif",
+                    "ambient_elements": [
+                        "suara mesin berdengung",
+                        "lampu indikator berkedip",
+                        "uap panas dari pipa"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Atur suhu reservoir panas (Th) dan dingin (Tc)."
+                        },
+                        {
+                            "step": 2,
+                            "text": "Amati perubahan energi kalor dan kerja yang dihasilkan."
+                        },
+                        {
+                            "step": 3,
+                            "text": "Analisis efisiensi mesin kalor dan COP pompa kalor."
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Tips Efisiensi",
+                        "strategy": "Efisiensi mesin kalor meningkat jika perbedaan suhu antara reservoir panas dan dingin semakin besar.",
+                        "formula": "η = W/Qh, COP = Qc/W",
+                        "example": "Jika Qh = 1000 J dan W = 300 J, maka efisiensi η = 0.3 atau 30%",
+                        "hint_image_description": "Diagram mesin kalor dan pompa kalor dengan aliran energi"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_01",
+                            "event": "background",
+                            "description": "Suara mesin industri futuristik"
+                        },
+                        {
+                            "id": "correct_01",
+                            "event": "on_correct_action",
+                            "description": "Bunyi klik sukses"
+                        },
+                        {
+                            "id": "wrong_01",
+                            "event": "on_wrong_action",
+                            "description": "Bunyi error sistem"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_heat_engine",
+                "scenario": {
+                    "title": "Optimasi Mesin Kalor",
+                    "narrative": "Atur suhu reservoir panas dan dingin untuk melihat pengaruhnya terhadap efisiensi mesin.",
+                    "context": "Sebuah mesin kalor bekerja antara dua reservoir suhu berbeda."
+                },
+                "variables": [
+                    {
+                        "id": "Th",
+                        "label": "Suhu Panas",
+                        "symbol": "Tₕ",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 300,
+                        "max": 800,
+                        "default": 500,
+                        "step": 10
+                    },
+                    {
+                        "id": "Tc",
+                        "label": "Suhu Dingin",
+                        "symbol": "T𝚌",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 200,
+                        "max": 400,
+                        "default": 300,
+                        "step": 10
+                    },
+                    {
+                        "id": "Qh",
+                        "label": "Kalor Masuk",
+                        "symbol": "Qₕ",
+                        "unit": "J",
+                        "type": "constant",
+                        "value": 1000
+                    },
+                    {
+                        "id": "W",
+                        "label": "Usaha",
+                        "symbol": "W",
+                        "unit": "J",
+                        "type": "computed"
+                    },
+                    {
+                        "id": "eta",
+                        "label": "Efisiensi",
+                        "symbol": "η",
+                        "unit": "",
+                        "type": "computed"
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_efficiency",
+                        "computes": "eta",
+                        "formula": "eta = 1 - (Tc/Th)",
+                        "description": "Efisiensi mesin kalor ideal (Carnot)"
+                    },
+                    {
+                        "id": "eq_work",
+                        "computes": "W",
+                        "formula": "W = eta * Qh",
+                        "description": "Hubungan usaha dan efisiensi"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "graph",
+                        "x_axis": "Th",
+                        "y_axis": "eta",
+                        "title": "Efisiensi vs Suhu Panas"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Aliran energi dari reservoir panas ke dingin melalui mesin"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur Th dan Tc agar efisiensi mencapai minimal 50%",
+                        "success_condition": "eta >= 0.5",
+                        "hint": "Perbesar selisih suhu antara Th dan Tc",
+                        "points": 25
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Efisiensi target tercapai",
+                    "logic": "eta >= 0.5",
+                    "feedback_text": "Kamu berhasil mengoptimalkan mesin kalor!",
+                    "feedback_audio": "correct_01"
+                },
+                "lose": {
+                    "description": "Efisiensi tidak tercapai",
+                    "logic": "eta < 0.5",
+                    "feedback_text": "Efisiensi masih rendah, coba ubah parameter suhu.",
+                    "feedback_audio": "wrong_01",
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 15,
+                    "wrong": -3,
+                    "bonus_time": 10
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Simulasi Hukum ke Nol Termodinamika",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Hukum Nol Dinamika",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisikaSMA11_hukumkenol_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Simulasi Hukum ke Nol Termodinamika",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Termodinamika",
+                "subbab": "Hukum Termodinamika",
+                "topik": "Hukum ke Nol Termodinamika",
+                "difficulty": 2,
+                "estimated_duration_minutes": 10,
+                "learning_objectives": [
+                    "Memahami konsep kesetimbangan termal",
+                    "Menjelaskan Hukum ke Nol Termodinamika",
+                    "Mengidentifikasi kondisi suhu yang setimbang",
+                    "Menganalisis hubungan antara tiga sistem termal"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Misi Kalibrasi Termometer",
+                    "story": "Kamu adalah teknisi laboratorium yang harus memastikan alat ukur suhu bekerja dengan akurat. Gunakan prinsip Hukum ke Nol Termodinamika untuk menentukan apakah sistem-sistem berada dalam kesetimbangan termal.",
+                    "image_description": "Laboratorium dengan tiga bejana berisi zat dengan termometer digital",
+                    "cta_text": "Mulai Eksperimen"
+                },
+                "visual_element": {
+                    "theme_name": "Thermal Lab",
+                    "theme_preset": "classroom",
+                    "mood": "eksperimental dan ilmiah",
+                    "color_palette": {
+                        "primary": "#FF6F61",
+                        "secondary": "#6B5B95",
+                        "background": "#F7F7F7",
+                        "accent": "#88B04B",
+                        "text": "#333333"
+                    },
+                    "setting_description": "Laboratorium fisika dengan alat pengukur suhu dan bejana zat",
+                    "art_style": "2D edukatif dengan tampilan alat eksperimen",
+                    "ambient_elements": [
+                        "bunyi alat laboratorium",
+                        "gelembung cairan",
+                        "indikator suhu berubah"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Atur suhu sistem A, B, dan C menggunakan slider."
+                        },
+                        {
+                            "step": 2,
+                            "text": "Amati apakah sistem mencapai kesetimbangan termal."
+                        },
+                        {
+                            "step": 3,
+                            "text": "Gunakan hubungan antara sistem untuk menentukan kesetimbangan."
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Konsep Penting",
+                        "strategy": "Jika sistem A setimbang dengan B, dan B setimbang dengan C, maka A juga setimbang dengan C.",
+                        "formula": null,
+                        "example": "Jika suhu A = 300K dan B = 300K, serta B = C = 300K, maka A = C sehingga semuanya setimbang.",
+                        "hint_image_description": "Tiga sistem dengan termometer menunjukkan suhu yang sama"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_01",
+                            "event": "background",
+                            "description": "Suara laboratorium tenang"
+                        },
+                        {
+                            "id": "correct_01",
+                            "event": "on_correct_action",
+                            "description": "Bunyi notifikasi benar"
+                        },
+                        {
+                            "id": "wrong_01",
+                            "event": "on_wrong_action",
+                            "description": "Bunyi kesalahan"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_equilibrium",
+                "scenario": {
+                    "title": "Kesetimbangan Tiga Sistem",
+                    "narrative": "Atur suhu tiga sistem dan tentukan apakah mereka berada dalam kesetimbangan termal.",
+                    "context": "Tiga sistem termal saling dibandingkan menggunakan termometer."
+                },
+                "variables": [
+                    {
+                        "id": "TA",
+                        "label": "Suhu Sistem A",
+                        "symbol": "Tₐ",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 250,
+                        "max": 400,
+                        "default": 300,
+                        "step": 5
+                    },
+                    {
+                        "id": "TB",
+                        "label": "Suhu Sistem B",
+                        "symbol": "Tᵦ",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 250,
+                        "max": 400,
+                        "default": 300,
+                        "step": 5
+                    },
+                    {
+                        "id": "TC",
+                        "label": "Suhu Sistem C",
+                        "symbol": "T𝚌",
+                        "unit": "K",
+                        "type": "user_input",
+                        "min": 250,
+                        "max": 400,
+                        "default": 300,
+                        "step": 5
+                    },
+                    {
+                        "id": "equilibrium",
+                        "label": "Status Kesetimbangan",
+                        "symbol": "Eq",
+                        "unit": "",
+                        "type": "computed"
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_equilibrium",
+                        "computes": "equilibrium",
+                        "formula": "equilibrium = (TA == TB) && (TB == TC)",
+                        "description": "Semua sistem setimbang jika suhu sama"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "diagram",
+                        "title": "Perbandingan Suhu Sistem A, B, C"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Indikator termometer berubah sesuai suhu masing-masing sistem"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur suhu sehingga hanya A dan B setimbang, tetapi C berbeda",
+                        "success_condition": "(TA == TB) && (TC != TA)",
+                        "hint": "Samakan suhu A dan B, ubah suhu C",
+                        "points": 20
+                    },
+                    {
+                        "id": "ch_002",
+                        "task": "Buat semua sistem berada dalam kesetimbangan termal",
+                        "success_condition": "(TA == TB) && (TB == TC)",
+                        "hint": "Samakan semua suhu",
+                        "points": 25
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Berhasil mencapai kondisi kesetimbangan",
+                    "logic": "(TA == TB) && (TB == TC)",
+                    "feedback_text": "Semua sistem telah mencapai kesetimbangan termal!",
+                    "feedback_audio": "correct_01"
+                },
+                "lose": {
+                    "description": "Belum mencapai kesetimbangan",
+                    "logic": "!((TA == TB) && (TB == TC))",
+                    "feedback_text": "Suhu belum setimbang, coba lagi!",
+                    "feedback_audio": "wrong_01",
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 10,
+                    "wrong": -2,
+                    "bonus_time": 5
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Simulasi Perpindahan Kalor",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Konduksi, Konveksi, dan Radiasi",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisikaSMA11_perpindahankalor_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Simulasi Perpindahan Kalor",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Kalor",
+                "subbab": "Perpindahan Kalor",
+                "topik": "Konduksi, Konveksi, dan Radiasi",
+                "difficulty": 2,
+                "estimated_duration_minutes": 12,
+                "learning_objectives": [
+                    "Memahami tiga mekanisme perpindahan kalor",
+                    "Menganalisis faktor yang mempengaruhi konduksi",
+                    "Mengamati proses konveksi dalam fluida",
+                    "Menjelaskan perpindahan kalor melalui radiasi"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Misi Penyelamatan Energi",
+                    "story": "Kamu adalah seorang teknisi yang harus mengatur perpindahan kalor dalam berbagai sistem agar tidak terjadi kehilangan energi berlebih. Gunakan prinsip konduksi, konveksi, dan radiasi untuk menyelesaikan misi!",
+                    "image_description": "Dapur dengan panci panas, aliran udara, dan sinar panas dari api",
+                    "cta_text": "Mulai Simulasi"
+                },
+                "visual_element": {
+                    "theme_name": "Heat Transfer Lab",
+                    "theme_preset": "classroom",
+                    "mood": "eksperimental dan interaktif",
+                    "color_palette": {
+                        "primary": "#FF5722",
+                        "secondary": "#03A9F4",
+                        "background": "#FAFAFA",
+                        "accent": "#FFC107",
+                        "text": "#212121"
+                    },
+                    "setting_description": "Laboratorium dengan berbagai alat untuk mengamati perpindahan kalor",
+                    "art_style": "2D edukatif dengan animasi sederhana",
+                    "ambient_elements": [
+                        "api menyala",
+                        "aliran udara bergerak",
+                        "panas memancar"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Pilih jenis perpindahan kalor (konduksi, konveksi, atau radiasi)."
+                        },
+                        {
+                            "step": 2,
+                            "text": "Atur parameter seperti suhu, bahan, atau aliran fluida."
+                        },
+                        {
+                            "step": 3,
+                            "text": "Amati perubahan suhu dan aliran kalor pada simulasi."
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Petunjuk Penting",
+                        "strategy": "Konduksi terjadi pada benda padat, konveksi pada fluida, dan radiasi tidak memerlukan medium.",
+                        "formula": "Q = k*A*(ΔT)/d",
+                        "example": "Semakin besar perbedaan suhu, maka laju perpindahan kalor semakin besar.",
+                        "hint_image_description": "Ilustrasi konduksi pada batang logam, konveksi pada air mendidih, dan radiasi dari matahari"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_01",
+                            "event": "background",
+                            "description": "Suara api dan lingkungan laboratorium"
+                        },
+                        {
+                            "id": "correct_01",
+                            "event": "on_correct_action",
+                            "description": "Bunyi keberhasilan"
+                        },
+                        {
+                            "id": "wrong_01",
+                            "event": "on_wrong_action",
+                            "description": "Bunyi kesalahan"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_heat_transfer",
+                "scenario": {
+                    "title": "Eksperimen Perpindahan Kalor",
+                    "narrative": "Amati bagaimana kalor berpindah melalui berbagai mekanisme dalam sistem yang berbeda.",
+                    "context": "Sistem terdiri dari benda padat, cair, dan sumber panas."
+                },
+                "variables": [
+                    {
+                        "id": "T_hot",
+                        "label": "Suhu Panas",
+                        "symbol": "Tₕ",
+                        "unit": "°C",
+                        "type": "user_input",
+                        "min": 50,
+                        "max": 200,
+                        "default": 100,
+                        "step": 10
+                    },
+                    {
+                        "id": "T_cold",
+                        "label": "Suhu Dingin",
+                        "symbol": "T𝚌",
+                        "unit": "°C",
+                        "type": "user_input",
+                        "min": 0,
+                        "max": 50,
+                        "default": 25,
+                        "step": 5
+                    },
+                    {
+                        "id": "k",
+                        "label": "Konduktivitas Termal",
+                        "symbol": "k",
+                        "unit": "W/mK",
+                        "type": "user_input",
+                        "min": 0.1,
+                        "max": 5,
+                        "default": 1,
+                        "step": 0.1
+                    },
+                    {
+                        "id": "Q",
+                        "label": "Kalor",
+                        "symbol": "Q",
+                        "unit": "J",
+                        "type": "computed"
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_heat",
+                        "computes": "Q",
+                        "formula": "Q = k*(T_hot - T_cold)",
+                        "description": "Hubungan sederhana perpindahan kalor"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "graph",
+                        "x_axis": "T_hot",
+                        "y_axis": "Q",
+                        "title": "Kalor vs Suhu Panas"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Animasi perpindahan kalor melalui konduksi, konveksi, dan radiasi"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur parameter agar kalor yang berpindah lebih dari 200 J",
+                        "success_condition": "Q > 200",
+                        "hint": "Perbesar perbedaan suhu atau nilai konduktivitas",
+                        "points": 20
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Berhasil mencapai target perpindahan kalor",
+                    "logic": "Q > 200",
+                    "feedback_text": "Kamu berhasil mengoptimalkan perpindahan kalor!",
+                    "feedback_audio": "correct_01"
+                },
+                "lose": {
+                    "description": "Target belum tercapai",
+                    "logic": "Q <= 200",
+                    "feedback_text": "Kalor belum cukup besar, coba ubah parameter!",
+                    "feedback_audio": "wrong_01",
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 10,
+                    "wrong": -2,
+                    "bonus_time": 5
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Simulasi Pemuaian Zat",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Pengaruh Kalor terhadap Pemuaian",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisikaSMA11_pemuaian_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Simulasi Pemuaian Zat",
+                "subject": "Fisika",
+                "grade_level": "SMA-11",
+                "bab": "Kalor",
+                "subbab": "Kalor",
+                "topik": "Pengaruh Kalor terhadap Pemuaian",
+                "difficulty": 2,
+                "estimated_duration_minutes": 12,
+                "learning_objectives": [
+                    "Memahami konsep pemuaian zat padat",
+                    "Menganalisis hubungan antara suhu dan perubahan panjang",
+                    "Menghitung pemuaian panjang menggunakan koefisien muai",
+                    "Mengamati pengaruh jenis bahan terhadap pemuaian"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Misi Rel Kereta",
+                    "story": "Kamu adalah seorang insinyur yang bertugas memastikan rel kereta tidak melengkung akibat pemuaian saat suhu meningkat. Atur parameter suhu dan bahan untuk menjaga keamanan rel!",
+                    "image_description": "Rel kereta api di bawah sinar matahari dengan celah antar sambungan",
+                    "cta_text": "Mulai Simulasi"
+                },
+                "visual_element": {
+                    "theme_name": "Rail Expansion Lab",
+                    "theme_preset": "nusantara",
+                    "mood": "teknis dan realistis",
+                    "color_palette": {
+                        "primary": "#795548",
+                        "secondary": "#607D8B",
+                        "background": "#F5F5F5",
+                        "accent": "#FF9800",
+                        "text": "#212121"
+                    },
+                    "setting_description": "Lingkungan rel kereta dengan perubahan suhu siang hari",
+                    "art_style": "2D semi-realistis dengan animasi perubahan panjang",
+                    "ambient_elements": [
+                        "suara kereta melintas",
+                        "panas matahari",
+                        "logam memuai"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Atur suhu awal dan suhu akhir."
+                        },
+                        {
+                            "step": 2,
+                            "text": "Pilih jenis bahan dengan koefisien muai berbeda."
+                        },
+                        {
+                            "step": 3,
+                            "text": "Amati perubahan panjang benda akibat pemuaian."
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Konsep Pemuaian",
+                        "strategy": "Semakin besar perubahan suhu dan koefisien muai, maka pemuaian semakin besar.",
+                        "formula": "ΔL = α * L0 * ΔT",
+                        "example": "Jika α = 1x10^-5, L0 = 2 m, dan ΔT = 50°C, maka ΔL = 0.001 m",
+                        "hint_image_description": "Batang logam memanjang saat dipanaskan"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_01",
+                            "event": "background",
+                            "description": "Suara lingkungan rel kereta"
+                        },
+                        {
+                            "id": "correct_01",
+                            "event": "on_correct_action",
+                            "description": "Bunyi berhasil"
+                        },
+                        {
+                            "id": "wrong_01",
+                            "event": "on_wrong_action",
+                            "description": "Bunyi kesalahan"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "thermodynamics_expansion",
+                "scenario": {
+                    "title": "Pemuaian Rel Kereta",
+                    "narrative": "Amati bagaimana rel kereta memuai akibat perubahan suhu.",
+                    "context": "Rel logam mengalami pemanasan akibat sinar matahari."
+                },
+                "variables": [
+                    {
+                        "id": "L0",
+                        "label": "Panjang Awal",
+                        "symbol": "L₀",
+                        "unit": "m",
+                        "type": "user_input",
+                        "min": 1,
+                        "max": 10,
+                        "default": 5,
+                        "step": 1
+                    },
+                    {
+                        "id": "alpha",
+                        "label": "Koefisien Muai",
+                        "symbol": "α",
+                        "unit": "1/°C",
+                        "type": "user_input",
+                        "min": 0.000005,
+                        "max": 0.00002,
+                        "default": 0.00001,
+                        "step": 0.000001
+                    },
+                    {
+                        "id": "deltaT",
+                        "label": "Perubahan Suhu",
+                        "symbol": "ΔT",
+                        "unit": "°C",
+                        "type": "user_input",
+                        "min": 0,
+                        "max": 100,
+                        "default": 30,
+                        "step": 5
+                    },
+                    {
+                        "id": "deltaL",
+                        "label": "Pertambahan Panjang",
+                        "symbol": "ΔL",
+                        "unit": "m",
+                        "type": "computed"
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_expansion",
+                        "computes": "deltaL",
+                        "formula": "deltaL = alpha * L0 * deltaT",
+                        "description": "Rumus pemuaian panjang"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "graph",
+                        "x_axis": "deltaT",
+                        "y_axis": "deltaL",
+                        "title": "Pemuaian vs Perubahan Suhu"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Batang logam memanjang saat suhu meningkat"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur parameter agar pertambahan panjang lebih dari 0.005 m",
+                        "success_condition": "deltaL > 0.005",
+                        "hint": "Perbesar ΔT atau α",
+                        "points": 20
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Berhasil mencapai pemuaian target",
+                    "logic": "deltaL > 0.005",
+                    "feedback_text": "Rel aman dari kerusakan akibat pemuaian!",
+                    "feedback_audio": "correct_01"
+                },
+                "lose": {
+                    "description": "Pemuaian belum cukup",
+                    "logic": "deltaL <= 0.005",
+                    "feedback_text": "Pemuaian masih kecil, coba ubah parameter!",
+                    "feedback_audio": "wrong_01",
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 10,
+                    "wrong": -2,
+                    "bonus_time": 5
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    },
+    {
+        "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+        "input": {
+            "judul_game": "Eksperimen Suhu dan Termometer",
+            "jenjang": "SMA-11",
+            "mata_pelajaran": "Fisika",
+            "topik": "Pengertian Suhu dan Alat Ukurnya",
+            "tingkat_kesulitan": 2,
+            "jenis_game": "sim_lab"
+        },
+        "output":{
+            "schema_version": "1.2",
+            "game_id": "game_fisika_sma10_suhu_simlab_001",
+            "game_type": "sim_lab",
+            "metadata": {
+                "title": "Eksperimen Suhu dan Termometer",
+                "subject": "Fisika",
+                "grade_level": "SMA-10",
+                "bab": "Kalor",
+                "subbab": "Suhu",
+                "topik": "Pengertian Suhu dan Alat Ukurnya",
+                "difficulty": 2,
+                "estimated_duration_minutes": 10,
+                "learning_objectives": [
+                    "Memahami konsep suhu sebagai ukuran derajat panas atau dingin suatu benda",
+                    "Mengidentifikasi alat ukur suhu (termometer)",
+                    "Menganalisis perubahan suhu berdasarkan simulasi"
+                ],
+                "language": "id"
+            },
+            "presentation": {
+                "opening": {
+                    "id": "opening_001",
+                    "show_once": true,
+                    "title": "Laboratorium Suhu",
+                    "story": "Kamu adalah seorang ilmuwan muda yang sedang meneliti suhu berbagai zat. Gunakan termometer untuk mengamati perubahan suhu dan pahami konsep suhu!",
+                    "image_description": "Laboratorium dengan berbagai alat eksperimen dan termometer",
+                    "cta_text": "Mulai Eksperimen"
+                },
+                "visual_element": {
+                    "theme_name": "Lab Sains",
+                    "theme_preset": "classroom",
+                    "mood": "eksperimen dan edukatif",
+                    "color_palette": {
+                        "primary": "#2E86C1",
+                        "secondary": "#AED6F1",
+                        "background": "#EBF5FB",
+                        "accent": "#F39C12",
+                        "text": "#1B2631"
+                    },
+                    "setting_description": "Laboratorium sekolah dengan meja eksperimen dan alat ukur suhu",
+                    "art_style": "2D clean educational",
+                    "ambient_elements": [
+                        "suara alat laboratorium",
+                        "gelembung cairan",
+                        "indikator termometer naik turun"
+                    ]
+                },
+                "instructions": {
+                    "id": "howto_001",
+                    "trigger": {
+                        "type": "popup_button",
+                        "position": "top_right",
+                        "icon": "question_mark",
+                        "label": "Petunjuk"
+                    },
+                    "steps": [
+                        {
+                            "step": 1,
+                            "text": "Atur suhu awal zat menggunakan slider"
+                        },
+                        {
+                            "step": 2,
+                            "text": "Amati perubahan pada termometer"
+                        },
+                        {
+                            "step": 3,
+                            "text": "Bandingkan suhu beberapa zat"
+                        }
+                    ]
+                },
+                "hint": {
+                    "id": "hint_001",
+                    "scope": "global",
+                    "trigger": {
+                        "type": "auto_popup",
+                        "after_seconds": 60,
+                        "dismissible": true,
+                        "reusable": true,
+                        "manual_trigger_available": true
+                    },
+                    "content": {
+                        "title": "Konsep Suhu",
+                        "strategy": "Suhu menunjukkan derajat panas atau dingin suatu benda dan diukur dengan termometer.",
+                        "formula": null,
+                        "example": "Air panas memiliki suhu lebih tinggi dibandingkan air dingin.",
+                        "hint_image_description": "Termometer menunjukkan perbedaan suhu"
+                    }
+                },
+                "audio": {
+                    "enabled": true,
+                    "tracks": [
+                        {
+                            "id": "bg_lab",
+                            "event": "background",
+                            "description": "Suara latar laboratorium"
+                        },
+                        {
+                            "id": "correct",
+                            "event": "on_correct_action",
+                            "description": "Bunyi klik berhasil"
+                        },
+                        {
+                            "id": "wrong",
+                            "event": "on_wrong_action",
+                            "description": "Bunyi error lembut"
+                        }
+                    ]
+                }
+            },
+            "payload": {
+                "sim_subtype": "temperature_measurement",
+                "scenario": {
+                    "title": "Mengukur Suhu Zat",
+                    "narrative": "Gunakan termometer untuk mengukur suhu beberapa zat dan bandingkan hasilnya.",
+                    "context": "Beberapa zat memiliki suhu berbeda di dalam laboratorium."
+                },
+                "variables": [
+                    {
+                        "id": "temp",
+                        "label": "Suhu",
+                        "symbol": "T",
+                        "unit": "°C",
+                        "type": "user_input",
+                        "min": 0,
+                        "max": 100,
+                        "default": 25,
+                        "step": 1
+                    },
+                    {
+                        "id": "thermometer_reading",
+                        "label": "Pembacaan Termometer",
+                        "symbol": "T_read",
+                        "unit": "°C",
+                        "type": "computed"
+                    }
+                ],
+                "equations": [
+                    {
+                        "id": "eq_temp",
+                        "computes": "thermometer_reading",
+                        "formula": "thermometer_reading = temp",
+                        "description": "Pembacaan termometer sesuai suhu benda"
+                    }
+                ],
+                "visualizations": [
+                    {
+                        "id": "viz_1",
+                        "type": "gauge",
+                        "title": "Termometer",
+                        "description": "Visualisasi termometer yang menunjukkan suhu"
+                    },
+                    {
+                        "id": "viz_2",
+                        "type": "animation",
+                        "description": "Cairan dalam termometer naik turun sesuai suhu"
+                    }
+                ],
+                "challenges": [
+                    {
+                        "id": "ch_001",
+                        "task": "Atur suhu hingga termometer menunjukkan 50°C",
+                        "success_condition": "abs(thermometer_reading - 50) < 1",
+                        "hint": "Geser nilai suhu hingga mencapai 50°C",
+                        "points": 20
+                    }
+                ]
+            },
+            "win_lose_condition": {
+                "applicable": true,
+                "win": {
+                    "description": "Berhasil mencapai suhu target",
+                    "logic": "abs(thermometer_reading - 50) < 1",
+                    "feedback_text": "Hebat! Kamu berhasil memahami konsep suhu.",
+                    "feedback_audio": null
+                },
+                "lose": {
+                    "description": "Gagal mencapai suhu target",
+                    "logic": "time_up",
+                    "feedback_text": "Coba lagi dan perhatikan pembacaan termometer.",
+                    "feedback_audio": null,
+                    "retry_allowed": true
+                }
+            },
+            "gameplay_parameters": {
+                "scoring": {
+                    "correct": 10,
+                    "wrong": -2,
+                    "bonus_time": 5
+                },
+                "lives": 3,
+                "time_limit_seconds": 300,
+                "pass_threshold": 70
+            }
+        }
+    }
+]

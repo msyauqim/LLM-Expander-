@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Batu di Lereng Gunung Nusantara",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Jenis-jenis Gaya",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_din_jenisgaya_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Batu di Lereng Gunung Nusantara",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika Gerak Partikel",
+      "subbab": "Jenis-Jenis Gaya",
+      "topik": "Jenis-jenis Gaya",
+      "difficulty": 3,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat mengidentifikasi dan menguraikan gaya berat, gaya normal, dan gaya gesek pada benda di bidang miring",
+        "Siswa dapat menghitung komponen gaya berat pada arah sejajar dan tegak lurus bidang miring",
+        "Siswa dapat menentukan kondisi keseimbangan benda di bidang miring berdasarkan hubungan koefisien gesek dan sudut kemiringan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Batu Megalit di Lereng Gunung",
+        "story": "Arkeolog muda dari Nusantara menemukan batu megalit bersejarah di lereng gunung berapi. Untuk memindahkannya dengan aman, tim perlu menghitung semua gaya yang bekerja: gaya berat, gaya normal lereng, dan gaya gesek. Bantu mereka menganalisis gaya-gaya pada batu di bidang miring agar batu tidak meluncur sebelum waktunya!",
+        "image_description": "Lereng gunung berapi Nusantara dengan vegetasi tropis, batu megalit berbentuk lonjong di lereng, diagram gaya berwarna-warni (merah untuk berat, biru untuk normal, kuning untuk gesek) tampil sebagai overlay, latar langit dramatis jingga dan biru",
+        "cta_text": "Analisis Gaya"
+      },
+      "visual_element": {
+        "theme_name": "Nusantara Highland",
+        "theme_preset": "nusantara",
+        "mood": "dramatic, educational, cultural",
+        "color_palette": {
+          "primary": "#8e2de2",
+          "secondary": "#c0392b",
+          "background": "#fef5e4",
+          "accent": "#e67e22",
+          "text": "#2c3e50"
+        },
+        "setting_description": "Lereng gunung berapi Nusantara dengan tanah merah kecoklatan, pepohonan tropis rimbun, motif ornamen Nusantara di tepi panel, dan anak panah gaya yang diwarnai seperti batik tradisional.",
+        "art_style": "flat design bergaya ilustrasi Nusantara dengan ornamen tradisional dan warna tanah yang hangat",
+        "ambient_elements": [
+          "Asap tipis mengepul dari kawah gunung di kejauhan",
+          "Daun-daun tropis bergerak tertiup angin pegunungan",
+          "Motif ornamen batik berkilau di bingkai diagram gaya"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur sudut kemiringan lereng (θ) dengan slider." },
+          { "step": 2, "text": "Atur massa batu (m) dengan slider." },
+          { "step": 3, "text": "Atur koefisien gesek antara batu dan lereng (μ)." },
+          { "step": 4, "text": "Amati gaya berat, gaya normal, gaya gesek, dan percepatan batu." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk menyelamatkan batu megalit!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Gaya-Gaya pada Bidang Miring",
+          "strategy": "Uraikan gaya berat (W=mg) menjadi dua komponen: sejajar lereng (W_par = mg·sinθ, ke bawah lereng) dan tegak lurus lereng (W_perp = mg·cosθ). Gaya normal = W_perp. Gaya gesek = μ·N = μ·mg·cosθ (melawan arah gerak). Percepatan = g·(sinθ − μ·cosθ); tidak bergantung pada massa!",
+          "formula": "N = mg·cosθ,  f = μ·N,  a = g·(sinθ − μ·cosθ)",
+          "example": "θ=30°, μ=0,2, g=10: a=10×(0,5−0,2×0,866)=10×(0,5−0,173)=3,27 m/s². Keseimbangan saat μ=tanθ.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_slide", "event": "on_correct_action", "description": "Suara batu bergerak di atas pasir dan kerikil lereng gunung saat parameter diubah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara gamelan singkat yang meriah sebagai tanda misi berhasil" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Suara batu meluncur dan jatuh disertai gerungan singkat" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Gaya pada Batu di Bidang Miring",
+        "narrative": "Atur sudut kemiringan lereng, massa batu, dan koefisien gesek. Simulasi menguraikan semua gaya yang bekerja dan menghitung percepatan batu. Perhatikan bahwa percepatan tidak bergantung pada massa karena massa saling meniadakan!",
+        "context": "Bidang miring satu dimensi; batu dianggap partikel titik; g = 10 m/s²; gaya gesek selalu ke atas lereng (melawan gerak); percepatan positif berarti batu meluncur ke bawah."
+      },
+      "variables": [
+        { "id": "sudut", "label": "Sudut kemiringan lereng", "symbol": "θ", "unit": "derajat", "type": "user_input", "min": 1, "max": 60, "default": 30, "step": 1 },
+        { "id": "massa", "label": "Massa batu", "symbol": "m", "unit": "kg", "type": "user_input", "min": 1, "max": 50, "default": 10, "step": 1 },
+        { "id": "koef_gesek", "label": "Koefisien gesek statis", "symbol": "μ", "unit": "-", "type": "user_input", "min": 0, "max": 0.9, "default": 0.3, "step": 0.05 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 10 },
+        { "id": "gaya_berat", "label": "Gaya berat", "symbol": "W", "unit": "N", "type": "computed" },
+        { "id": "gaya_normal", "label": "Gaya normal", "symbol": "N", "unit": "N", "type": "computed" },
+        { "id": "gaya_gesek", "label": "Gaya gesek", "symbol": "f", "unit": "N", "type": "computed" },
+        { "id": "percepatan", "label": "Percepatan batu", "symbol": "a", "unit": "m/s²", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_berat", "computes": "gaya_berat", "formula": "gaya_berat = massa * 10", "description": "Gaya berat batu = massa × gravitasi (g=10 m/s²)" },
+        { "id": "eq_normal", "computes": "gaya_normal", "formula": "gaya_normal = massa * 10 * cos(sudut * pi / 180)", "description": "Gaya normal = komponen gaya berat tegak lurus bidang miring" },
+        { "id": "eq_gesek", "computes": "gaya_gesek", "formula": "gaya_gesek = koef_gesek * gaya_normal", "description": "Gaya gesek kinetik = koefisien gesek × gaya normal, menahan batu agar tidak meluncur" },
+        { "id": "eq_percepatan", "computes": "percepatan", "formula": "percepatan = 10 * (sin(sudut * pi / 180) - koef_gesek * cos(sudut * pi / 180))", "description": "Percepatan batu di bidang miring; tidak bergantung massa karena massa saling meniadakan" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Diagram bidang miring dengan batu di atasnya; tiga anak panah gaya: merah (berat W ke bawah), biru (normal N tegak lurus bidang), kuning (gesek f ke atas lereng); komponen gaya berat W_par dan W_perp digambarkan dengan garis putus-putus" },
+        { "id": "viz_2", "type": "graph", "x_axis": "sudut", "y_axis": "percepatan", "title": "Percepatan vs Sudut Kemiringan" },
+        { "id": "viz_3", "type": "table", "title": "Ringkasan Gaya pada Batu", "description": "Tabel menampilkan W, N, f, dan percepatan secara real-time; baris percepatan ditandai merah jika > 0 (batu meluncur) dan hijau jika ≤ 0 (batu diam)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur sudut=30° dan koef_gesek=0,2. Verifikasi bahwa percepatan batu ≈ 3,27 m/s² (batu meluncur). Apakah hasilnya bergantung pada massa batu?",
+          "success_condition": "abs(sudut - 30) < 1 AND abs(koef_gesek - 0.2) < 0.02 AND abs(percepatan - 3.27) < 0.3",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi sudut dan koef_gesek sedemikian sehingga percepatan batu = 0 (batu tepat seimbang di lereng, tidak meluncur). Ingat syaratnya: μ = tan(θ).",
+          "success_condition": "abs(percepatan) < 0.15 AND sudut > 5 AND koef_gesek > 0",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur sudut=45° dan koef_gesek=0,5. Verifikasi bahwa percepatan batu = 0 karena sin45° = cos45° sehingga μ = tan(45°) = 1... Tunggu, coba hitung sendiri dan periksa apakah batu diam atau bergerak!",
+          "success_condition": "abs(sudut - 45) < 1 AND abs(koef_gesek - 0.5) < 0.02 AND percepatan > 0",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua tantangan analisis gaya pada bidang miring",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Batu megalit aman! Kamu memahami gaya-gaya pada bidang miring. Ingat: keseimbangan terjadi saat μ = tan(θ)!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Misi gagal! Ingat: a = g(sinθ − μ·cosθ). Jika hasilnya positif, batu meluncur. Coba lagi!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

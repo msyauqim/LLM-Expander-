@@ -1,0 +1,239 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Representasi Vektor"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_representasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Studio Panah Vektor",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Representasi Vektor",
+      "topik": "Representasi Vektor",
+      "difficulty": 1,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat merepresentasikan vektor sebagai panah dengan panjang sebanding magnitudo dan arah yang benar",
+        "Siswa dapat menguraikan vektor 2D menjadi komponen horizontal (Ax) dan vertikal (Ay)",
+        "Siswa dapat menentukan besar dan sudut vektor dari komponen-komponennya menggunakan Pythagoras dan arctan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Papan Gambar Vektor",
+        "story": "Selamat datang di Studio Vektor! Kamu adalah arsitek panah — tugasmu merancang vektor di bidang koordinat. Atur besar dan sudut panah, lalu amati bagaimana komponen-komponennya berubah secara langsung. Kuasai seni representasi vektor sebelum melangkah ke operasi yang lebih rumit!",
+        "image_description": "Bidang koordinat kartesius besar di papan gambar putih dengan panah vektor berwarna biru cerah, komponen x dan y ditandai garis putus-putus merah dan kuning, busur derajat di origin, suasana studio desain modern",
+        "cta_text": "Buka Studio"
+      },
+      "visual_element": {
+        "theme_name": "Blueprint Studio",
+        "theme_preset": "minimal_mono",
+        "mood": "precise, clean, exploratory",
+        "color_palette": {
+          "primary": "#3a86ff",
+          "secondary": "#ff6b6b",
+          "background": "#f8f9fa",
+          "accent": "#ffd166",
+          "text": "#212529"
+        },
+        "setting_description": "Studio desain bersih dengan meja gambar putih, grid koordinat halus abu-abu, panah vektor biru cerah, komponen ditampilkan garis putus merah (Ax) dan kuning (Ay), busur transparan di origin.",
+        "art_style": "technical blueprint illustration, flat and precise",
+        "ambient_elements": [
+          "Grid koordinat halus di seluruh layar",
+          "Label sumbu x dan y yang bersih",
+          "Busur derajat transparan di titik origin",
+          "Angka derajat muncul saat sudut diubah"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Geser slider |A| untuk mengubah panjang (besar) panah vektor." },
+          { "step": 2, "text": "Geser slider θ untuk memutar arah panah (0°–360°)." },
+          { "step": 3, "text": "Amati panah vektor, komponen Ax, dan Ay berubah secara real-time." },
+          { "step": 4, "text": "Panel data menampilkan nilai Ax, Ay, |A|, dan θ secara otomatis." },
+          { "step": 5, "text": "Selesaikan tantangan dengan mencapai nilai komponen yang diminta!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 50,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Rumus Komponen Vektor",
+          "strategy": "Bayangkan vektor sebagai sisi miring segitiga siku-siku. Komponen Ax adalah proyeksi pada sumbu-x (sisi mendatar), Ay adalah proyeksi pada sumbu-y (sisi tegak). Gunakan trigonometri untuk menghitung keduanya.",
+          "formula": "Ax = |A|·cos θ  |  Ay = |A|·sin θ  |  |A| = √(Ax² + Ay²)  |  θ = arctan(Ay/Ax)",
+          "example": "Vektor |A|=10, θ=53°: Ax = 10·cos53° = 10·0,6 = 6 satuan, Ay = 10·sin53° = 10·0,8 = 8 satuan.",
+          "hint_image_description": "Segitiga siku-siku di kuadran I dengan sisi miring berlabel |A|, sisi horizontal berlabel Ax = |A|cosθ, sisi vertikal berlabel Ay = |A|sinθ, sudut θ di origin diberi busur"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara klik presisi saat nilai komponen sesuai target tantangan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi ding ringan dan animasi bintang saat semua tantangan selesai" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik lo-fi instrumental ringan, bertempo santai, cocok untuk eksplorasi dan fokus, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Laboratorium Representasi Vektor 2D",
+        "narrative": "Eksplorasi representasi vektor pada bidang koordinat Kartesius. Atur besar dan sudut vektor, amati panah yang terbentuk beserta komponen-komponennya, dan verifikasi hubungan trigonometrinya.",
+        "context": "Vektor 2D pada bidang koordinat Kartesius. Sudut θ diukur dari sumbu-x positif berlawanan arah jarum jam (konvensi standar). Satuan panjang bersifat arbitrer."
+      },
+      "variables": [
+        {
+          "id": "magnitude",
+          "label": "Besar vektor",
+          "symbol": "|A|",
+          "unit": "satuan",
+          "type": "user_input",
+          "min": 1,
+          "max": 20,
+          "default": 10,
+          "step": 0.5
+        },
+        {
+          "id": "theta",
+          "label": "Sudut vektor",
+          "symbol": "θ",
+          "unit": "derajat",
+          "type": "user_input",
+          "min": 0,
+          "max": 360,
+          "default": 45,
+          "step": 1
+        },
+        {
+          "id": "ax",
+          "label": "Komponen horizontal",
+          "symbol": "Ax",
+          "unit": "satuan",
+          "type": "computed"
+        },
+        {
+          "id": "ay",
+          "label": "Komponen vertikal",
+          "symbol": "Ay",
+          "unit": "satuan",
+          "type": "computed"
+        },
+        {
+          "id": "quadrant",
+          "label": "Kuadran",
+          "symbol": "Q",
+          "unit": "",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_ax",
+          "computes": "ax",
+          "formula": "ax = magnitude * cos(theta * pi / 180)",
+          "description": "Komponen horizontal vektor A pada sumbu-x"
+        },
+        {
+          "id": "eq_ay",
+          "computes": "ay",
+          "formula": "ay = magnitude * sin(theta * pi / 180)",
+          "description": "Komponen vertikal vektor A pada sumbu-y"
+        },
+        {
+          "id": "eq_check_magnitude",
+          "computes": "magnitude_check",
+          "formula": "magnitude_check = sqrt(ax^2 + ay^2)",
+          "description": "Verifikasi: rekonstruksi besar vektor dari komponen (harus sama dengan |A|)"
+        },
+        {
+          "id": "eq_check_theta",
+          "computes": "theta_check",
+          "formula": "theta_check = atan2(ay, ax) * 180 / pi",
+          "description": "Verifikasi: rekonstruksi sudut dari komponen menggunakan atan2"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_arrow",
+          "type": "animation",
+          "title": "Panah Vektor di Bidang Koordinat",
+          "description": "Panah dari titik origin (0,0) ke ujung vektor. Panjang proporsional terhadap |A|, arah sesuai θ. Komponen Ax (garis putus horizontal merah) dan Ay (garis putus vertikal kuning) ditampilkan real-time."
+        },
+        {
+          "id": "viz_components_table",
+          "type": "table",
+          "title": "Panel Data Vektor",
+          "description": "Tabel real-time menampilkan |A|, θ, Ax, Ay, dan kuadran yang diperbarui setiap slider digeser."
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur vektor sehingga komponen horizontalnya (Ax) tepat bernilai 0. Pada sudut berapa saja hal ini terjadi? Temukan dua sudut yang berbeda.",
+          "success_condition": "abs(ax) < 0.3",
+          "points": 20
+        },
+        {
+          "id": "ch_002",
+          "task": "Buat vektor dengan |A| = 10 satuan dan θ = 53°. Verifikasi bahwa Ax ≈ 6 satuan dan Ay ≈ 8 satuan menggunakan simulator.",
+          "success_condition": "abs(magnitude - 10) < 0.5 AND abs(theta - 53) <= 2",
+          "points": 25
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur vektor agar berada di Kuadran II (Ax negatif, Ay positif). Berapa rentang sudut yang memenuhi kondisi ini?",
+          "success_condition": "ax < -0.5 AND ay > 0.5",
+          "points": 25
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal 2 dari 3 tantangan representasi",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Bravo, Arsitek Vektor! Kamu menguasai representasi panah vektor di bidang koordinat!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat rumus Ax = |A|cosθ dan Ay = |A|sinθ. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_slider_change": 1
+      },
+      "lives": null,
+      "time_limit_seconds": 720,
+      "pass_threshold": 50
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Puzzle Game Payload",
+  "description": "Schema payload untuk game_type: puzzle_game. Game berbasis teka-teki logika, drag-drop, susun urutan, pilihan ganda interaktif.",
+  "type": "object",
+  "required": ["instruction", "stages"],
+  "properties": {
+    "instruction": {
+      "type": "string",
+      "description": "Instruksi singkat cara bermain puzzle"
+    },
+    "intro_narrative": {
+      "type": "string",
+      "description": "Narasi pembuka sebelum puzzle dimulai"
+    },
+    "outro_narrative": {
+      "type": "string",
+      "description": "Narasi penutup setelah semua stage selesai"
+    },
+    "distractors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Jawaban pengecoh tambahan untuk meningkatkan kesulitan (opsional)"
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["stage_id", "title", "description", "challenges"],
+        "properties": {
+          "stage_id": { "type": "integer" },
+          "title": { "type": "string" },
+          "description": { "type": "string", "description": "Narasi atau konteks cerita untuk stage ini" },
+          "challenges": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "prompt", "answer", "explanation"],
+              "properties": {
+                "id": { "type": "integer" },
+                "type": {
+                  "type": "string",
+                  "enum": ["multiple_choice", "drag_sort", "drag_match", "calculate", "true_false"],
+                  "description": "Tipe tantangan"
+                },
+                "prompt": { "type": "string" },
+                "image_hint": { "type": "string", "description": "Deskripsi gambar/diagram yang perlu di-render" },
+                "options": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "answer": {
+                  "description": "Jawaban benar. String untuk MC/calculate/true_false, array string untuk drag_sort/drag_match",
+                  "oneOf": [
+                    { "type": "string" },
+                    { "type": "array", "items": { "type": "string" } }
+                  ]
+                },
+                "explanation": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

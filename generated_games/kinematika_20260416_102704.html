@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<style>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const GameEdukasi = () => {
+  const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'end'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(5);
+  const [isRunning, setIsRunning] = useState(false);
+  const [questions, setQuestions] = useState([
+    {
+      question: "Apa ibukota Indonesia?",
+      options: ["Jakarta", "Bandung", "Surabaya", "Medan"],
+      answer: 0
+    },
+    {
+      question: "Berapa hasil dari 12 + 8?",
+      options: ["18", "20", "22", "16"],
+      answer: 1
+    },
+    {
+      question: "Apa warna bendera Indonesia?",
+      options: ["Merah Biru", "Hijau Putih", "Merah Putih", "Biru Kuning"],
+      answer: 2
+    },
+    {
+      question: "Siapa penemu bola lampu?",
+      options: ["Newton", "Einstein", "Edison", "Tesla"],
+      answer: 2
+    },
+    {
+      question: "Berapa jumlah sisi pada kubus?",
+      options: ["4", "6", "8", "12"],
+      answer: 1
+    }
+  ]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackCorrect, setFeedbackCorrect] = useState(false);
+
+  const initGame = useCallback(() => {
+    setScore(0);
+    setLives(3);
+    setTimeLeft(30);
+    setCurrentQuestion(0);
+    setCurrentIndex(0);
+    setAnswers([]);
+    setShowFeedback(false);
+  }, []);
+
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+  };
+
+  const endGame = () => {
+    setGameState('end');
+    setIsRunning(false);
+  };
+
+  const updateScore = (points) => {
+    setScore(prev => prev + points);
+  };
+
+  const updateTimer = () => {
+    if (timeLeft > 0 && isRunning) {
+      setTimeLeft(prev => prev - 1);
+    } else if (timeLeft === 0 && isRunning) {
+      endGame();
+    }
+  };
+
+  const showFeedback = (correct) => {
+    setFeedbackCorrect(correct);
+    setFeedbackMessage(correct ? 'Benar!' : 'Salah!');
+    setShowFeedback(true);
+    setTimeout(() => {
+      setShowFeedback(false);
+      nextQuestion();
+    }, 1500);
+  };
+
+  const handleAnswer = (index) => {
+    const isCorrect = index === questions[currentIndex].answer;
+    if (isCorrect) {
+      updateScore(10);
+    } else {
+      setLives(prev => prev - 1);
+    }
+    showFeedback(isCorrect);
+  };
+
+  const nextQuestion = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      endGame();
+    }
+  };
+
+  const showInstructions = () => {
+    setGameState('instructions');
+  };
+
+  const hideInstructions = () => {
+    setGameState('start');
+  };
+
+  useEffect(() => {
+    let interval = null;
+    if (isRunning && gameState === 'playing') {
+      interval = setInterval(updateTimer, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, gameState]);
+
+  useEffect(() => {
+    if (lives <= 0) {
+      endGame();
+    }
+  }, [lives]);
+
+  const currentQ = questions[currentIndex];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      {/* Particle background effect */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-blue-200 rounded-full opacity-30 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${2 + Math.random() * 3}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div id="game-container" className="w-full max-w-4xl mx-auto relative z-10">
+        
+        {/* Start Screen */}
+        {gameState === 'start' && (
+          <div id="start-screen" className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+                Game Edukasi
+              </h1>
+              <p className="text-xl text-gray-700 mb-8">Uji pengetahuanmu dan bersenang-senanglah!</p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+                    <h3 className="font-semibold text-gray-800">Skor</h3>
+                    <p className="text-2xl font-bold text-blue-600">0</p>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+                    <h3 className="font-semibold text-gray-800">Nyawa</h3>
+                    <p className="text-2xl font-bold text-red-500">3 ❤️</p>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+                    <h3 className="font-semibold text-gray-800">Waktu</h3>
+                    <p className="text-2xl font-bold text-green-600">30s</p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={startGame}
+                className="btn-primary bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                Mulai Bermain
+              </button>
+
+              <button
+                onClick={showInstructions}
+                className="btn-secondary ml-4 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-3 rounded-xl text-lg font-medium shadow-lg transform transition-all duration-300 hover:scale-105"
+              >
+                Petunjuk
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Instructions Screen */}
+        {gameState === 'instructions' && (
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6">
+                Petunjuk Permainan
+              </h2>
+              <div className="text-left space-y-4 text-gray-700 mb-8 max-w-2xl mx-auto">
+                <p>• Pilih jawaban yang benar dari pertanyaan yang tersedia</p>
+                <p>• Setiap jawaban benar memberikan 10 poin</p>
+                <p>• Jawaban salah mengurangi 1 nyawa</p>
+                <p>• Waktu per soal adalah 30 detik</p>
+                <p>• Permainan berakhir jika waktu habis atau nyawa habis</p>
+              </div>
+              <button
+                onClick={hideInstructions}
+                className="btn-primary bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold shadow-lg transform transition-all duration-300 hover:scale-105"
+              >
+                Kembali
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Game Screen */}
+        {gameState === 'playing' && (
+          <div id="game-screen" className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="flex justify-between items-center mb-6">
+              <div id="score-display" className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/30">
+                <span className="text-lg font-semibold text-gray-800">Skor: </span>
+                <span className="text-2xl font-bold text-blue-600">{score}</span>
+              </div>
+              <div id="timer-display" className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/30">
+                <span className="text-lg font-semibold text-gray-800">Waktu: </span>
+                <span className={`text-2xl font-bold ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-green-600'}`}>
+                  {timeLeft}s
+                </span>
+              </div>
+              <div id="lives-display" className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/30">
+                <span className="text-lg font-semibold text-gray-800">Nyawa: </span>
+                <span className="text-2xl font-bold text-red-500">
+                  {'❤️'.repeat(lives)}
+                </span>
+              </div>
+            </div>
+
+            <div id="scene-area" className="mb-6">
+              <div className="card bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+                  Pertanyaan {currentIndex + 1} dari {questions.length}
+                </h3>
+                <p className="text-xl text-gray-700 mb-6 text-center leading-relaxed">
+                  {currentQ.question}
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {currentQ.options.map((option, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleAnswer(index)}
+                      className="btn-primary bg-white/30 hover:bg-white/40 backdrop-blur-sm border border-white/40 text-gray-800 px-6 py-4 rounded-xl text-lg font-semibold shadow-md transform transition-all duration-200 hover:scale-105 hover:shadow-lg text-left hover:border-white/60"
+                    >
+                      {String.fromCharCode(65 + index)}. {option}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Feedback Display */}
+            {showFeedback && (
+              <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white/90 backdrop-blur-sm rounded-2xl p-8 border-4 ${
+                feedbackCorrect ? 'border-green-500' : 'border-red-500'
+              } shadow-2xl`}>
+                <div className={`text-6xl text-center mb-4 ${feedbackCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                  {feedbackCorrect ? '✓' : '✗'}
+                </div>
+                <h3 className={`text-3xl font-bold text-center ${
+                  feedbackCorrect ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {feedbackMessage}
+                </h3>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* End Screen */}
+        {gameState === 'end' && (
+          <div id="end-screen" className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="text-center">
+              <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6">
+                Permainan Selesai!
+              </h2>
+              
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border border-white/30 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6">
+                    <h3 className="text-lg font-semibold mb-2">Skor Akhir</h3>
+                    <p className="text-3xl font-bold">{score}</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6">
+                    <h3 className="text-lg font-semibold mb-2">Pertanyaan Benar</h3>
+                    <p className="text-3xl font-bold">{Math.floor(score / 10)}</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6">
+                    <h3 className="text-lg font-semibold mb-2">Kesalahan</h3>
+                    <p className="text-3xl font-bold">{3 - lives}</p>
+                  </div>
+                </div>
+                
+                <div className="mb-8">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Statistik:</h3>
+                  <p className="text-lg text-gray-700">
+                    {score >= 30 ? '🎉 Luar biasa! Kamu sangat pintar!' :
+                     score >= 20 ? '👍 Bagus sekali! Teruskan belajar!' :
+                     score >= 10 ? '😊 Lumayan! Belajar lebih giat ya!' :
+                     '📚 Jangan menyerah! Terus belajar dan coba lagi!'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-x-4">
+                <button
+                  onClick={startGame}
+                  className="btn-primary bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold shadow-lg transform transition-all duration-300 hover:scale-105"
+                >
+                  Main Lagi
+                </button>
+                <button
+                  onClick={() => setGameState('start')}
+                  className="btn-secondary bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-8 py-4 rounded-xl text-xl font-semibold shadow-lg transform transition-all duration-300 hover:scale-105"
+                >
+                  Menu Utama
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default GameEdukasi;
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Fisika SMA-10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 35, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            padding: 40px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            color: #4cc9f0;
+            text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+        }
+
+        h2 {
+            color: #f72585;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-primary, .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #f72585, #b5179e);
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4cc9f0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a9a9b3;
+        }
+
+        .question-container {
+            background: rgba(30, 30, 46, 0.7);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            background: rgba(25, 25, 35, 0.8);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .incorrect {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(76, 201, 240, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(76, 201, 240, 0.8);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(30, 30, 46, 0.7);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: #f72585;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4cc9f0;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .end-screen h2 {
+            color: #4cc9f0;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            color: #f72585;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4361ee, #f72585);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .screen {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h1>🎮 Game Edukasi Fisika SMA-10</h1>
+            <div class="card">
+                <h2>Uji Pengetahuanmu!</h2>
+                <p style="margin: 15px 0; line-height: 1.6;">
+                    Jawab pertanyaan-pertanyaan fisika tingkat SMA kelas 10. 
+                    Kumpulkan skor tertinggi dan tingkatkan pemahamanmu!
+                </p>
+                <button id="instructions-btn" class="btn-secondary">Petunjuk Bermain</button>
+            </div>
+            <button id="start-btn" class="btn-primary glow">Mulai Permainan</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="score-display">0</div>
+                    <div class="stat-label">Skor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lives-display">3</div>
+                    <div class="stat-label">Nyawa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timer-display">60</div>
+                    <div class="stat-label">Waktu</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+
+            <div id="scene-area" class="question-container">
+                <div class="question-text" id="current-question">Memuat soal...</div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="answer-input" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
+                <button id="submit-btn" class="btn-primary">Submit</button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen">
+            <h2>🎉 Permainan Selesai!</h2>
+            <div class="final-score" id="final-score">0</div>
+            <div class="card">
+                <p id="result-message">Kerja bagus! Kamu telah menyelesaikan permainan.</p>
+            </div>
+            <button id="restart-btn" class="btn-primary">Main Lagi</button>
+            <button id="back-to-menu-btn" class="btn-secondary">Kembali ke Menu</button>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="instructions-modal hidden">
+        <div class="modal-content">
+            <h2>Petunjuk Bermain</h2>
+            <ul style="margin: 20px 0; line-height: 1.8;">
+                <li>Jawab pertanyaan fisika secepat dan seakurat mungkin</li>
+                <li>Kamu memiliki 3 nyawa dan waktu terbatas</li>
+                <li>Setiap jawaban benar memberimu 10 poin</li>
+                <li>Jawaban salah mengurangi 1 nyawa</li>
+                <li>Tujuan: Kumpulkan skor tertinggi sebelum waktu habis!</li>
+            </ul>
+            <button id="close-instructions" class="close-btn">Mengerti!</button>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let gameState = 'menu'; // menu, playing, ended
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 60;
+        let currentQuestion = 0;
+        let totalQuestions = 10;
+        let isRunning = false;
+        let timerInterval = null;
+
+        // Questions about Physics for SMA-10
+        const questions = [
+            {
+                question: "Apa satuan dasar untuk panjang dalam Sistem Internasional?",
+                answer: "meter"
+            },
+            {
+                question: "Berapa nilai percepatan gravitasi standar di permukaan bumi?",
+                answer: "9.8 meter per detik kuadrat"
+            },
+            {
+                question: "Apa nama hukum yang menyatakan bahwa gaya aksi sama besar dan berlawanan arah dengan gaya reaksi?",
+                answer: "hukum ketiga newton"
+            },
+            {
+                question: "Apa satuan dari energi dalam sistem internasional?",
+                answer: "joule"
+            },
+            {
+                question: "Apa nama alat ukur tekanan?",
+                answer: "manometer"
+            },
+            {
+                question: "Apa rumus untuk menghitung kecepatan?",
+                answer: "jarak dibagi waktu"
+            },
+            {
+                question: "Apa istilah untuk perubahan kecepatan per satuan waktu?",
+                answer: "percepatan"
+            },
+            {
+                question: "Apa nama hukum yang menyatakan bahwa energi tidak dapat diciptakan maupun dimusnahkan?",
+                answer: "hukum kekekalan energi"
+            },
+            {
+                question: "Apa satuan dari gaya dalam sistem internasional?",
+                answer: "newton"
+            },
+            {
+                question: "Apa nama fenomena di mana cahaya dibelokkan saat melewati medium yang berbeda?",
+                answer: "pembiasan"
+            }
+        ];
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const backToMenuBtn = document.getElementById('back-to-menu-btn');
+        const answerInput = document.getElementById('answer-input');
+        const currentQuestionEl = document.getElementById('current-question');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const feedbackEl = document.getElementById('feedback');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultMessage = document.getElementById('result-message');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const closeInstructions = document.getElementById('close-instructions');
+        const progressBar = document.getElementById('progress-bar');
+
+        // Initialize game
+        function initGame() {
+            score = 0;
+            lives = 3;
+            timeLeft = 60;
+            currentQuestion = 0;
+            updateScore();
+            updateLives();
+            updateTimer();
+            showCurrentQuestion();
+        }
+
+        // Start game
+        function startGame() {
+            initGame();
+            gameState = 'playing';
+            startScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+            isRunning = true;
+            
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Update score display
+        function updateScore() {
+            scoreDisplay.textContent = score;
+        }
+
+        // Update lives display
+        function updateLives() {
+            livesDisplay.textContent = lives;
+        }
+
+        // Update timer display
+        function updateTimer() {
+            timerDisplay.textContent = timeLeft;
+            timeLeft--;
+            
+            if (timeLeft < 0) {
+                endGame();
+            }
+        }
+
+        // Show current question
+        function showCurrentQuestion() {
+            if (currentQuestion < questions.length) {
+                currentQuestionEl.textContent = questions[currentQuestion].question;
+                answerInput.value = '';
+                feedbackEl.style.display = 'none';
+                
+                // Update progress bar
+                const progressPercent = ((currentQuestion) / questions.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+            } else {
+                endGame();
+            }
+        }
+
+        // Check answer
+        function checkAnswer() {
+            if (!isRunning) return;
+            
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                // Correct answer
+                score += 10;
+                updateScore();
+                feedbackEl.textContent = '✅ Benar! Jawaban kamu tepat.';
+                feedbackEl.className = 'feedback correct';
+                feedbackEl.style.display = 'block';
+                
+                // Move to next question after delay
+                setTimeout(() => {
+                    currentQuestion++;
+                    if (currentQuestion < questions.length) {
+                        showCurrentQuestion();
+                    } else {
+                        endGame();
+                    }
+                }, 1500);
+            } else {
+                // Incorrect answer
+                lives--;
+                updateLives();
+                feedbackEl.textContent = `❌ Salah! Jawaban yang benar adalah: ${questions[currentQuestion].answer}`;
+                feedbackEl.className = 'feedback incorrect';
+                feedbackEl.style.display = 'block';
+                
+                if (lives <= 0) {
+                    setTimeout(endGame, 2000);
+                } else {
+                    setTimeout(() => {
+                        currentQuestion++;
+                        if (currentQuestion < questions.length) {
+                            showCurrentQuestion();
+                        } else {
+                            endGame();
+                        }
+                    }, 2000);
+                }
+            }
+        }
+
+        // End game
+        function endGame() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            gameState = 'ended';
+            
+            gameScreen.classList.remove('active');
+            endScreen.classList.add('active');
+            
+            finalScoreEl.textContent = score;
+            
+            // Determine result message based on score
+            if (score >= 80) {
+                resultMessage.textContent = '🏆 Luar biasa! Kamu sangat hebat dalam fisika!';
+            } else if (score >= 50) {
+                resultMessage.textContent = '👍 Bagus sekali! Teruskan belajar fisika!';
+            } else {
+                resultMessage.textContent = '📚 Belajar lebih giat lagi, kamu pasti bisa!';
+            }
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        
+        submitBtn.addEventListener('click', () => {
+            if (answerInput.value.trim()) {
+                checkAnswer();
+            }
+        });
+        
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && answerInput.value.trim()) {
+                checkAnswer();
+            }
+        });
+        
+        restartBtn.addEventListener('click', () => {
+            endScreen.classList.remove('active');
+            startScreen.classList.add('active');
+        });
+        
+        backToMenuBtn.addEventListener('click', () => {
+            endScreen.classList.remove('active');
+            startScreen.classList.add('active');
+        });
+        
+        instructionsBtn.addEventListener('click', () => {
+            instructionsModal.classList.remove('hidden');
+        });
+        
+        closeInstructions.addEventListener('click', () => {
+            instructionsModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        instructionsModal.addEventListener('click', (e) => {
+            if (e.target === instructionsModal) {
+                instructionsModal.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+<script>
+import React, { useState, useEffect, useCallback } from 'react';
+
+const WordGame = () => {
+  // Game state management
+  const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'results'
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [isRunning, setIsRunning] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  // Mock questions data
+  const questions = [
+    { id: 1, word: 'COMPUTER', scrambled: 'OPUTMREC', hint: 'Device for processing data' },
+    { id: 2, word: 'PROGRAMMING', scrambled: 'GRORMMIPNA', hint: 'Writing code' },
+    { id: 3, word: 'DEVELOPER', scrambled: 'LOPEVRED', hint: 'Software creator' },
+    { id: 4, word: 'ALGORITHM', scrambled: 'HMGROLITA', hint: 'Step-by-step procedure' },
+    { id: 5, word: 'DATABASE', scrambled: 'ATADASEB', hint: 'Structured data storage' },
+    { id: 6, word: 'INTERFACE', scrambled: 'FACINTERE', hint: 'Connection point' },
+    { id: 7, word: 'FRAMEWORK', scrambled: 'EMARFWORK', hint: 'Development structure' },
+    { id: 8, word: 'RESPONSIVE', scrambled: 'PONSERSEVI', hint: 'Adapts to screen size' },
+    { id: 9, word: 'OPTIMIZATION', scrambled: 'TIMIZAOPNORE', hint: 'Improving efficiency' },
+    { id: 10, word: 'DEBUGGING', scrambled: 'GUBGEDGIN', hint: 'Finding errors' }
+  ];
+
+  // Initialize game
+  const initGame = useCallback(() => {
+    setScore(0);
+    setLives(3);
+    setTimeLeft(300);
+    setCurrentIndex(0);
+    setAnswers([]);
+    setFeedback('');
+    setShowFeedback(false);
+  }, []);
+
+  // Start game
+  const startGame = () => {
+    initGame();
+    setGameState('playing');
+    setIsRunning(true);
+    setCurrentQuestion(questions[0]);
+  };
+
+  // End game
+  const endGame = () => {
+    setIsRunning(false);
+    setGameState('results');
+  };
+
+  // Update score
+  const updateScore = (points) => {
+    setScore(prev => Math.max(0, prev + points));
+  };
+
+  // Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            endGame();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (timeLeft === 0) {
+      endGame();
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
+
+  // Handle answer submission
+  const handleAnswer = (answer) => {
+    if (!currentQuestion || !isRunning) return;
+
+    const isCorrect = answer.toUpperCase() === currentQuestion.word;
+    
+    if (isCorrect) {
+      updateScore(10);
+      setFeedback('Correct! +10 points');
+      setShowFeedback(true);
+      
+      setTimeout(() => {
+        setShowFeedback(false);
+        nextQuestion();
+      }, 1500);
+    } else {
+      setLives(prev => {
+        const newLives = prev - 1;
+        if (newLives <= 0) {
+          endGame();
+        }
+        return newLives;
+      });
+      setFeedback('Incorrect! -1 life');
+      setShowFeedback(true);
+      
+      setTimeout(() => {
+        setShowFeedback(false);
+      }, 1500);
+    }
+
+    setAnswers(prev => [...prev, { questionId: currentQuestion.id, answer, isCorrect }]);
+  };
+
+  // Move to next question
+  const nextQuestion = () => {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < questions.length) {
+      setCurrentIndex(nextIndex);
+      setCurrentQuestion(questions[nextIndex]);
+    } else {
+      endGame();
+    }
+  };
+
+  // Format time display
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Show instructions
+  const showInstructions = () => setShowInstructions(true);
+  const hideInstructions = () => setShowInstructions(false);
+
+  // Show hint
+  const showHint = () => setShowHint(true);
+  const hideHint = () => setShowHint(false);
+
+  // Calculate progress
+  const progress = (currentIndex / questions.length) * 100;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white">
+      {/* Game Container */}
+      <div id="game-container" className="container mx-auto px-4 py-8">
+        
+        {/* Start Screen */}
+        {gameState === 'menu' && (
+          <div id="start-screen" className="text-center py-20">
+            <h1 className="text-6xl font-bold mb-8 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+              Word Scramble Challenge
+            </h1>
+            <p className="text-xl mb-8 text-gray-300">Unscramble words and test your vocabulary!</p>
+            <button
+              onClick={startGame}
+              className="btn-primary bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-xl transition-all duration-300 transform hover:scale-105"
+            >
+              Start Game
+            </button>
+            <button
+              onClick={showInstructions}
+              className="btn-secondary ml-4 bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-full transition-all duration-300"
+            >
+              Instructions
+            </button>
+          </div>
+        )}
+
+        {/* Game Screen */}
+        {gameState === 'playing' && currentQuestion && (
+          <div id="game-screen" className="max-w-4xl mx-auto">
+            {/* Game Header */}
+            <div className="flex justify-between items-center mb-8 bg-black bg-opacity-30 p-6 rounded-lg">
+              <div className="flex space-x-6">
+                <div id="score-display" className="bg-yellow-500 text-black px-4 py-2 rounded font-bold">
+                  Score: {score}
+                </div>
+                <div id="lives-display" className="bg-red-500 text-white px-4 py-2 rounded font-bold">
+                  Lives: {lives}
+                </div>
+                <div id="timer-display" className={`px-4 py-2 rounded font-bold ${timeLeft < 60 ? 'bg-red-600' : 'bg-blue-500'} text-white`}>
+                  Time: {formatTime(timeLeft)}
+                </div>
+              </div>
+              <div className="w-64 bg-gray-700 rounded-full h-4">
+                <div 
+                  className="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Question Area */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl mb-4">Unscramble this word:</h2>
+              <div className="text-6xl font-bold mb-8 text-yellow-400 tracking-wider">
+                {currentQuestion.scrambled}
+              </div>
+              <p className="text-lg text-gray-300 mb-6">Question {currentIndex + 1} of {questions.length}</p>
+              
+              <div className="flex justify-center space-x-4 mb-6">
+                <button
+                  onClick={showHint}
+                  className="btn-secondary bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg transition-colors"
+                >
+                  Hint 💡
+                </button>
+                <button
+                  onClick={showInstructions}
+                  className="btn-secondary bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg transition-colors"
+                >
+                  Instructions
+                </button>
+              </div>
+            </div>
+
+            {/* Answer Input */}
+            <div className="text-center">
+              <input
+                type="text"
+                placeholder="Type your answer..."
+                className="w-full max-w-md mx-auto text-black text-2xl p-4 rounded-lg mb-4 text-center uppercase"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleAnswer(e.target.value);
+                    e.target.value = '';
+                  }
+                }}
+              />
+              <button
+                onClick={(e) => {
+                  const input = e.target.previousElementSibling;
+                  handleAnswer(input.value);
+                  input.value = '';
+                }}
+                className="btn-primary bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all"
+              >
+                Submit Answer
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Results Screen */}
+        {gameState === 'results' && (
+          <div id="end-screen" className="text-center py-20">
+            <h1 className="text-5xl font-bold mb-8">
+              {score >= 70 ? '🎉 Congratulations!' : 'Game Over'}
+            </h1>
+            <div className="bg-black bg-opacity-30 p-8 rounded-lg max-w-2xl mx-auto mb-8">
+              <h2 className="text-3xl mb-6">Final Results</h2>
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div className="bg-yellow-500 text-black p-4 rounded-lg">
+                  <div className="text-2xl font-bold">{score}</div>
+                  <div>Final Score</div>
+                </div>
+                <div className="bg-blue-500 text-white p-4 rounded-lg">
+                  <div className="text-2xl font-bold">{currentIndex}</div>
+                  <div>Questions Completed</div>
+                </div>
+              </div>
+              <p className="text-xl mb-8">
+                {score >= 70 ? 'You won! Great job!' : 'Better luck next time!'}
+              </p>
+              <button
+                onClick={() => {
+                  setGameState('menu');
+                  initGame();
+                }}
+                className="btn-primary bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-xl transition-all"
+              >
+                Play Again
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Feedback Modal */}
+        {showFeedback && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className={`card bg-white text-black p-6 rounded-lg shadow-2xl ${feedback.includes('Correct') ? 'border-green-500' : 'border-red-500'} border-4`}>
+              <p className={`text-2xl font-bold ${feedback.includes('Correct') ? 'text-green-600' : 'text-red-600'}`}>
+                {feedback}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Instructions Modal */}
+        {showInstructions && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="card bg-gray-800 text-white p-8 rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+              <h2 className="text-3xl font-bold mb-4">How to Play</h2>
+              <div className="space-y-3 text-left">
+                <p>• Unscramble the given words by typing the correct answer</p>
+                <p>• Each correct answer gives you 10 points</p>
+                <p>• You have 3 lives - each wrong answer costs 1 life</p>
+                <p>• You have 5 minutes to complete as many questions as possible</p>
+                <p>• Score 70+ points to win!</p>
+                <p>• Use hints when you need help</p>
+              </div>
+              <button
+                onClick={hideInstructions}
+                className="mt-6 btn-secondary bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hint Modal */}
+        {showHint && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="card bg-purple-800 text-white p-8 rounded-lg max-w-md w-full">
+              <h3 className="text-2xl font-bold mb-4">Hint</h3>
+              <p className="text-lg mb-6">{currentQuestion?.hint}</p>
+              <button
+                onClick={hideHint}
+                className="btn-secondary bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default WordGame;
+</script>
+</body>
+</html>

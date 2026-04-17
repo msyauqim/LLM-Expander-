@@ -1,0 +1,167 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium Hukum Newton",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Hukum Newton",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_din_hukumnewton_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Laboratorium Hukum Newton",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika Gerak Partikel",
+      "subbab": "Hukum Newton",
+      "topik": "Hukum Newton",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menerapkan Hukum II Newton untuk menghitung percepatan benda dengan adanya gaya dorong dan gaya gesek",
+        "Siswa dapat menentukan kondisi keseimbangan benda sesuai Hukum I Newton ketika gaya dorong sama dengan gaya gesek",
+        "Siswa dapat menganalisis pengaruh massa dan koefisien gesek terhadap percepatan benda"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Meja Eksperimen Fisika Lanjutan",
+        "story": "Di laboratorium fisika SMA, kamu mendorong balok di atas meja. Kali ini lebih menantang: meja memiliki gaya gesek! Atur besar gaya doronganmu dan koefisien gesek permukaannya. Temukan hubungan antara gaya neto, massa, dan percepatan — dan buktikan sendiri ketiga Hukum Newton dalam satu eksperimen!",
+        "image_description": "Meja eksperimen kayu panjang di laboratorium dengan balok berwarna di atasnya, anak panah gaya dorong berwarna oranye ke kanan dan anak panah gaya gesek berwarna merah ke kiri, timbangan digital dan sensor gerak di sisi meja",
+        "cta_text": "Mulai Eksperimen"
+      },
+      "visual_element": {
+        "theme_name": "Physics Lab Classic",
+        "theme_preset": "classroom",
+        "mood": "investigative, methodical, educational",
+        "color_palette": {
+          "primary": "#3498db",
+          "secondary": "#e67e22",
+          "background": "#fdfaf6",
+          "accent": "#e74c3c",
+          "text": "#2c3e50"
+        },
+        "setting_description": "Ruang laboratorium fisika SMA yang rapi dengan meja eksperimen kayu, rel gesekan yang bisa diatur, papan tulis formula di belakang, dan sensor digital yang mencatat data secara real-time.",
+        "art_style": "flat design edukatif bergaya buku fisika dengan anak panah gaya warna-warni",
+        "ambient_elements": [
+          "Lampu sorot lab menerangi meja eksperimen dari atas",
+          "Sensor gerak berkedip saat balok mulai berpindah posisi",
+          "Grafik percepatan bergerak langsung di layar monitor lab"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa balok (m) dengan slider." },
+          { "step": 2, "text": "Atur gaya dorongan (F) yang diberikan pada balok." },
+          { "step": 3, "text": "Atur koefisien gesek kinetik (μ) permukaan meja." },
+          { "step": 4, "text": "Amati gaya gesek, gaya neto, dan percepatan yang dihitung otomatis." },
+          { "step": 5, "text": "Selesaikan dua tantangan untuk membuktikan Hukum Newton!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Tiga Hukum Newton",
+          "strategy": "Hukum I: benda diam jika gaya neto = 0 (gaya dorong = gaya gesek). Hukum II: percepatan = gaya neto / massa (F_neto = m·a). Hukum III: gaya gesek meja pada balok sama besar namun berlawanan arah dengan gaya balok pada meja.",
+          "formula": "f_gesek = μ·m·g,  F_neto = F_dorong − f_gesek,  a = F_neto / m",
+          "example": "m=4kg, F=28N, μ=0,2: f=0,2×4×10=8N; F_neto=28−8=20N; a=20/4=5 m/s².",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_push", "event": "on_correct_action", "description": "Suara geseran balok kayu di atas meja saat simulasi dijalankan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Bunyi denting lonceng lab dan tepuk tangan ringan saat tantangan berhasil" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Gaya Dorong dan Gaya Gesek",
+        "narrative": "Atur massa balok, besar gaya dorong, dan koefisien gesek permukaan. Simulasi menghitung gaya gesek, gaya neto, dan percepatan secara otomatis berdasarkan Hukum Newton.",
+        "context": "Permukaan horizontal; gaya gesek kinetik berlawanan arah gerak; g = 10 m/s²; balok dianggap partikel titik."
+      },
+      "variables": [
+        { "id": "massa", "label": "Massa balok", "symbol": "m", "unit": "kg", "type": "user_input", "min": 1, "max": 20, "default": 4, "step": 0.5 },
+        { "id": "gaya_dorong", "label": "Gaya dorong", "symbol": "F", "unit": "N", "type": "user_input", "min": 0, "max": 100, "default": 20, "step": 1 },
+        { "id": "koef_gesek", "label": "Koefisien gesek kinetik", "symbol": "μ", "unit": "-", "type": "user_input", "min": 0, "max": 1, "default": 0.2, "step": 0.05 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 10 },
+        { "id": "gaya_gesek", "label": "Gaya gesek", "symbol": "f", "unit": "N", "type": "computed" },
+        { "id": "gaya_neto", "label": "Gaya neto", "symbol": "F_net", "unit": "N", "type": "computed" },
+        { "id": "percepatan", "label": "Percepatan", "symbol": "a", "unit": "m/s²", "type": "computed" },
+        { "id": "kecepatan", "label": "Kecepatan", "symbol": "v", "unit": "m/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_gesek", "computes": "gaya_gesek", "formula": "gaya_gesek = koef_gesek * massa * 10", "description": "Gaya gesek kinetik = koefisien gesek × berat normal (N = mg)" },
+        { "id": "eq_neto", "computes": "gaya_neto", "formula": "gaya_neto = gaya_dorong - gaya_gesek", "description": "Gaya neto adalah resultan semua gaya pada sumbu gerak (Hukum II Newton)" },
+        { "id": "eq_a", "computes": "percepatan", "formula": "percepatan = gaya_neto / massa", "description": "Percepatan benda sebanding dengan gaya neto dan berbanding terbalik dengan massa" },
+        { "id": "eq_v", "computes": "kecepatan", "formula": "kecepatan = percepatan * t", "description": "Kecepatan benda dari keadaan diam dengan percepatan konstan" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Balok bergerak di atas meja; anak panah oranye (gaya dorong) dan merah (gaya gesek) ditampilkan proporsional terhadap nilai masing-masing; panjang anak panah hijau (gaya neto) menunjukkan besaran resultan" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "kecepatan", "title": "Kecepatan vs Waktu (v-t)" },
+        { "id": "viz_3", "type": "table", "title": "Ringkasan Gaya dan Gerak", "description": "Tabel menampilkan gaya_gesek, gaya_neto, percepatan, dan kecepatan secara real-time" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur massa=4 kg dan koef_gesek=0,2. Temukan besar gaya dorong yang menghasilkan percepatan tepat 5 m/s². (Petunjuk: hitung terlebih dahulu gaya geseknya!)",
+          "success_condition": "abs(massa - 4) < 0.1 AND abs(koef_gesek - 0.2) < 0.02 AND abs(percepatan - 5) < 0.2",
+          "points": 30
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi gaya_dorong dan koef_gesek sedemikian sehingga gaya neto = 0 dan benda bergerak dengan kecepatan tetap (Hukum I Newton). Benda tidak boleh diam: gaya_dorong harus lebih besar dari 0.",
+          "success_condition": "abs(gaya_neto) < 0.3 AND gaya_dorong > 0",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan kedua tantangan aplikasi Hukum Newton",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu berhasil membuktikan ketiga Hukum Newton. F = ma, dan keseimbangan terjadi saat gaya neto = 0!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: F_neto = F_dorong − μmg, lalu a = F_neto/m. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 720,
+      "pass_threshold": 40
+    }
+  }
+}

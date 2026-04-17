@@ -1,0 +1,172 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Debit Aliran dan Persamaan Kontinuitas",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Fluida Dinamis",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_fluida_kontinuitas_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Debit Aliran dan Persamaan Kontinuitas",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Fluida",
+      "subbab": "Fluida Dinamis",
+      "topik": "Debit Aliran dan Persamaan Kontinuitas",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menghitung debit aliran fluida menggunakan hubungan Q = A × v",
+        "Siswa dapat menerapkan persamaan kontinuitas A₁v₁ = A₂v₂ pada perubahan luas penampang pipa",
+        "Siswa dapat menganalisis hubungan antara luas penampang dan kecepatan aliran fluida"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Jaringan Irigasi Sawah Nusantara",
+        "story": "Di tengah sawah subur Jawa Tengah, sistem irigasi tradisional harus dirancang ulang agar air mengalir merata ke seluruh petak sawah. Saluran besar harus dibagi menjadi saluran-saluran kecil tanpa kehilangan debit total. Kamu adalah insinyur pengairan yang harus memastikan setiap saluran membawa jumlah air yang tepat dengan menerapkan Persamaan Kontinuitas!",
+        "image_description": "Pemandangan sawah hijau Nusantara dari atas dengan jaringan saluran irigasi; pipa besar berwarna cokelat tanah menyempit menjadi pipa kecil; anak panah biru menunjukkan arah aliran; petani berpakaian batik mengamati panel kontrol debit digital di tepi sawah",
+        "cta_text": "Kelola Irigasi"
+      },
+      "visual_element": {
+        "theme_name": "Irigasi Sawah Nusantara",
+        "theme_preset": "nusantara",
+        "mood": "calm, natural, purposeful",
+        "color_palette": {
+          "primary": "#2e7d32",
+          "secondary": "#1565c0",
+          "background": "#f1f8e9",
+          "accent": "#f9a825",
+          "text": "#1b5e20"
+        },
+        "setting_description": "Lanskap sawah Nusantara yang hijau dengan saluran irigasi tanah liat; panel kontrol debit bergaya wayang-tech berwarna hijau-biru; langit cerah dengan awan putih berarak.",
+        "art_style": "ilustrasi flat dengan perspektif isometrik ringan, warna natural bumi Nusantara, dan ornamen ukiran kayu pada bingkai panel",
+        "ambient_elements": [
+          "Aliran air biru berkilau mengalir dari kiri ke kanan mengikuti arah pipa",
+          "Partikel kecil berwarna biru tua bergerak bersama aliran menandakan kecepatan",
+          "Dedaunan sawah yang bergoyang lembut di tepi saluran irigasi"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur luas penampang pipa bagian 1 (A₁) dan kecepatan aliran di titik 1 (v₁)." },
+          { "step": 2, "text": "Simulasi menghitung debit Q secara otomatis dari Q = A₁ × v₁." },
+          { "step": 3, "text": "Atur luas penampang pipa bagian 2 (A₂) yang berbeda dari A₁." },
+          { "step": 4, "text": "Simulasi menghitung kecepatan di titik 2 (v₂) menggunakan persamaan kontinuitas." },
+          { "step": 5, "text": "Selesaikan tantangan untuk merancang sistem irigasi yang optimal!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Debit dan Persamaan Kontinuitas",
+          "strategy": "Debit Q = A × v menyatakan volume fluida yang mengalir per satuan waktu (m³/s). Pada pipa tak bocor dengan fluida tak termampatkan (incompressible), debit selalu konstan di setiap penampang: A₁v₁ = A₂v₂. Jadi jika pipa menyempit (A₂ < A₁), kecepatan aliran bertambah besar (v₂ > v₁).",
+          "formula": "Q = A · v ;  A₁·v₁ = A₂·v₂  →  v₂ = v₁·(A₁/A₂)",
+          "example": "A₁=0,04 m², v₁=2 m/s → Q=0,08 m³/s. Jika A₂=0,02 m² → v₂=0,08/0,02=4 m/s (kecepatan berlipat dua).",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_flow", "event": "on_correct_action", "description": "Suara gemericik air mengalir yang semakin cepat saat luas penampang diperkecil" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi gong gamelan gembira diikuti suara air mengalir deras ke sawah dengan sukses" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara saluran air tersumbat yang berdeguk singkat menandakan kegagalan perhitungan" },
+          { "id": "bgm", "event": "background", "description": "Musik angklung instrumental bertempo tenang dengan suara gemericik air latar, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Debit dan Persamaan Kontinuitas Pipa",
+        "narrative": "Atur luas penampang dan kecepatan aliran pada dua titik pipa. Simulasi menghitung debit total dan memverifikasi bahwa persamaan kontinuitas berlaku: debit di kedua titik selalu sama.",
+        "context": "Fluida ideal (tak viskos, tak termampatkan); pipa horizontal; tidak ada percabangan; debit masuk = debit keluar pada setiap penampang; satuan Q dalam m³/s."
+      },
+      "variables": [
+        { "id": "a1", "label": "Luas penampang pipa titik 1", "symbol": "A₁", "unit": "m²", "type": "user_input", "min": 0.005, "max": 0.2, "default": 0.04, "step": 0.005 },
+        { "id": "v1", "label": "Kecepatan aliran di titik 1", "symbol": "v₁", "unit": "m/s", "type": "user_input", "min": 0.5, "max": 20, "default": 2, "step": 0.5 },
+        { "id": "a2", "label": "Luas penampang pipa titik 2", "symbol": "A₂", "unit": "m²", "type": "user_input", "min": 0.005, "max": 0.2, "default": 0.02, "step": 0.005 },
+        { "id": "q", "label": "Debit aliran", "symbol": "Q", "unit": "m³/s", "type": "computed" },
+        { "id": "v2", "label": "Kecepatan aliran di titik 2", "symbol": "v₂", "unit": "m/s", "type": "computed" },
+        { "id": "rasio_v", "label": "Rasio kecepatan v₂ terhadap v₁", "symbol": "v₂/v₁", "unit": "", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_q", "computes": "q", "formula": "q = a1 * v1", "description": "Debit = luas penampang × kecepatan aliran di titik 1" },
+        { "id": "eq_v2", "computes": "v2", "formula": "v2 = q / a2", "description": "Kecepatan di titik 2 dari persamaan kontinuitas: v₂ = Q/A₂ = A₁v₁/A₂" },
+        { "id": "eq_rasio_v", "computes": "rasio_v", "formula": "rasio_v = a1 / a2", "description": "Rasio kecepatan berbanding terbalik dengan rasio luas penampang" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Penampang samping pipa yang menyempit dari kiri (A₁, v₁) ke kanan (A₂, v₂); partikel biru bergerak lebih rapat dan cepat di bagian sempit; label Q, v₁, v₂ tampil di atas masing-masing bagian pipa; anak panah kecepatan proporsional terhadap nilai v" },
+        { "id": "viz_2", "type": "graph", "x_axis": "a2", "y_axis": "v2", "title": "Kecepatan di Titik 2 vs Luas Penampang A₂ (v₂–A₂)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "v1", "y_axis": "q", "title": "Debit vs Kecepatan Aliran Titik 1 (Q–v₁)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur A₁ = 0,04 m² dan v₁ = 2 m/s. Verifikasi bahwa debit Q = 0,08 m³/s.",
+          "success_condition": "abs(a1 - 0.04) < 0.002 AND abs(v1 - 2) < 0.1 AND abs(q - 0.08) < 0.005",
+          "points": 20
+        },
+        {
+          "id": "ch_002",
+          "task": "Dengan A₁ = 0,04 m² dan v₁ = 3 m/s, atur A₂ = 0,015 m². Berapa kecepatan v₂ di bagian sempit?",
+          "success_condition": "abs(a1 - 0.04) < 0.002 AND abs(v1 - 3) < 0.1 AND abs(a2 - 0.015) < 0.001 AND abs(v2 - 8) < 0.3",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Rancang sistem irigasi: debit yang diperlukan Q = 0,06 m³/s. Tentukan kombinasi A₁ dan v₁ yang menghasilkan debit tersebut, lalu atur A₂ sehingga v₂ = 3 × v₁.",
+          "success_condition": "abs(q - 0.06) < 0.003 AND abs(rasio_v - 3) < 0.2",
+          "points": 40
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan persamaan kontinuitas",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Irigasi berhasil! Sawah mendapat air merata. Kamu menguasai Q = A×v dan persamaan kontinuitas A₁v₁ = A₂v₂. Penampang mengecil berarti kecepatan makin besar!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Sawah kekeringan! Ingat: Q = A×v dan A₁v₁ = A₂v₂. Jika pipa menyempit, kecepatan bertambah besar agar debit tetap. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 780,
+      "pass_threshold": 50
+    }
+  }
+}

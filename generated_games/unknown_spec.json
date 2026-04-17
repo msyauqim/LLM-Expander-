@@ -1,0 +1,457 @@
+{
+  "schema_version": "1.2",
+  "game_metadata": {
+    "game_id": "phy_kin_10_01_grlb_word_v1",
+    "title": "Gerak Lurus Berubah Beraturan - Word Game",
+    "grade_level": "SMA-10",
+    "subject": "Fisika",
+    "chapter": "KINEMATIKA",
+    "sub_chapter": "GERAK LURUS BERUBAH BERATURAN",
+    "game_type": "word_game",
+    "estimated_duration_minutes": 15,
+    "learning_objectives": [
+      "Memahami konsep percepatan dalam GLBB",
+      "Mengenal persamaan-persamaan GLBB",
+      "Menyelesaikan soal-soal sederhana tentang GLBB"
+    ]
+  },
+  "game_content": {
+    "instructions": "Susun kata-kata berikut untuk membentuk rumus GLBB yang benar. Pilih huruf dari grid dan susun di area jawaban.",
+    "vocabulary_items": [
+      {
+        "term": "percepatan",
+        "definition": "Perubahan kecepatan per satuan waktu",
+        "formula": "a = (vt - v0) / t"
+      },
+      {
+        "term": "kecepatan akhir",
+        "definition": "Kecepatan benda setelah mengalami percepatan",
+        "formula": "vt = v0 + a.t"
+      },
+      {
+        "term": "jarak tempuh",
+        "definition": "Panjang lintasan yang ditempuh benda",
+        "formula": "s = v0.t + ½.a.t²"
+      }
+    ],
+    "word_grid": [
+      [
+        "v",
+        "t",
+        "=",
+        "v",
+        "0",
+        "+",
+        "a",
+        ".",
+        "t"
+      ],
+      [
+        "s",
+        "=",
+        "v",
+        "0",
+        ".",
+        "t",
+        "+",
+        "½",
+        "."
+      ],
+      [
+        "a",
+        "=",
+        "(",
+        "v",
+        "t",
+        "-",
+        "v",
+        "0",
+        ")"
+      ],
+      [
+        "/",
+        "t",
+        "v",
+        "0",
+        "=",
+        "v",
+        "t",
+        "-",
+        "a"
+      ],
+      [
+        ".",
+        "t",
+        "s",
+        "=",
+        "½",
+        "(",
+        "v",
+        "0",
+        "+"
+      ],
+      [
+        "v",
+        "t",
+        ")",
+        ".",
+        "t",
+        "a",
+        "=",
+        "v",
+        "t"
+      ]
+    ],
+    "correct_answers": [
+      {
+        "question": "Rumus kecepatan akhir dalam GLBB",
+        "target_word": "vt=v0+a.t",
+        "required_letters": [
+          "v",
+          "t",
+          "=",
+          "v",
+          "0",
+          "+",
+          "a",
+          ".",
+          "t"
+        ]
+      },
+      {
+        "question": "Rumus jarak tempuh dalam GLBB",
+        "target_word": "s=v0.t+½.a.t²",
+        "required_letters": [
+          "s",
+          "=",
+          "v",
+          "0",
+          ".",
+          "t",
+          "+",
+          "½",
+          ".",
+          "a",
+          ".",
+          "t",
+          "²"
+        ]
+      },
+      {
+        "question": "Rumus percepatan dalam GLBB",
+        "target_word": "a=(vt-v0)/t",
+        "required_letters": [
+          "a",
+          "=",
+          "(",
+          "v",
+          "t",
+          "-",
+          "v",
+          "0",
+          ")",
+          "/",
+          "t"
+        ]
+      }
+    ]
+  },
+  "visual_elements": {
+    "canvas_scene": {
+      "scene_type": "physics_lab",
+      "background_layers": [
+        {
+          "layer_name": "sky_gradient",
+          "type": "linear_gradient",
+          "colors": [
+            "#87CEEB",
+            "#E0F7FA"
+          ],
+          "position": "top",
+          "animation": "slow_pan"
+        },
+        {
+          "layer_name": "road_background",
+          "type": "pattern",
+          "pattern_type": "asphalt",
+          "color": "#5D4037",
+          "position": "middle",
+          "animation": "static"
+        },
+        {
+          "layer_name": "grid_overlay",
+          "type": "wireframe",
+          "opacity": 0.2,
+          "color": "#0000FF",
+          "animation": "pulse_slow"
+        }
+      ],
+      "objects": [
+        {
+          "object_name": "car_physics_model",
+          "type": "animated_sprite",
+          "sprite_sheet": "car_with_trail",
+          "position": {
+            "x": 100,
+            "y": 250
+          },
+          "animation_sequence": "acceleration_motion",
+          "scale": 0.8,
+          "properties": {
+            "velocity_vector": true,
+            "acceleration_indicator": true
+          }
+        },
+        {
+          "object_name": "vector_arrows",
+          "type": "svg_paths",
+          "elements": [
+            {
+              "name": "velocity_arrow",
+              "path": "M150,250 L200,250",
+              "stroke": "#00FF00",
+              "stroke_width": 3,
+              "animation": "grow_right"
+            },
+            {
+              "name": "acceleration_arrow",
+              "path": "M150,240 L180,240",
+              "stroke": "#FF0000",
+              "stroke_width": 3,
+              "animation": "pulse_width"
+            }
+          ]
+        },
+        {
+          "object_name": "physics_equation_display",
+          "type": "floating_text",
+          "content": "GLBB: vt = v0 + at",
+          "position": {
+            "x": 300,
+            "y": 100
+          },
+          "style": {
+            "font_size": "24px",
+            "color": "#1976D2",
+            "shadow": true,
+            "glow_effect": true
+          },
+          "animation": "float_gentle"
+        }
+      ],
+      "particle_effects": [
+        {
+          "effect_name": "motion_particles",
+          "type": "trail_system",
+          "emitter_position": {
+            "x": 100,
+            "y": 250
+          },
+          "particle_properties": {
+            "color": "#4CAF50",
+            "size": 3,
+            "lifetime": 2,
+            "speed": 0.5
+          },
+          "animation": "continuous_flow"
+        },
+        {
+          "effect_name": "physics_sparkles",
+          "type": "sparkle_system",
+          "emitter_position": {
+            "x": 400,
+            "y": 150
+          },
+          "particle_properties": {
+            "color": "#FFD700",
+            "size": 2,
+            "lifetime": 1.5,
+            "frequency": 0.2
+          },
+          "animation": "random_burst"
+        }
+      ]
+    }
+  },
+  "ui_components": {
+    "header": {
+      "element_type": "game_header",
+      "css_styles": {
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "width": "100%",
+        "height": "80px",
+        "background": "linear-gradient(135deg, #1976D2, #42A5F5)",
+        "box_shadow": "0 4px 12px rgba(0,0,0,0.3)",
+        "display": "flex",
+        "align_items": "center",
+        "justify_content": "space-between",
+        "padding": "0 20px",
+        "z_index": "1000"
+      },
+      "content": {
+        "title": "GLBB Word Game",
+        "subtitle": "Gerak Lurus Berubah Beraturan",
+        "score_display": true
+      }
+    },
+    "word_grid_container": {
+      "element_type": "interactive_grid",
+      "css_styles": {
+        "position": "absolute",
+        "top": "100px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "width": "600px",
+        "height": "300px",
+        "background": "rgba(255,255,255,0.9)",
+        "border_radius": "12px",
+        "box_shadow": "0 8px 32px rgba(0,0,0,0.2)",
+        "padding": "20px",
+        "display": "grid",
+        "grid_template_columns": "repeat(9, 1fr)",
+        "gap": "8px",
+        "backdrop_filter": "blur(10px)"
+      }
+    },
+    "letter_tiles": {
+      "element_type": "draggable_tiles",
+      "css_styles": {
+        "width": "40px",
+        "height": "40px",
+        "background": "linear-gradient(145deg, #E3F2FD, #BBDEFB)",
+        "border": "2px solid #1976D2",
+        "border_radius": "8px",
+        "display": "flex",
+        "align_items": "center",
+        "justify_content": "center",
+        "font_weight": "bold",
+        "font_size": "18px",
+        "color": "#0D47A1",
+        "cursor": "grab",
+        "transition": "all 0.2s ease",
+        "box_shadow": "0 4px 8px rgba(0,0,0,0.1)"
+      },
+      "hover_styles": {
+        "transform": "scale(1.1)",
+        "background": "linear-gradient(145deg, #BBDEFB, #90CAF9)",
+        "box_shadow": "0 6px 12px rgba(0,0,0,0.2)"
+      }
+    },
+    "answer_area": {
+      "element_type": "drop_zone",
+      "css_styles": {
+        "position": "absolute",
+        "top": "420px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "width": "600px",
+        "height": "80px",
+        "background": "rgba(255,255,255,0.85)",
+        "border": "3px dashed #4CAF50",
+        "border_radius": "12px",
+        "display": "flex",
+        "align_items": "center",
+        "justify_content": "flex-start",
+        "padding": "10px",
+        "gap": "5px",
+        "backdrop_filter": "blur(5px)"
+      }
+    },
+    "question_display": {
+      "element_type": "text_box",
+      "css_styles": {
+        "position": "absolute",
+        "top": "520px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "width": "700px",
+        "height": "60px",
+        "background": "rgba(25, 118, 210, 0.15)",
+        "border": "2px solid #1976D2",
+        "border_radius": "10px",
+        "padding": "15px",
+        "font_size": "16px",
+        "font_weight": "500",
+        "color": "#0D47A1",
+        "text_align": "center",
+        "backdrop_filter": "blur(3px)"
+      }
+    },
+    "controls_panel": {
+      "element_type": "button_group",
+      "css_styles": {
+        "position": "absolute",
+        "bottom": "30px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "display": "flex",
+        "gap": "15px"
+      },
+      "buttons": [
+        {
+          "id": "submit_btn",
+          "label": "Submit Jawaban",
+          "styles": {
+            "padding": "12px 24px",
+            "background": "linear-gradient(135deg, #4CAF50, #2E7D32)",
+            "color": "white",
+            "border": "none",
+            "border_radius": "25px",
+            "font_size": "16px",
+            "font_weight": "bold",
+            "cursor": "pointer",
+            "box_shadow": "0 4px 15px rgba(76, 175, 80, 0.4)",
+            "transition": "all 0.3s ease"
+          },
+          "hover_styles": {
+            "transform": "translateY(-2px)",
+            "box_shadow": "0 6px 20px rgba(76, 175, 80, 0.6)"
+          }
+        },
+        {
+          "id": "reset_btn",
+          "label": "Reset",
+          "styles": {
+            "padding": "12px 24px",
+            "background": "linear-gradient(135deg, #FF9800, #EF6C00)",
+            "color": "white",
+            "border": "none",
+            "border_radius": "25px",
+            "font_size": "16px",
+            "font_weight": "bold",
+            "cursor": "pointer",
+            "box_shadow": "0 4px 15px rgba(255, 152, 0, 0.4)",
+            "transition": "all 0.3s ease"
+          },
+          "hover_styles": {
+            "transform": "translateY(-2px)",
+            "box_shadow": "0 6px 20px rgba(255, 152, 0, 0.6)"
+          }
+        }
+      ]
+    }
+  },
+  "game_mechanics": {
+    "drag_and_drop": true,
+    "instant_feedback": true,
+    "scoring_system": {
+      "points_per_correct_answer": 100,
+      "bonus_for_speed": true,
+      "penalty_for_wrong_attempts": 10
+    },
+    "progress_tracking": {
+      "total_questions": 3,
+      "current_question": 1,
+      "completed_questions": []
+    }
+  },
+  "audio_visual_feedback": {
+    "success_sound": "positive_tone",
+    "error_sound": "negative_tone",
+    "celebration_animation": "confetti_explosion",
+    "highlight_correct": true,
+    "shake_on_error": true
+  }
+}

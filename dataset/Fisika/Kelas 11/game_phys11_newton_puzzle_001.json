@@ -1,0 +1,173 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Hukum Newton"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_dinamika_newton_puzzle_001",
+    "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Sidang Hukum Newton",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika",
+      "subbab": "Hukum Newton tentang Gerak",
+      "topik": "Hukum Newton",
+      "difficulty": 2,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat menyatakan bunyi ketiga Hukum Newton dengan benar",
+        "Siswa dapat mengidentifikasi contoh penerapan masing-masing Hukum Newton dalam kehidupan sehari-hari",
+        "Siswa dapat menghubungkan persamaan matematis Hukum II Newton dengan konsep gaya, massa, dan percepatan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pengadilan Fisika Newton",
+        "story": "Hakim Besar memanggil kamu ke ruang sidang! Tiga berkas perkara Hukum Newton telah tercampur aduk — bunyi hukum, persamaan, dan contoh penerapannya berserakan. Sebagai jaksa fisika muda, susun kembali semua berkas agar persidangan bisa berjalan. Kebenaran ilmu pengetahuan ada di tanganmu!",
+        "image_description": "Ruang sidang bergaya klasik dengan meja hakim besar, berkas-berkas dokumen bertuliskan rumus fisika berserakan di lantai, palu hakim di meja, langit-langit tinggi dengan lampu gantung kuning",
+        "cta_text": "Mulai Sidang"
+      },
+      "visual_element": {
+        "theme_name": "Courtroom Classic",
+        "theme_preset": "minimal_mono",
+        "mood": "serious, intellectual, orderly",
+        "color_palette": {
+          "primary": "#3d405b",
+          "secondary": "#e07a5f",
+          "background": "#f4f1de",
+          "accent": "#81b29a",
+          "text": "#3d405b"
+        },
+        "setting_description": "Ruang sidang bergaya klasik dengan dinding kayu cokelat tua, meja hijau berlapis kain, berkas-berkas dokumen, dan lampu meja kuning hangat. Nuansa serius namun ramah.",
+        "art_style": "warm flat illustration, classic courtroom aesthetic",
+        "ambient_elements": [
+          "Debu berputar di sinar cahaya jendela",
+          "Tumpukan buku fisika di sudut meja",
+          "Potret Isaac Newton di dinding"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Baca kartu di kolom kiri — berisi nama hukum, persamaan, atau konsep." },
+          { "step": 2, "text": "Klik satu kartu di kolom kiri untuk memilihnya." },
+          { "step": 3, "text": "Klik kartu yang paling cocok di kolom kanan." },
+          { "step": 4, "text": "Kartu hijau = benar dan terkunci; kartu merah = salah, coba lagi." },
+          { "step": 5, "text": "Selesaikan semua 6 pasangan untuk menang!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 50,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Tiga Hukum Newton",
+          "strategy": "Hukum I: benda cenderung mempertahankan keadaannya (inersia) — ΣF=0. Hukum II: gaya menyebabkan percepatan — ΣF=ma. Hukum III: aksi-reaksi selalu berpasangan, sama besar berlawanan arah pada DUA benda berbeda.",
+          "formula": "ΣF = 0 (Hk. I)  |  ΣF = m·a (Hk. II)  |  F_aksi = –F_reaksi (Hk. III)",
+          "example": "Hk. I: buku di meja diam karena ΣF=0. Hk. II: mendorong gerobak 10 kg dengan F=20 N → a=2 m/s². Hk. III: kaki menendang bola (aksi) → bola mendorong balik kaki (reaksi).",
+          "hint_image_description": "Tiga panel berdampingan: panel I berisi benda diam berlabel ΣF=0, panel II berisi panah F dan a searah berlabel F=ma, panel III berisi dua panah berlawanan berlabel aksi-reaksi"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara ketukan palu hakim sekali: tok! — tanda berkas diterima" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Suara kertas disobek singkat saat berkas salah dipasangkan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Tiga ketukan palu hakim dan sorak tepuk tangan: sidang selesai!" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik instrumental klasik ringan bertempo lambat, nuansa ruang sidang elegan, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 6 kartu di kolom kiri (nama hukum, persamaan, konsep) dengan deskripsi atau contoh yang tepat di kolom kanan. Hati-hati dengan 3 distraktor!",
+      "pairs": [
+        {
+          "id": "p_001",
+          "left": { "type": "text", "content": "Hukum I Newton (Inersia)" },
+          "right": { "type": "text", "content": "Setiap benda tetap diam atau bergerak lurus beraturan selama resultan gaya yang bekerja padanya nol" },
+          "explanation": "Hukum I Newton menyatakan prinsip inersia: benda 'malas' mengubah keadaannya. ΣF=0 berarti tidak ada perubahan gerak."
+        },
+        {
+          "id": "p_002",
+          "left": { "type": "text", "content": "Hukum II Newton" },
+          "right": { "type": "formula", "content": "ΣF = m · a  →  percepatan sebanding gaya, berbanding terbalik dengan massa" },
+          "explanation": "Hukum II Newton menghubungkan sebab (gaya) dan akibat (percepatan). Massa adalah ukuran inersia: massa besar → percepatan kecil untuk gaya yang sama."
+        },
+        {
+          "id": "p_003",
+          "left": { "type": "text", "content": "Hukum III Newton (Aksi-Reaksi)" },
+          "right": { "type": "text", "content": "Jika benda A memberikan gaya pada benda B, maka benda B memberikan gaya yang sama besar namun berlawanan arah kepada benda A" },
+          "explanation": "Pasangan aksi-reaksi selalu bekerja pada DUA benda yang berbeda, sehingga tidak saling menghilangkan. Tidak ada aksi tanpa reaksi."
+        },
+        {
+          "id": "p_004",
+          "left": { "type": "text", "content": "Contoh Hukum I Newton" },
+          "right": { "type": "text", "content": "Penumpang terdorong ke depan saat bus tiba-tiba berhenti karena tubuhnya cenderung mempertahankan gerak" },
+          "explanation": "Ini adalah inersia gerak: tubuh penumpang 'ingin' terus bergerak ke depan saat bus berhenti mendadak — sesuai Hukum I Newton."
+        },
+        {
+          "id": "p_005",
+          "left": { "type": "text", "content": "Contoh Hukum II Newton" },
+          "right": { "type": "text", "content": "Mendorong troli belanja kosong lebih mudah daripada troli penuh barang dengan gaya yang sama" },
+          "explanation": "Troli kosong bermassa lebih kecil sehingga percepatan yang dihasilkan lebih besar untuk gaya dorong yang sama — bukti ΣF=ma."
+        },
+        {
+          "id": "p_006",
+          "left": { "type": "text", "content": "Contoh Hukum III Newton" },
+          "right": { "type": "text", "content": "Roket melaju ke atas karena gas panas disemburkan ke bawah dengan kecepatan tinggi" },
+          "explanation": "Gas disemburkan ke bawah (aksi), roket terdorong ke atas (reaksi). Pasangan gaya ini bekerja pada dua benda berbeda: gas dan roket."
+        }
+      ],
+      "distractors": [
+        "Gaya yang bekerja pada benda selalu menghasilkan perpindahan",
+        "Benda bermassa lebih besar selalu bergerak lebih lambat dari benda bermassa kecil",
+        "Aksi dan reaksi bekerja pada benda yang sama sehingga saling meniadakan"
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil memasangkan semua 6 kartu dengan benar",
+        "logic": "correct_pairs == 6",
+        "feedback_text": "Sidang selesai! Semua berkas Hukum Newton berhasil disusun. Hakim menyatakan kamu lulus uji fisika!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Siswa melakukan lebih dari 5 kesalahan pasangan",
+        "logic": "wrong_attempts > 5",
+        "feedback_text": "Terlalu banyak berkas yang salah tempat. Pelajari kembali ketiga Hukum Newton dan coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "correct_pair": 15,
+        "wrong_attempt": -3
+      },
+      "lives": null,
+      "time_limit_seconds": 540,
+      "pass_threshold": 70
+    }
+  }
+}

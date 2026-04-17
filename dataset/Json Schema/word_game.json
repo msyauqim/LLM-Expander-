@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Word Game Payload",
+  "description": "Schema payload untuk game_type: word_game. Game berbasis teks seperti isi kata, cocokkan istilah, tebak definisi.",
+  "type": "object",
+  "required": ["instruction", "word_bank", "questions"],
+  "properties": {
+    "instruction": {
+      "type": "string",
+      "description": "Instruksi singkat untuk siswa tentang cara bermain"
+    },
+    "word_bank": {
+      "type": "array",
+      "description": "Kumpulan kata/istilah yang digunakan dalam game",
+      "items": { "type": "string" },
+      "minItems": 3,
+      "maxItems": 20
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "prompt", "answer", "explanation"],
+        "properties": {
+          "id": { "type": "integer" },
+          "type": {
+            "type": "string",
+            "enum": ["fill_blank", "match_pair", "crossword_clue", "unscramble"],
+            "description": "Tipe soal kata"
+          },
+          "prompt": { "type": "string", "description": "Pertanyaan atau petunjuk" },
+          "options": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Pilihan jawaban (opsional, untuk match_pair)"
+          },
+          "answer": { "type": "string", "description": "Jawaban benar" },
+          "explanation": { "type": "string", "description": "Penjelasan singkat setelah menjawab" }
+        }
+      }
+    }
+  }
+}

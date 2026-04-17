@@ -1,0 +1,222 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Reaktor Fotolistrik",
+    "jenjang": "SMA-12", "mata_pelajaran": "Fisika",
+    "topik": "Efek fotolistrik", "tingkat_kesulitan": 4,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2", "game_id": "game_phys12_photo_sim_001", "game_type": "sim_lab",
+    "metadata": {
+      "title": "Reaktor Fotolistrik", "subject": "Fisika", "grade_level": "SMA-12",
+      "bab": "Fisika Kuantum", "subbab": "Efek Fotolistrik", "topik": "Efek fotolistrik",
+      "difficulty": 4, "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan hubungan frekuensi cahaya dengan energi kinetik elektron",
+        "Siswa dapat menentukan frekuensi ambang berbagai logam"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001", "show_once": true, "title": "Laboratorium Kuantum",
+        "story": "Selamat datang di laboratorium kuantum! Tembakkan cahaya ke berbagai logam dan amati bagaimana elektron terlepas. Jelajahi batas frekuensi ambang setiap logam.",
+        "image_description": "Laboratorium fisika modern dengan laser biru menyinari plat logam, elektron digambarkan sebagai titik cahaya kuning bertebaran, latar belakang gelap dengan grid holografik",
+        "cta_text": "Mulai Eksperimen"
+      },
+      "visual_element": {
+        "theme_name": "Quantum Lab Neon", "theme_preset": "scifi_neon",
+        "mood": "precise, futuristic, exploratory",
+        "color_palette": {
+          "primary": "#00f5ff",
+          "secondary": "#ff00aa",
+          "background": "#0a0a1f",
+          "accent": "#ffee00",
+          "text": "#ffffff",
+          "gradient_bg": "linear-gradient(135deg, #0a0a1f 0%, #0d1b2a 40%, #1b2838 70%, #0a0a1f 100%)"
+        },
+        "setting_description": "Laboratorium kuantum dengan panel holografik, cahaya neon biru-magenta, grid cahaya di latar belakang.",
+        "art_style": "flat design with neon glow accents",
+        "ambient_elements": ["Partikel cahaya melayang", "Grid holografik samar", "Glow pulse pada elemen aktif"],
+        "canvas_scene": {
+          "render_method": "mixed",
+          "background_layers": [
+            {
+              "id": "bg_deep_space",
+              "type": "gradient",
+              "css_description": "Background utama: radial-gradient(ellipse at 50% 120%, #0d1b2a 0%, #0a0a1f 70%). Kesan ruangan gelap laboratorium.",
+              "z_index": 0
+            },
+            {
+              "id": "bg_grid",
+              "type": "pattern",
+              "css_description": "Grid holografik: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,245,255,0.05) 50px) dan repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,245,255,0.05) 50px). Ukuran 50x50px, menutupi seluruh area simulasi.",
+              "z_index": 1
+            },
+            {
+              "id": "bg_glow_spots",
+              "type": "image_css",
+              "css_description": "3 titik glow besar di background: radial-gradient(circle 150px at 20% 80%, rgba(0,245,255,0.08), transparent), radial-gradient(circle 100px at 70% 30%, rgba(255,0,170,0.06), transparent), radial-gradient(circle 120px at 85% 75%, rgba(255,238,0,0.05), transparent).",
+              "z_index": 2
+            }
+          ],
+          "objects": [
+            {
+              "id": "lab_table",
+              "shape_description": "Meja lab: div lebar 70% tinggi 8px, background linear-gradient(90deg, #2a2a4a, #3a3a5a, #2a2a4a), border-top 1px solid rgba(0,245,255,0.3), box-shadow: 0 2px 20px rgba(0,245,255,0.1). Posisi horizontal tengah.",
+              "position": "bottom: 120px; left: 15%; width: 70%",
+              "animation": null
+            },
+            {
+              "id": "laser_emitter",
+              "shape_description": "Tabung laser di kiri: div 60x20px, background linear-gradient(90deg, #1a1a3a, #2a2a5a), border 1px solid rgba(0,245,255,0.4), border-radius 3px. Ujung kanan ada div 4x12px background #00f5ff (lensa laser) dengan glow box-shadow 0 0 10px #00f5ff.",
+              "position": "bottom: 128px; left: 16%",
+              "animation": null
+            },
+            {
+              "id": "metal_plate",
+              "shape_description": "Plat logam target di tengah: div 12x50px, background linear-gradient(180deg, #8a8a8a, #b0b0b0, #8a8a8a) untuk Cesium (berubah warna sesuai logam dipilih: Natrium=#c0c0c0, Seng=#7a7a9a), border 1px solid rgba(255,255,255,0.2), box-shadow: 0 0 5px rgba(255,255,255,0.1). Label nama logam di bawah plat.",
+              "position": "bottom: 128px; left: 50%",
+              "animation": null
+            },
+            {
+              "id": "detector_screen",
+              "shape_description": "Layar detektor di kanan: div 8x60px, background #0a0a2a, border 1px solid rgba(255,238,0,0.4), border-radius 2px. Di dalamnya ada area kecil yang menyala kuning saat elektron terdeteksi.",
+              "position": "bottom: 123px; right: 18%",
+              "animation": null
+            }
+          ],
+          "particle_effects": [
+            {
+              "type": "floating_dots",
+              "count": 12,
+              "css_description": "Partikel ambient: div 2px border-radius 50%, warna #00f5ff opacity 0.1-0.3, animasi float naik-turun random 8-15s infinite, posisi tersebar di seluruh area simulasi."
+            }
+          ]
+        },
+        "ui_components": {
+          "button_style": "Rounded 8px, background transparent, border 1px solid #00f5ff, color #00f5ff, box-shadow: 0 0 10px rgba(0,245,255,0.3), hover: background rgba(0,245,255,0.15) + box-shadow 0 0 20px rgba(0,245,255,0.5) + transform scale(1.03), transition all 0.3s ease",
+          "card_style": "Background rgba(10,10,31,0.8), border 1px solid rgba(0,245,255,0.15), backdrop-filter blur(10px), border-radius 12px, padding 16px, box-shadow: inset 0 0 30px rgba(0,245,255,0.03)",
+          "score_display_style": "Font monospace, color #00f5ff, text-shadow: 0 0 10px rgba(0,245,255,0.5), background rgba(0,0,0,0.5), border 1px solid rgba(0,245,255,0.2), border-radius 6px, padding 8px 16px",
+          "input_style": "Slider: -webkit-appearance none, height 6px, background linear-gradient(90deg, #00f5ff, #ff00aa), border-radius 3px, thumb: 18px circle background #ffffff box-shadow 0 0 8px #00f5ff"
+        }
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+        "steps": [
+          { "step": 1, "text": "Pilih jenis logam target dari dropdown." },
+          { "step": 2, "text": "Atur frekuensi cahaya dengan slider." },
+          { "step": 3, "text": "Amati: apakah elektron terlepas? Cek energi kinetik pada panel." },
+          { "step": 4, "text": "Eksplorasi: temukan frekuensi ambang tiap logam!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001", "scope": "global",
+        "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+        "content": {
+          "title": "Persamaan Einstein",
+          "strategy": "Energi kinetik elektron = energi foton dikurangi work function logam. Jika hasilnya negatif, tidak ada elektron terlepas (di bawah frekuensi ambang).",
+          "formula": "KE = h·f - W",
+          "example": "Untuk Cesium (W=2.1 eV), pada f=6x10^14 Hz: KE = 4.136e-15 x 6e14 - 2.1 = 0.38 eV.",
+          "hint_image_description": "Diagram panah: foton datang (E=hf) -> logam -> elektron keluar (KE=hf-W), dengan label work function W di permukaan logam"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_emit", "event": "on_correct_action", "description": "Suara elektron terlepas: singkat, elektronik, nada tinggi 0.3s" },
+          { "id": "sfx_blocked", "event": "on_wrong_action", "description": "Suara frekuensi terlalu rendah: buzz pendek 0.2s" },
+          { "id": "bgm", "event": "background", "description": "Ambient lab elektronik lembut, drone rendah dengan shimmer halus, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_quantum",
+      "scene": {
+        "title": "Laboratorium Fotolistrik",
+        "narrative": "Tembakkan cahaya dengan frekuensi berbeda ke permukaan logam dan amati elektron yang terlepas.",
+        "context": "Eksperimen efek fotolistrik dengan berbagai logam dan rentang frekuensi cahaya UV-visible.",
+        "interactive_objects": [
+          {
+            "id": "laser_beam",
+            "label": "Sinar Laser",
+            "visual_description": "Garis horizontal dari laser emitter ke plat logam: div tinggi 3px, background linear-gradient(90deg, transparent 0%, warna_cahaya 10%, warna_cahaya 90%, transparent 100%), box-shadow: 0 0 8px warna_cahaya, 0 0 20px rgba(warna_cahaya, 0.3). Warna berubah sesuai frekuensi: merah (#ff0000) di 4x10^14 Hz, bergeser ke ungu (#8b00ff) di 8x10^14 Hz, UV transparan-putih (#ffffff opacity 0.6) di atas 8x10^14 Hz. Animasi: pulse opacity 0.8-1.0 setiap 0.5s.",
+            "position": "bottom: 135px; left: 21%; width: 29%",
+            "bound_to_variable": "freq",
+            "visual_response": "Warna beam berubah sesuai frekuensi (merah->jingga->kuning->hijau->biru->ungu->UV). Lebar glow shadow membesar saat frekuensi naik (box-shadow spread 8px di 4x10^14 Hz, 25px di 20x10^14 Hz). Jika freq < frekuensi_ambang: beam tetap ada tapi tidak ada elektron keluar."
+          },
+          {
+            "id": "electrons",
+            "label": "Elektron Terlepas",
+            "visual_description": "Setiap elektron: div 5px border-radius 50%, background #ffee00, box-shadow: 0 0 6px #ffee00, 0 0 12px rgba(255,238,0,0.4). Muncul di posisi plat logam, animasi terbang ke kanan menuju detektor dengan ease-out. Jumlah elektron proporsional KE (0 jika KE=0, max 8 partikel). Setiap elektron punya trajectory sedikit berbeda (random spread vertikal +/- 15px).",
+            "position": "spawn dari posisi metal_plate, bergerak ke kanan",
+            "bound_to_variable": "ke",
+            "visual_response": "KE=0: tidak ada elektron (area kosong). KE>0: elektron muncul dan bergerak, kecepatan animasi proporsional KE (KE rendah: 2s, KE tinggi: 0.5s). Jumlah partikel: Math.min(8, Math.ceil(KE*3)). Trail transparan di belakang setiap elektron."
+          },
+          {
+            "id": "metal_plate_glow",
+            "label": "Efek pada Plat Logam",
+            "visual_description": "Overlay glow di permukaan plat logam saat terkena laser. Div overlay sama ukuran plat, background rgba(warna_cahaya, 0.3), animasi flicker halus.",
+            "position": "sama dengan metal_plate",
+            "bound_to_variable": "freq",
+            "visual_response": "Saat freq >= frekuensi_ambang: glow menjadi lebih terang + warna kuning (elektron terlepas). Saat freq < ambang: glow hanya warna cahaya redup, tidak ada efek tambahan."
+          }
+        ],
+        "visual_feedback": [
+          {
+            "id": "ke_bar",
+            "type": "bar_meter",
+            "description": "Bar horizontal di panel info: lebar 200px tinggi 14px, background rgba(255,255,255,0.1), fill gradient dari #2ecc71 (rendah) ke #ffee00 (sedang) ke #e74c3c (tinggi), border-radius 7px, transition width 0.4s ease. Label 'KE = X.XX eV' di samping kanan bar. Jika KE=0: bar kosong + teks 'Tidak ada elektron'.",
+            "bound_to": "ke"
+          },
+          {
+            "id": "freq_color_indicator",
+            "type": "color_change",
+            "description": "Kotak kecil 20x20px di samping slider frekuensi menunjukkan warna cahaya saat ini (merah-ungu sesuai spektrum). Border-radius 4px, box-shadow glow warna cahaya.",
+            "bound_to": "freq"
+          },
+          {
+            "id": "ke_vs_freq_graph",
+            "type": "graph_realtime",
+            "description": "Grafik kecil 250x150px di panel info. Sumbu X = frekuensi, sumbu Y = KE. Garis lurus dari (f_ambang, 0) ke kanan atas. Titik merah menunjukkan posisi saat ini. Background grafik: rgba(0,0,0,0.3), garis sumbu: rgba(255,255,255,0.3), garis data: #00f5ff, titik saat ini: #ffee00 8px.",
+            "bound_to": "ke"
+          }
+        ],
+        "animation_on_run": "Saat slider frekuensi diubah: laser beam muncul/berubah warna dengan transition 0.3s. Jika freq >= ambang: elektron mulai spawn setiap 0.4s dari plat logam, terbang ke kanan dengan ease-out, fade out setelah 1.5s. Plat logam glow kuning. Detektor berkedip kuning. Jika freq < ambang: laser tetap menyala tapi tidak ada elektron, plat logam glow redup saja."
+      },
+      "variables": [
+        { "id": "freq", "name": "freq", "label": "Frekuensi cahaya", "symbol": "f", "unit": "x10^14 Hz", "type": "user_input", "min": 1, "max": 20, "default": 5, "step": 0.5, "role": "independent", "slider_color": "#00f5ff" },
+        { "id": "metal", "name": "metal", "label": "Jenis logam", "type": "user_input", "options": [
+          { "value": "cesium", "label": "Cesium (W=2.1 eV)", "work_function": 2.1 },
+          { "value": "sodium", "label": "Natrium (W=2.3 eV)", "work_function": 2.3 },
+          { "value": "zinc", "label": "Seng (W=4.3 eV)", "work_function": 4.3 }
+        ], "default": "cesium", "role": "independent" },
+        { "id": "ke", "name": "ke", "label": "Energi kinetik elektron", "symbol": "KE", "unit": "eV", "type": "computed", "role": "dependent" }
+      ],
+      "formula": {
+        "expression": "Math.max(0, 4.136e-15 * freq * 1e14 - metal.work_function)",
+        "description": "Persamaan Einstein untuk efek fotolistrik: KE = hf - W. Jika hf < W maka KE = 0 (tidak ada elektron terlepas).",
+        "display_latex": "KE = hf - W"
+      },
+      "sim_steps": [
+        { "step": 1, "action": "Pilih logam Cesium sebagai target.", "expected_observation": "Plat logam berwarna abu-abu muncul di tengah area simulasi." },
+        { "step": 2, "action": "Atur frekuensi cahaya ke 4x10^14 Hz (cahaya merah).", "expected_observation": "Laser merah menyala, tapi tidak ada elektron terlepas karena di bawah frekuensi ambang Cesium." },
+        { "step": 3, "action": "Naikkan frekuensi perlahan hingga muncul elektron pertama.", "expected_observation": "Pada sekitar 5.1x10^14 Hz (frekuensi ambang Cesium), elektron mulai terlepas dengan KE mendekati 0." },
+        { "step": 4, "action": "Naikkan frekuensi ke 10x10^14 Hz.", "expected_observation": "Lebih banyak elektron terlepas dengan kecepatan lebih tinggi. KE meningkat linear." },
+        { "step": 5, "action": "Ganti logam ke Seng dan amati perbedaannya.", "expected_observation": "Pada frekuensi yang sama, Seng memerlukan frekuensi jauh lebih tinggi (~10.4x10^14 Hz) untuk melepas elektron karena work function lebih besar." }
+      ],
+      "analysis_questions": [
+        { "id": 1, "question": "Berapa frekuensi ambang Cesium? (dalam x10^14 Hz)", "expected_answer": "Sekitar 5.08 x10^14 Hz (dari W/h = 2.1 eV / 4.136e-15 eV.s)", "hint": "Frekuensi ambang = W / h" },
+        { "id": 2, "question": "Mengapa menaikkan intensitas cahaya (bukan frekuensi) tidak bisa melepas elektron jika frekuensi di bawah ambang?", "expected_answer": "Karena setiap foton harus memiliki energi minimal E=hf >= W. Intensitas hanya menambah jumlah foton, bukan energi per foton.", "hint": "Pikirkan cahaya sebagai partikel (foton), bukan gelombang kontinu." },
+        { "id": 3, "question": "Jika grafik KE vs frekuensi ditarik garis lurus, berapa kemiringannya?", "expected_answer": "Kemiringan = konstanta Planck h = 4.136 x 10^-15 eV.s (atau 6.626 x 10^-34 J.s)", "hint": "Dari KE = hf - W, bandingkan dengan y = mx + c." }
+      ]
+    },
+    "win_lose_condition": { "applicable": false },
+    "gameplay_parameters": {
+      "scoring": { "exploration_points_per_parameter_change": 1, "correct_analysis_answer": 20 },
+      "lives": null, "time_limit_seconds": null, "pass_threshold": null
+    }
+  }
+}

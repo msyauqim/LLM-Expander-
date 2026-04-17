@@ -1,0 +1,144 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium Gerak",
+    "jenjang": "SMA-10",
+    "mata_pelajaran": "Fisika",
+    "topik": "Istilah-istilah dalam kinematika",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "word_game"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys10_kin_word_001",
+    "game_type": "word_game",
+    "metadata": {
+      "title": "Laboratorium Gerak",
+      "subject": "Fisika", "grade_level": "SMA-10",
+      "bab": "Kinematika", "subbab": "Besaran dalam Gerak Lurus",
+      "topik": "Istilah-istilah dalam kinematika",
+      "difficulty": 2, "estimated_duration_minutes": 8,
+      "learning_objectives": [
+        "Siswa dapat mengenali istilah penting dalam kinematika",
+        "Siswa dapat membedakan besaran skalar dan vektor"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001", "show_once": true,
+        "title": "Arsip Ilmuwan",
+        "story": "Seorang ilmuwan meninggalkan catatan penting tentang gerak benda, tapi istilahnya teracak. Susun kembali kata-kata ini!",
+        "image_description": "Ilustrasi laboratorium klasik dengan papan tulis berisi coretan, cahaya sore dari jendela",
+        "cta_text": "Mulai Menyusun"
+      },
+      "visual_element": {
+        "theme_name": "Classroom Laboratory", "theme_preset": "classroom",
+        "mood": "warm, curious, inviting",
+        "color_palette": {
+          "primary": "#ef8354", "secondary": "#4f5d75",
+          "background": "#fdf6e3", "accent": "#2d3142", "text": "#2d3142",
+          "gradient_bg": "linear-gradient(180deg, #fdf6e3 0%, #f5e6c8 60%, #e8d5b0 100%)"
+        },
+        "setting_description": "Ruang kelas fisika hangat dengan papan tulis hijau, meja kayu, cahaya sore dari jendela.",
+        "art_style": "flat cartoon with warm gradients",
+        "ambient_elements": ["Partikel debu halus di cahaya", "Buku-buku di rak background"],
+        "canvas_scene": {
+          "render_method": "css_divs",
+          "background_layers": [
+            {
+              "id": "bg_wall",
+              "type": "gradient",
+              "css_description": "Dinding kelas: linear-gradient(180deg, #f5e6c8 0%, #e8d5b0 100%). Efek tekstur kayu halus dengan repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(139,90,43,0.03) 30px, rgba(139,90,43,0.03) 31px).",
+              "z_index": 0
+            },
+            {
+              "id": "bg_chalkboard",
+              "type": "image_css",
+              "css_description": "Papan tulis: div lebar 60% tinggi 35%, background #2d5016, border 8px solid #5d4037, border-radius 2px, box-shadow inset 0 0 30px rgba(0,0,0,0.3), posisi top 10% center. Di atasnya ada teks 'KINEMATIKA' dengan font chalk (color rgba(255,255,255,0.7), text-shadow 1px 1px 2px rgba(255,255,255,0.3)).",
+              "z_index": 1
+            }
+          ],
+          "objects": [
+            {
+              "id": "desk",
+              "shape_description": "Meja kayu: div lebar 80% tinggi 12px, background linear-gradient(180deg, #8B6914, #6B4F12), border-top 2px solid #a07828, box-shadow: 0 4px 8px rgba(0,0,0,0.2).",
+              "position": "bottom: 30%; left: 10%",
+              "animation": null
+            },
+            {
+              "id": "window_light",
+              "shape_description": "Cahaya jendela: div 80x120px, background linear-gradient(135deg, rgba(255,236,179,0.4), transparent), border-left 3px solid rgba(255,236,179,0.6). Efek sinar matahari diagonal.",
+              "position": "top: 5%; right: 5%",
+              "animation": "pulse 4s ease-in-out infinite"
+            }
+          ],
+          "particle_effects": [
+            {
+              "type": "dust",
+              "count": 8,
+              "css_description": "Partikel debu: div 2-3px border-radius 50%, background #fff8e1 opacity 0.2-0.5, float diagonal dari kanan atas ke kiri bawah dalam 10-20s infinite. Hanya muncul di area cahaya jendela."
+            }
+          ]
+        },
+        "ui_components": {
+          "button_style": "Rounded 10px, background #ef8354, color white, font-weight bold, box-shadow: 0 3px 0 #c06030, hover: transform translateY(-2px) + box-shadow 0 5px 0 #c06030, active: translateY(1px) + box-shadow 0 1px 0 #c06030, transition all 0.2s",
+          "card_style": "Background #ffffff, border-radius 12px, box-shadow: 0 2px 12px rgba(0,0,0,0.08), border: 1px solid rgba(239,131,84,0.2), padding 16px",
+          "score_display_style": "Font rounded, background #2d3142, color #ef8354, border-radius 8px, padding 6px 14px, font-weight bold",
+          "input_style": "Border 2px solid #4f5d75, border-radius 8px, padding 10px, font-size 1.1rem, focus: border-color #ef8354 + box-shadow 0 0 0 3px rgba(239,131,84,0.2)"
+        }
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": { "type": "popup_button", "position": "top_right", "icon": "question_mark", "label": "Petunjuk" },
+        "steps": [
+          { "step": 1, "text": "Perhatikan huruf-huruf acak yang ditampilkan." },
+          { "step": 2, "text": "Ketik jawabanmu di kotak input." },
+          { "step": 3, "text": "Tekan Enter untuk cek jawaban." },
+          { "step": 4, "text": "Kamu punya 3 nyawa. Jawaban salah mengurangi 1 nyawa." }
+        ]
+      },
+      "hint": {
+        "id": "hint_001", "scope": "global",
+        "trigger": { "type": "auto_popup", "after_seconds": 60, "dismissible": true, "reusable": true, "manual_trigger_available": true },
+        "content": {
+          "title": "Strategi Menyusun",
+          "strategy": "Istilah kinematika sering berakhiran '-an' atau '-si'. Pikirkan besaran fisika: ada yang mengukur jarak, waktu, kecepatan, perubahannya.",
+          "formula": null,
+          "example": "Huruf 'KACEJARAN' bisa disusun jadi 'KECEPATAN'.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Ding ceria singkat" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Buzz lembut" },
+          { "id": "sfx_win", "event": "on_win", "description": "Fanfare 8-bit 2 detik" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Nada turun 1.5 detik" }
+        ]
+      }
+    },
+    "payload": {
+      "word_game_subtype": "anagram",
+      "intro_narrative": "Susun 5 istilah kinematika!",
+      "items": [
+        { "id": "w_001", "scrambled": "KARJA", "answer": "JARAK", "explanation": "Panjang lintasan total, besaran skalar.", "points": 10 },
+        { "id": "w_002", "scrambled": "NAHPINAGREP", "answer": "PERPINDAHAN", "explanation": "Perubahan posisi, besaran vektor.", "points": 10 },
+        { "id": "w_003", "scrambled": "TANEPECEK", "answer": "KECEPATAN", "explanation": "Perpindahan per waktu, vektor.", "points": 10 },
+        { "id": "w_004", "scrambled": "JANUALEK", "answer": "KELAJUAN", "explanation": "Jarak per waktu, skalar.", "points": 10 },
+        { "id": "w_005", "scrambled": "NAHCAPEPRTE", "answer": "PERCEPATAN", "explanation": "Perubahan kecepatan per waktu, m/s².", "points": 10 }
+      ],
+      "outro_narrative": "Arsip terbuka! Kamu siap mempelajari gerak."
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": { "description": "Benar minimal 4 dari 5", "logic": "correct_count >= 4", "feedback_text": "Hebat! Kamu menguasai istilah kinematika.", "feedback_audio": "sfx_win" },
+      "lose": { "description": "Kehabisan nyawa", "logic": "lives <= 0", "feedback_text": "Belum berhasil. Coba lagi!", "feedback_audio": "sfx_lose", "retry_allowed": true }
+    },
+    "gameplay_parameters": {
+      "scoring": { "correct": 10, "wrong": -2, "bonus_time": 5 },
+      "lives": 3, "time_limit_seconds": 300, "pass_threshold": 70
+    }
+  }
+}

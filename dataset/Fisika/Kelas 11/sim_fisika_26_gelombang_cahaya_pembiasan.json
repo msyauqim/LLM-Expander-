@@ -1,0 +1,167 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Pembiasan Cahaya dan Indeks Bias",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gelombang Cahaya",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_cahaya_pembiasan_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Pembiasan Cahaya dan Indeks Bias",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Gelombang, Bunyi, dan Cahaya",
+      "subbab": "Gelombang Cahaya",
+      "topik": "Pembiasan Cahaya dan Hukum Snell",
+      "difficulty": 2,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menerapkan Hukum Snell untuk menghitung sudut bias cahaya antara dua medium",
+        "Siswa dapat menghitung cepat rambat cahaya dalam medium menggunakan indeks bias",
+        "Siswa dapat menghitung sudut kritis untuk peristiwa pemantulan dalam total pada antarmuka dua medium"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Bengkel Kaca Nusantara",
+        "story": "Di bengkel kaca seni Nusantara, pengrajin menggunakan prisma dan lensa kristal untuk menciptakan efek cahaya yang indah. Setiap kali cahaya memasuki kaca atau air, ia membelok — itulah pembiasan. Kamu adalah asisten optik yang harus menghitung sudut bias dan cepat rambat cahaya di berbagai medium agar desain optik bengkel sesuai rancangan. Kuasai Hukum Snell dan jadilah ahli optik Nusantara!",
+        "image_description": "Bengkel kaca seni Nusantara yang terang: balok kaca kristal bening di atas meja kayu; berkas cahaya putih memasuki kaca dan membelok; busur derajat digital di sisi kiri menunjukkan sudut datang dan bias; aneka warna spektrum terpancar dari prisma kaca; dinding kayu dengan ragam hias ukiran Nusantara",
+        "cta_text": "Mulai Eksperimen Optik"
+      },
+      "visual_element": {
+        "theme_name": "Bengkel Optik Nusantara",
+        "theme_preset": "candy_pastel",
+        "mood": "colorful, curious, artistic",
+        "color_palette": {
+          "primary": "#e91e63",
+          "secondary": "#7b1fa2",
+          "background": "#fff9fb",
+          "accent": "#00bcd4",
+          "text": "#212121"
+        },
+        "setting_description": "Bengkel kaca seni yang cerah dan berwarna-warni; blok medium transparan berwarna pastel di tengah layar; berkas cahaya berwarna-warni membiaskan diri melalui berbagai material; busur derajat interaktif di sekeliling blok medium.",
+        "art_style": "ilustrasi flat colorful bergaya bengkel seni kreatif dengan gradien warna pastel dan efek cahaya spektrum pelangi",
+        "ambient_elements": [
+          "Berkas cahaya berwarna bergerak mengikuti perubahan sudut datang secara real-time",
+          "Busur derajat animasi menampilkan sudut datang dan sudut bias secara bersamaan",
+          "Spektrum pelangi kecil muncul di sisi kaca saat cahaya memasuki medium"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur indeks bias medium pertama (n₁), biasanya 1,0 untuk udara." },
+          { "step": 2, "text": "Atur indeks bias medium kedua (n₂), misalnya 1,5 untuk kaca atau 1,33 untuk air." },
+          { "step": 3, "text": "Atur sudut datang (θ₁) — sudut berkas cahaya terhadap garis normal pada antarmuka." },
+          { "step": 4, "text": "Simulasi menghitung sudut bias (θ₂), cepat rambat cahaya di medium 2, dan sudut kritis jika n₁ > n₂." },
+          { "step": 5, "text": "Selesaikan tiga tantangan optik untuk lulus sebagai ahli kaca Nusantara!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Hukum Snell dan Indeks Bias",
+          "strategy": "Hukum Snell: n₁ sin θ₁ = n₂ sin θ₂. Jika n₂ > n₁ (cahaya masuk medium lebih rapat), maka θ₂ < θ₁ (sinar mendekati normal). Jika n₁ > n₂ (keluar ke medium renggang), θ₂ > θ₁ — pada sudut kritis θc = arcsin(n₂/n₁), cahaya tidak melewati batas (Pemantulan Dalam Total). Cepat rambat: v₂ = c/n₂ dengan c = 3×10⁸ m/s.",
+          "formula": "n₁·sin θ₁ = n₂·sin θ₂ ;  θ_kritis = arcsin(n₂/n₁) [jika n₁>n₂] ;  v₂ = c/n₂",
+          "example": "Udara→kaca: n₁=1,0, n₂=1,5, θ₁=30°: sin θ₂=(1,0/1,5)×sin30°=0,333; θ₂≈19,5°. Kaca→udara: θ_kritis=arcsin(1,0/1,5)=arcsin(0,667)≈41,8°.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": false,
+        "tracks": []
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_optics",
+      "scenario": {
+        "title": "Simulasi Pembiasan Cahaya antar Dua Medium (Hukum Snell)",
+        "narrative": "Atur indeks bias dua medium dan sudut datang cahaya. Simulasi menghitung sudut bias menggunakan Hukum Snell, cepat rambat cahaya di medium 2, dan sudut kritis saat n₁ > n₂.",
+        "context": "Cahaya merambat dari medium 1 (indeks bias n₁) ke medium 2 (indeks bias n₂); antarmuka datar horizontal; sudut diukur dari garis normal antarmuka; c = 3×10⁸ m/s; θ_kritis hanya berlaku ketika n₁ > n₂; fungsi arcsin menghasilkan sudut dalam derajat; π = 3.14159."
+      },
+      "variables": [
+        { "id": "n1", "label": "Indeks bias medium 1", "symbol": "n₁", "unit": "", "type": "user_input", "min": 1.0, "max": 2.5, "default": 1.5, "step": 0.05 },
+        { "id": "n2", "label": "Indeks bias medium 2", "symbol": "n₂", "unit": "", "type": "user_input", "min": 1.0, "max": 2.5, "default": 1.0, "step": 0.05 },
+        { "id": "theta1", "label": "Sudut datang (dari garis normal)", "symbol": "θ₁", "unit": "°", "type": "user_input", "min": 1, "max": 85, "default": 30, "step": 1 },
+        { "id": "theta2", "label": "Sudut bias di medium 2", "symbol": "θ₂", "unit": "°", "type": "computed" },
+        { "id": "theta_kritis", "label": "Sudut kritis (berlaku jika n₁ > n₂)", "symbol": "θ_c", "unit": "°", "type": "computed" },
+        { "id": "v2", "label": "Cepat rambat cahaya di medium 2", "symbol": "v₂", "unit": "m/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_theta2", "computes": "theta2", "formula": "theta2 = arcsin(n1 / n2 * sin(theta1 * 3.14159 / 180)) * 180 / 3.14159", "description": "Hukum Snell: n₁ sin θ₁ = n₂ sin θ₂ → θ₂ = arcsin(n₁/n₂ × sin θ₁)" },
+        { "id": "eq_tc", "computes": "theta_kritis", "formula": "theta_kritis = arcsin(n2 / n1) * 180 / 3.14159", "description": "Sudut kritis untuk pemantulan dalam total: θ_c = arcsin(n₂/n₁); valid hanya jika n₁ > n₂" },
+        { "id": "eq_v2", "computes": "v2", "formula": "v2 = 300000000 / n2", "description": "Cepat rambat cahaya di medium 2 = c/n₂; c = 3×10⁸ m/s" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Antarmuka horizontal dua medium: medium 1 (atas, warna lebih terang) dan medium 2 (bawah, lebih gelap seiring n₂ meningkat); berkas cahaya berwarna datang dari atas kiri dengan sudut θ₁, membelok di batas, melanjut dengan sudut θ₂ di medium 2; busur derajat animasi menunjukkan kedua sudut secara bersamaan" },
+        { "id": "viz_2", "type": "graph", "x_axis": "theta1", "y_axis": "theta2", "title": "Sudut Bias vs Sudut Datang (θ₂–θ₁)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "n2", "y_axis": "theta_kritis", "title": "Sudut Kritis vs Indeks Bias Medium 2 (θ_c–n₂)" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Cahaya dari udara (n₁=1,0) memasuki kaca (n₂=1,5) dengan sudut datang θ₁=30°. Hitung sudut bias θ₂ menggunakan Hukum Snell. (Petunjuk: sin θ₂ = sin30°/1,5 = 0,333; θ₂≈19,5°)",
+          "success_condition": "abs(n1 - 1.0) < 0.02 AND abs(n2 - 1.5) < 0.02 AND abs(theta1 - 30) < 0.5 AND abs(theta2 - 19.47) < 1",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Dari dalam kaca (n₁=1,5) ke udara (n₂=1,0), hitung sudut kritis θ_c. Verifikasi bahwa saat θ₁ = θ_c, sudut bias θ₂ ≈ 90°. (Petunjuk: θ_c = arcsin(1,0/1,5) ≈ 41,8°)",
+          "success_condition": "abs(n1 - 1.5) < 0.02 AND abs(n2 - 1.0) < 0.02 AND abs(theta_kritis - 41.81) < 1.5",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Cahaya merambat dari air (n₁=1,33) ke kaca (n₂=1,5) dengan sudut datang 45°. Berapa sudut bias θ₂? Juga hitung cepat rambat cahaya di dalam kaca tersebut.",
+          "success_condition": "abs(n1 - 1.33) < 0.02 AND abs(n2 - 1.5) < 0.02 AND abs(theta1 - 45) < 0.5 AND abs(theta2 - 38.97) < 1.5 AND abs(v2 - 200000000) < 5000000",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan pembiasan cahaya",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Bengkel optik berhasil! Kamu menguasai Hukum Snell: n₁sinθ₁=n₂sinθ₂, sudut kritis, dan cepat rambat v=c/n. Desain lensa sempurna!",
+        "feedback_audio": null
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: n₁sinθ₁=n₂sinθ₂. Medium lebih rapat (n besar) → θ mengecil (mendekati normal). Sudut kritis=arcsin(n₂/n₁) saat n₁>n₂. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

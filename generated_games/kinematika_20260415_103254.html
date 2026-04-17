@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+:root {
+  --primary: #1E90FF;
+  --secondary: #FF6347;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --accent: #8b5cf6;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, var(--background) 0%, #1a2436 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.game-container {
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Particle background */
+.particles-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 144, 255, 0.3) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
+}
+
+/* Header styling */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(30, 144, 255, 0.2);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* Main content area */
+.content-area {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .content-area {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Scene area styling */
+.scene-area {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.scene-area:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.scene-content {
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Sidebar styling */
+.sidebar {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: sticky;
+  top: 2rem;
+}
+
+.sidebar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.stats-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(15, 23, 42, 0.8);
+  transform: translateX(2px);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Controls section */
+.controls-section {
+  margin-top: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(30, 144, 255, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #0066cc);
+  color: white;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--secondary), #e0553b);
+  color: white;
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 8px 25px rgba(255, 99, 71, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: rgba(30, 144, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(30, 144, 255, 0.2);
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Card styling */
+.card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-content {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Input styling */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  width: 65%;
+}
+
+/* Animation utilities */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .content-area {
+    gap: 1rem;
+  }
+  
+  .scene-area,
+  .sidebar {
+    padding: 1rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.875rem;
+  }
+  
+  .stat-card {
+    padding: 0.75rem;
+  }
+  
+  .stat-value {
+    font-size: 1.1rem;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0066cc;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Gaya Aksi-Reaksi Newton 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #e6e6e6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Menu Screen */
+        .screen {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #64ffda;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #a9b7d0;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #64ffda, #0f9d58);
+            color: #0a0a1a;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(100, 255, 218, 0.5);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #4a4a8a, #2c2c5c);
+            color: white;
+        }
+        
+        /* Game Screen */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 12px;
+        }
+        
+        .stat-box {
+            background: rgba(25, 150, 120, 0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            min-width: 120px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+        
+        .question-container {
+            background: rgba(30, 30, 50, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #e6e6e6;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #4a4a8a;
+            border-radius: 8px;
+            background: rgba(20, 20, 40, 0.8);
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+        
+        .examples {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(40, 40, 70, 0.5);
+            border-radius: 8px;
+        }
+        
+        .example-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(30, 30, 50, 0.5);
+            border-left: 3px solid #64ffda;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Results Screen */
+        .results-content {
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #64ffda;
+            margin: 30px 0;
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+        }
+        
+        .feedback {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: rgba(30, 30, 50, 0.95);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #ff6b6b;
+        }
+        
+        .modal-title {
+            color: #64ffda;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .highlight {
+            color: #64ffda;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(100, 100, 150, 0.3);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #64ffda, #0f9d58);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .reaction-animation {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(40, 40, 70, 0.5);
+            border-radius: 12px;
+        }
+        
+        .object {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: #64ffda;
+            animation: bounce 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .screen {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Menu Screen -->
+        <div id="menu-screen" class="screen active">
+            <h1>Newton #3: Aksi-Reaksi</h1>
+            <p>Simulasi interaktif untuk memahami Hukum III Newton tentang Gaya Aksi dan Reaksi</p>
+            <div class="reaction-animation">
+                <div class="object">A</div>
+                <div class="arrow">←→</div>
+                <div class="object">B</div>
+            </div>
+            <button id="start-btn" class="btn">Mulai Simulasi</button>
+            <button id="instructions-btn" class="btn btn-secondary">Petunjuk Penggunaan</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="stat-box">
+                    <div>Skor</div>
+                    <div id="score-value" class="stat-value">0</div>
+                </div>
+                <div class="stat-box">
+                    <div>Sisa Nyawa</div>
+                    <div id="lives-value" class="stat-value">3</div>
+                </div>
+                <div class="stat-box">
+                    <div>Waktu</div>
+                    <div id="timer-value" class="stat-value">60</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text">
+                    Contoh peristiwa yang menunjukkan Hukum III Newton (gaya aksi-reaksi) adalah...
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="answer-input" placeholder="Ketik contoh peristiwa...">
+                    <button id="submit-btn" class="btn">Periksa</button>
+                </div>
+                
+                <div class="examples">
+                    <h3>Contoh-contoh:</h3>
+                    <div class="example-item">- Orang berjalan di tanah</div>
+                    <div class="example-item">- Ayunan tali yang saling tarik-menarik</div>
+                    <div class="example-item">- Peluncuran roket</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <h2>Simulasi Selesai!</h2>
+            <div class="score-display" id="final-score">0</div>
+            <div class="feedback" id="feedback-message">Pertahankan belajarmu!</div>
+            <p>Kamu telah memahami konsep Hukum III Newton tentang gaya aksi-reaksi.</p>
+            <button id="restart-btn" class="btn">Ulangi Simulasi</button>
+            <button id="menu-btn" class="btn btn-secondary">Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">Petunjuk Simulasi Newton #3</h2>
+            <p>Cari contoh peristiwa sehari-hari yang menunjukkan <span class="highlight">Hukum III Newton</span>:</p>
+            <p><span class="highlight">"Gaya aksi = Gaya reaksi"</span>, tetapi arahnya berlawanan.</p>
+            <br>
+            <p><span class="highlight">Cara Bermain:</span></p>
+            <ul style="text-align: left; margin: 15px 0;">
+                <li>Baca pertanyaan dengan teliti</li>
+                <li>Ketik contoh peristiwa yang sesuai</li>
+                <li>Tekan "Periksa" untuk verifikasi</li>
+                <li>Dapatkan skor untuk jawaban benar</li>
+            </ul>
+            <p>Gunakan waktu sebaik mungkin dan pelajari konsepnya!</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const menuScreen = document.getElementById('menu-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startBtn = document.getElementById('start-btn');
+        const instructionsBtn = document.getElementById('instructions-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const menuBtn = document.getElementById('menu-btn');
+        const answerInput = document.getElementById('answer-input');
+        const questionText = document.getElementById('question-text');
+        const scoreValue = document.getElementById('score-value');
+        const livesValue = document.getElementById('lives-value');
+        const timerValue = document.getElementById('timer-value');
+        const finalScore = document.getElementById('final-score');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const closeModal = document.querySelector('.close-btn');
+        const progress = document.getElementById('progress');
+
+        // Game State
+        let gameState = {
+            score: 0,
+            lives: 3,
+            timeLeft: 60,
+            timer: null,
+            currentQuestion: 0,
+            questions: [
+                "Berikan contoh peristiwa yang menunjukkan Hukum III Newton (gaya aksi-reaksi)!",
+                "Jelaskan bagaimana Hukum III Newton berlaku saat seseorang berjalan!",
+                "Sebutkan fenomena alam yang menggambarkan prinsip aksi-reaksi!",
+                "Berikan contoh teknologi yang menerapkan Hukum III Newton!"
+            ],
+            answers: [
+                ["mendorong tembok", "orang berjalan", "peluncuran roket", "menendang bola"],
+                ["kaki mendorong tanah", "tanah memberi reaksi", "memungkinkan gerak maju"],
+                ["burung terbang", "ikan berenang", "gerak jet"],
+                ["roket luar angkasa", "mesin jet", "kapal selam"]
+            ]
+        };
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        instructionsBtn.addEventListener('click', () => {
+            instructionsModal.style.display = 'flex';
+        });
+        closeModal.addEventListener('click', () => {
+            instructionsModal.style.display = 'none';
+        });
+        submitBtn.addEventListener('click', checkAnswer);
+        restartBtn.addEventListener('click', resetGame);
+        menuBtn.addEventListener('click', () => {
+            showScreen(menuScreen);
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === instructionsModal) {
+                instructionsModal.style.display = 'none';
+            }
+        });
+
+        // Functions
+        function showScreen(screen) {
+            menuScreen.classList.remove('active');
+            gameScreen.classList.remove('active');
+            resultsScreen.classList.remove('active');
+            screen.classList.add('active');
+        }
+
+        function startGame() {
+            resetGameState();
+            showScreen(gameScreen);
+            updateUI();
+            startTimer();
+            loadQuestion();
+        }
+
+        function resetGameState() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.timeLeft = 60;
+            gameState.currentQuestion = 0;
+            clearInterval(gameState.timer);
+        }
+
+        function resetGame() {
+            resetGameState();
+            showScreen(menuScreen);
+        }
+
+        function updateUI() {
+            scoreValue.textContent = gameState.score;
+            livesValue.textContent = gameState.lives;
+            timerValue.textContent = gameState.timeLeft;
+            progress.style.width = `${((gameState.questions.length - gameState.currentQuestion) / gameState.questions.length) * 100}%`;
+        }
+
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateUI();
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            if (gameState.currentQuestion < gameState.questions.length) {
+                questionText.textContent = gameState.questions[gameState.currentQuestion];
+                answerInput.value = '';
+                updateUI();
+            } else {
+                endGame();
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = answerInput.value.toLowerCase().trim();
+            const correctAnswers = gameState.answers[gameState.currentQuestion];
+
+            if (correctAnswers.some(answer => userAnswer.includes(answer))) {
+                gameState.score += 10;
+                feedbackMessage.textContent = "Benar! Jawabanmu sesuai.";
+                feedbackMessage.style.color = "#64ffda";
+            } else {
+                gameState.lives--;
+                feedbackMessage.textContent = "Kurang tepat, coba lagi!";
+                feedbackMessage.style.color = "#ff6b6b";
+            }
+
+            gameState.currentQuestion++;
+            
+            if (gameState.lives <= 0) {
+                endGame();
+            } else if (gameState.currentQuestion < gameState.questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+            
+            updateUI();
+        }
+
+        function endGame() {
+            clearInterval(gameState.timer);
+            finalScore.textContent = gameState.score;
+            
+            if (gameState.score >= 30) {
+                feedbackMessage.textContent = "Hebat! Kamu memahami Hukum III Newton dengan baik!";
+            } else if (gameState.score >= 10) {
+                feedbackMessage.textContent = "Bagus! Terus latih pemahamanmu tentang aksi-reaksi!";
+            } else {
+                feedbackMessage.textContent = "Belajar lebih lanjut tentang Hukum III Newton!";
+            }
+            
+            showScreen(resultsScreen);
+        }
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>;
+const GameComponent = const;
+
+// Render React component
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<GameComponent />);
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Melingkar Beraturan"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_gerak_melingkar_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Orbit Sempurna: Simulator GMB",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Gerak Melingkar Beraturan",
+      "topik": "Gerak Melingkar Beraturan",
+      "difficulty": 3,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan besaran-besaran GMB: periode, frekuensi, kecepatan sudut, dan kecepatan linear",
+        "Siswa dapat menghitung percepatan sentripetal dan menjelaskan arahnya menuju pusat lingkaran",
+        "Siswa dapat menghubungkan kecepatan sudut ω dengan kecepatan linear v melalui persamaan v = ω·r"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Kendalikan Satelit Orbit",
+        "story": "Pusat kendali antariksa membutuhkan keahlianmu! Sebuah satelit kecil harus mengorbit Bumi dalam lintasan lingkaran sempurna. Kamu bertugas mengatur jari-jari orbit dan periode putaran, lalu menghitung semua besaran GMB yang diperlukan. Pastikan orbitnya stabil!",
+        "image_description": "Bumi dari luar angkasa dengan satelit kecil mengorbit dalam lintasan lingkaran bercahaya biru, latar hitam pekat berbintang, panel kontrol di pojok kiri bawah menampilkan data orbit",
+        "cta_text": "Aktifkan Orbit"
+      },
+      "visual_element": {
+        "theme_name": "Orbital Control",
+        "theme_preset": "space_cosmic",
+        "mood": "precise, immersive, scientific",
+        "color_palette": {
+          "primary": "#48cae4",
+          "secondary": "#f4a261",
+          "background": "#03071e",
+          "accent": "#80ffdb",
+          "text": "#e9ecef"
+        },
+        "setting_description": "Ruang angkasa dalam dengan planet biru di tengah, lintasan orbit bercahaya aqua, satelit kecil bergerak melingkar, grid koordinat polar tipis di latar.",
+        "art_style": "space flat illustration with glowing orbit paths",
+        "ambient_elements": [
+          "Bintang latar berkedip lambat",
+          "Jejak orbit satelit yang perlahan memudar",
+          "Vektor kecepatan dan sentripetal ditampilkan sebagai panah",
+          "Label sudut φ yang berputar mengikuti satelit"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur jari-jari orbit r menggunakan slider." },
+          { "step": 2, "text": "Atur periode T (waktu satu putaran penuh) menggunakan slider." },
+          { "step": 3, "text": "Tekan Aktifkan untuk menjalankan simulasi orbit." },
+          { "step": 4, "text": "Amati vektor kecepatan linear (tangensial) dan percepatan sentripetal (menuju pusat)." },
+          { "step": 5, "text": "Panel data menampilkan ω, v, dan aₛ secara otomatis. Selesaikan tantangan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 75,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Rumus Kunci GMB",
+          "strategy": "Dalam GMB, kelajuan linear konstan namun arahnya selalu berubah (tangensial). Percepatan sentripetal selalu mengarah ke pusat lingkaran dan menyebabkan perubahan arah. Semakin besar r atau ω, semakin besar kecepatan linear.",
+          "formula": "ω = 2π/T = 2πf  |  v = ω·r = 2πr/T  |  aₛ = v²/r = ω²·r",
+          "example": "Satelit r=1000 km=10⁶ m, T=2 jam=7200 s: ω=2π/7200≈8,7×10⁻⁴ rad/s, v=ω·r≈873 m/s, aₛ=v²/r≈0,76 m/s².",
+          "hint_image_description": "Diagram lingkaran dengan satelit di tepi: panah tangensial berlabel v, panah menuju pusat berlabel aₛ, jari-jari berlabel r, sudut kecil berlabel dφ"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_orbit_active", "event": "on_correct_action", "description": "Suara misi aktif: bip elektronik naik diikuti hum mesin satelit stabil" },
+          { "id": "sfx_win", "event": "on_win", "description": "Fanfare orkestral pendek dan alarm misi suksesi saat semua tantangan selesai" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Alarm peringatan orbit tidak stabil, frekuensi menurun" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik ambient luar angkasa bertempo lambat, synthesizer mengambang, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Laboratorium Orbit Melingkar",
+        "narrative": "Simulasikan satelit yang bergerak melingkar beraturan mengelilingi planet. Eksplorasi hubungan antara jari-jari orbit, periode, kecepatan sudut, kecepatan linear, dan percepatan sentripetal.",
+        "context": "GMB ideal: kelajuan konstan, arah berubah kontinyu. Gravitasi menyediakan gaya sentripetal. Satuan SI digunakan."
+      },
+      "variables": [
+        {
+          "id": "r",
+          "label": "Jari-jari orbit",
+          "symbol": "r",
+          "unit": "m",
+          "type": "user_input",
+          "min": 1,
+          "max": 20,
+          "default": 8,
+          "step": 0.5
+        },
+        {
+          "id": "T",
+          "label": "Periode",
+          "symbol": "T",
+          "unit": "s",
+          "type": "user_input",
+          "min": 1,
+          "max": 30,
+          "default": 4,
+          "step": 0.5
+        },
+        {
+          "id": "t",
+          "label": "Waktu simulasi",
+          "symbol": "t",
+          "unit": "s",
+          "type": "simulation_time",
+          "min": 0,
+          "max": 60
+        },
+        {
+          "id": "omega",
+          "label": "Kecepatan sudut",
+          "symbol": "ω",
+          "unit": "rad/s",
+          "type": "computed"
+        },
+        {
+          "id": "freq",
+          "label": "Frekuensi",
+          "symbol": "f",
+          "unit": "Hz",
+          "type": "computed"
+        },
+        {
+          "id": "v_linear",
+          "label": "Kecepatan linear",
+          "symbol": "v",
+          "unit": "m/s",
+          "type": "computed"
+        },
+        {
+          "id": "a_sentripetal",
+          "label": "Percepatan sentripetal",
+          "symbol": "aₛ",
+          "unit": "m/s²",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_omega",
+          "computes": "omega",
+          "formula": "omega = 2 * pi / T",
+          "description": "Kecepatan sudut dari periode orbit"
+        },
+        {
+          "id": "eq_freq",
+          "computes": "freq",
+          "formula": "freq = 1 / T",
+          "description": "Frekuensi orbit (kebalikan periode)"
+        },
+        {
+          "id": "eq_v",
+          "computes": "v_linear",
+          "formula": "v_linear = omega * r",
+          "description": "Kecepatan linear tangensial dari kecepatan sudut dan jari-jari"
+        },
+        {
+          "id": "eq_as",
+          "computes": "a_sentripetal",
+          "formula": "a_sentripetal = v_linear^2 / r",
+          "description": "Percepatan sentripetal yang selalu mengarah ke pusat lingkaran"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_orbit",
+          "type": "animation",
+          "title": "Animasi Orbit Satelit",
+          "description": "Satelit bergerak melingkar beraturan mengelilingi planet. Vektor kecepatan tangensial (biru) dan percepatan sentripetal (merah menuju pusat) ditampilkan real-time."
+        },
+        {
+          "id": "viz_omega_v",
+          "type": "graph",
+          "x_axis": "r",
+          "y_axis": "v_linear",
+          "title": "Grafik v terhadap r (T konstan)"
+        },
+        {
+          "id": "viz_table",
+          "type": "table",
+          "title": "Panel Besaran GMB",
+          "description": "Tabel menampilkan nilai r, T, f, ω, v, dan aₛ secara real-time"
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur r = 5 m dan T = 2 s. Hitung dan verifikasi kecepatan sudut ω, kecepatan linear v, dan percepatan sentripetal aₛ menggunakan simulasi.",
+          "success_condition": "abs(r - 5) < 0.3 AND abs(T - 2) < 0.2 AND abs(omega - 3.14) < 0.3",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi r dan T sehingga kecepatan linear v tepat 10 m/s. Lebih dari satu jawaban benar!",
+          "success_condition": "abs(v_linear - 10) < 0.5",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Jika r digandakan tetapi T dibiarkan sama, prediksi apa yang terjadi pada v dan aₛ. Verifikasi prediksimu dengan simulasi.",
+          "success_condition": "abs(r - 16) < 0.5 AND abs(T - 4) < 0.3",
+          "points": 25
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan minimal 2 dari 3 tantangan orbit",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Orbit sempurna! Kamu telah menguasai Gerak Melingkar Beraturan seperti insinyur antariksa profesional!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Orbit tidak stabil! Ingat: v = ωr dan aₛ = v²/r. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_parameter_change": 1
+      },
+      "lives": null,
+      "time_limit_seconds": 1080,
+      "pass_threshold": 50
+    }
+  }
+}

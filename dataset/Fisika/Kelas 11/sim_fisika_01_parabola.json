@@ -1,0 +1,151 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Peluncur Parabola",
+    "jenjang": "SMA-10",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak parabola",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys10_parabola_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Peluncur Parabola",
+      "subject": "Fisika",
+      "grade_level": "SMA-10",
+      "bab": "Kinematika",
+      "subbab": "Gerak Dua Dimensi",
+      "topik": "Gerak parabola",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menguraikan gerak parabola menjadi komponen horizontal dan vertikal",
+        "Siswa dapat menentukan jangkauan dan ketinggian maksimum gerak parabola"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Lapangan Tembak Parabola",
+        "story": "Kamu adalah operator meriam di lapangan percobaan. Atur sudut dan kecepatan peluru, lalu tembakkan! Amati lintasan parabola yang terbentuk dan temukan kombinasi terbaik untuk menjangkau target sejauh mungkin.",
+        "image_description": "Lapangan terbuka hijau dengan meriam di atas bukit kecil, lintasan parabola digambarkan garis putus-putus di langit biru cerah",
+        "cta_text": "Mulai Eksperimen"
+      },
+      "visual_element": {
+        "theme_name": "Outdoor Ballistics",
+        "theme_preset": "forest_green",
+        "mood": "adventurous, educational, dynamic",
+        "color_palette": {
+          "primary": "#2ecc71",
+          "secondary": "#e67e22",
+          "background": "#1a2e1a",
+          "accent": "#f1c40f",
+          "text": "#ffffff"
+        },
+        "setting_description": "Lapangan terbuka dengan rumput hijau subur, langit biru cerah berawan tipis, target lingkaran merah di kejauhan.",
+        "art_style": "flat design with soft shadow accents",
+        "ambient_elements": ["Angin sepoi menggerakkan rumput", "Awan bergerak perlahan di latar", "Partikel debu saat meriam ditembakkan"]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur kecepatan awal v₀ dengan slider." },
+          { "step": 2, "text": "Atur sudut peluncuran θ (1°–89°) dengan slider." },
+          { "step": 3, "text": "Tekan Tembak untuk melihat lintasan parabola." },
+          { "step": 4, "text": "Amati jangkauan R dan ketinggian maksimum H pada panel hasil." },
+          { "step": 5, "text": "Eksplorasi: sudut berapakah yang menghasilkan jangkauan terbesar?" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Rumus Gerak Parabola",
+          "strategy": "Pisahkan gerak menjadi horizontal (kecepatan konstan) dan vertikal (diperlambat gravitasi). Jangkauan maksimum terjadi pada θ = 45°. Ketinggian maksimum dicapai saat komponen vertikal kecepatan = nol.",
+          "formula": "R = v₀²·sin(2θ)/g,  H = v₀²·sin²(θ)/(2g)",
+          "example": "Untuk v₀=20 m/s, θ=45°, g=10 m/s²: R = 400·1/10 = 40 m, H = 400·0.5/20 = 10 m.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_launch", "event": "on_correct_action", "description": "Suara ledakan meriam singkat dan meriah saat peluru diluncurkan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara ding! dan sorak sorai saat semua tantangan berhasil diselesaikan" },
+          { "id": "bgm", "event": "background", "description": "Musik petualangan ringan bernuansa alam terbuka, loop tenang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Laboratorium Gerak Parabola",
+        "narrative": "Tembakkan peluru dengan berbagai sudut dan kecepatan, amati lintasan parabola, dan temukan kombinasi optimal untuk menjangkau target.",
+        "context": "Eksperimen gerak parabola ideal, hambatan udara diabaikan, g = 10 m/s²."
+      },
+      "variables": [
+        { "id": "v0", "label": "Kecepatan awal", "symbol": "v₀", "unit": "m/s", "type": "user_input", "min": 5, "max": 50, "default": 20, "step": 1 },
+        { "id": "theta", "label": "Sudut peluncuran", "symbol": "θ", "unit": "derajat", "type": "user_input", "min": 1, "max": 89, "default": 45, "step": 1 },
+        { "id": "t", "label": "Waktu", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 20 },
+        { "id": "x", "label": "Posisi horizontal", "symbol": "x", "unit": "m", "type": "computed" },
+        { "id": "y", "label": "Posisi vertikal", "symbol": "y", "unit": "m", "type": "computed" },
+        { "id": "range_max", "label": "Jangkauan maksimum", "symbol": "R", "unit": "m", "type": "computed" },
+        { "id": "height_max", "label": "Ketinggian maksimum", "symbol": "H", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_x", "computes": "x", "formula": "x = v0 * cos(theta * pi / 180) * t", "description": "Posisi horizontal, gerak lurus beraturan" },
+        { "id": "eq_y", "computes": "y", "formula": "y = v0 * sin(theta * pi / 180) * t - 0.5 * 10 * t^2", "description": "Posisi vertikal, GLBB akibat gravitasi" },
+        { "id": "eq_range", "computes": "range_max", "formula": "range_max = v0^2 * sin(2 * theta * pi / 180) / 10", "description": "Jangkauan horizontal maksimum" },
+        { "id": "eq_height", "computes": "height_max", "formula": "height_max = v0^2 * (sin(theta * pi / 180))^2 / 20", "description": "Ketinggian maksimum yang dicapai peluru" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Peluru bergerak mengikuti lintasan parabola dari kiri ke kanan, titik puncak dan jarak jangkauan ditandai pada sumbu" },
+        { "id": "viz_2", "type": "graph", "x_axis": "x", "y_axis": "y", "title": "Lintasan Parabola (y vs x)" }
+      ],
+      "challenges": [
+        { "id": "ch_001", "task": "Temukan sudut θ yang menghasilkan jangkauan paling jauh saat kecepatan awal v₀ = 20 m/s.", "success_condition": "abs(theta - 45) <= 2 AND v0 == 20", "points": 20 },
+        { "id": "ch_002", "task": "Atur v₀ dan θ sedemikian sehingga peluru mencapai ketinggian maksimum tepat 20 meter.", "success_condition": "abs(height_max - 20) < 1", "points": 25 }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan kedua tantangan eksperimen",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu menguasai konsep gerak parabola!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Batas waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: jangkauan maksimum ada di sudut 45°. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 25, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 40
+    }
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Operasi Vektor"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_operasi_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Resultan: Lab Operasi Vektor",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Operasi Vektor",
+      "topik": "Operasi Vektor",
+      "difficulty": 3,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menjumlahkan dua vektor menggunakan metode komponen dan memverifikasinya secara grafis",
+        "Siswa dapat menghitung resultan dua vektor beserta besar dan arahnya",
+        "Siswa dapat menerapkan perkalian skalar vektor (dot product) untuk menghitung hasil kali dua vektor"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Laboratorium Resultan Gaya",
+        "story": "Robot penjelajah terjebak di medan berbatu! Dua roket pendorong menghasilkan gaya yang berbeda arah. Sebagai insinyur kendali, kamu harus menghitung resultan gaya kedua roket tersebut agar robot dapat bergerak ke arah yang tepat. Atur vektor gaya, hitung resultannya, dan navigasikan robot ke zona aman!",
+        "image_description": "Robot kecil di medan berbatu dengan dua roket pendorong memancarkan api berwarna berbeda (biru dan merah), panah vektor gaya ditampilkan, zona aman berwarna hijau di kejauhan",
+        "cta_text": "Aktifkan Lab"
+      },
+      "visual_element": {
+        "theme_name": "Engineering Lab",
+        "theme_preset": "minimal_mono",
+        "mood": "analytical, precise, problem-solving",
+        "color_palette": {
+          "primary": "#2b9348",
+          "secondary": "#e63946",
+          "background": "#f1faee",
+          "accent": "#457b9d",
+          "text": "#1d3557"
+        },
+        "setting_description": "Laboratorium rekayasa modern dengan papan kerja putih bersih, dua panah vektor berwarna hijau dan merah, panah resultan biru tebal, grid koordinat rapi, panel instrumen di sisi kanan.",
+        "art_style": "clean engineering diagram style, flat technical illustration",
+        "ambient_elements": [
+          "Grid koordinat tipis di seluruh bidang kerja",
+          "Label vektor A, B, dan R (resultan) yang jelas",
+          "Garis komponen x dan y putus-putus di bawah setiap vektor",
+          "Jajargenjang transparan terbentuk saat dua vektor ditampilkan"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur besar dan sudut Vektor A menggunakan slider |A| dan θ_A." },
+          { "step": 2, "text": "Atur besar dan sudut Vektor B menggunakan slider |B| dan θ_B." },
+          { "step": 3, "text": "Simulator menghitung resultan R = A + B secara otomatis." },
+          { "step": 4, "text": "Amati metode jajargenjang di layar visual dan komponen Rx, Ry di panel data." },
+          { "step": 5, "text": "Selesaikan tantangan dengan mencapai resultan yang ditentukan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Metode Komponen untuk Resultan",
+          "strategy": "Cara termudah menjumlahkan vektor: uraikan setiap vektor menjadi komponen x dan y, jumlahkan komponen sejenis, lalu gabungkan kembali untuk mendapatkan resultan. Besar resultan menggunakan Pythagoras, sudutnya menggunakan arctan.",
+          "formula": "Rx = Ax + Bx  |  Ry = Ay + By  |  |R| = √(Rx² + Ry²)  |  θ_R = arctan(Ry/Rx)",
+          "example": "A=5 N, θ_A=0°; B=5 N, θ_B=90°: Rx=5+0=5, Ry=0+5=5, |R|=√50≈7,07 N, θ_R=arctan(5/5)=45°.",
+          "hint_image_description": "Diagram jajargenjang vektor: vektor A dan B dari titik yang sama, diagonal jajargenjang berlabel R (resultan), komponen Rx dan Ry ditunjukkan dengan garis putus"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_calc_done", "event": "on_correct_action", "description": "Suara kalkulator berhasil: bip singkat menyenangkan saat kondisi tantangan terpenuhi" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi kemenangan laboratorium: alarm sukses diikuti suara robot melaju ke zona aman" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Alarm peringatan singkat, nada turun, menandakan waktu habis" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik elektronik minimalis bertempo sedang, nuansa laboratorium teknik, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Laboratorium Penjumlahan dan Operasi Vektor",
+        "narrative": "Eksplorasi operasi penjumlahan dua vektor menggunakan metode komponen dan verifikasi grafis dengan metode jajargenjang. Selesaikan tantangan resultan untuk menavigasi robot penjelajah.",
+        "context": "Operasi vektor 2D pada bidang koordinat Kartesius. Sudut diukur dari sumbu-x positif berlawanan arah jarum jam. Tidak ada efek dinamika; ini adalah lab vektor murni."
+      },
+      "variables": [
+        {
+          "id": "mag_a",
+          "label": "Besar Vektor A",
+          "symbol": "|A|",
+          "unit": "satuan",
+          "type": "user_input",
+          "min": 1,
+          "max": 15,
+          "default": 8,
+          "step": 0.5
+        },
+        {
+          "id": "theta_a",
+          "label": "Sudut Vektor A",
+          "symbol": "θ_A",
+          "unit": "derajat",
+          "type": "user_input",
+          "min": 0,
+          "max": 360,
+          "default": 0,
+          "step": 1
+        },
+        {
+          "id": "mag_b",
+          "label": "Besar Vektor B",
+          "symbol": "|B|",
+          "unit": "satuan",
+          "type": "user_input",
+          "min": 1,
+          "max": 15,
+          "default": 6,
+          "step": 0.5
+        },
+        {
+          "id": "theta_b",
+          "label": "Sudut Vektor B",
+          "symbol": "θ_B",
+          "unit": "derajat",
+          "type": "user_input",
+          "min": 0,
+          "max": 360,
+          "default": 90,
+          "step": 1
+        },
+        {
+          "id": "rx",
+          "label": "Komponen x Resultan",
+          "symbol": "Rx",
+          "unit": "satuan",
+          "type": "computed"
+        },
+        {
+          "id": "ry",
+          "label": "Komponen y Resultan",
+          "symbol": "Ry",
+          "unit": "satuan",
+          "type": "computed"
+        },
+        {
+          "id": "mag_r",
+          "label": "Besar Resultan",
+          "symbol": "|R|",
+          "unit": "satuan",
+          "type": "computed"
+        },
+        {
+          "id": "theta_r",
+          "label": "Sudut Resultan",
+          "symbol": "θ_R",
+          "unit": "derajat",
+          "type": "computed"
+        },
+        {
+          "id": "dot_product",
+          "label": "Dot Product A·B",
+          "symbol": "A·B",
+          "unit": "satuan²",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_rx",
+          "computes": "rx",
+          "formula": "rx = mag_a * cos(theta_a * pi / 180) + mag_b * cos(theta_b * pi / 180)",
+          "description": "Komponen x resultan: jumlah komponen x vektor A dan B"
+        },
+        {
+          "id": "eq_ry",
+          "computes": "ry",
+          "formula": "ry = mag_a * sin(theta_a * pi / 180) + mag_b * sin(theta_b * pi / 180)",
+          "description": "Komponen y resultan: jumlah komponen y vektor A dan B"
+        },
+        {
+          "id": "eq_mag_r",
+          "computes": "mag_r",
+          "formula": "mag_r = sqrt(rx^2 + ry^2)",
+          "description": "Besar resultan dari komponen menggunakan teorema Pythagoras"
+        },
+        {
+          "id": "eq_theta_r",
+          "computes": "theta_r",
+          "formula": "theta_r = atan2(ry, rx) * 180 / pi",
+          "description": "Sudut resultan terhadap sumbu-x positif"
+        },
+        {
+          "id": "eq_dot",
+          "computes": "dot_product",
+          "formula": "dot_product = mag_a * mag_b * cos((theta_b - theta_a) * pi / 180)",
+          "description": "Dot product A·B = |A||B|cos(sudut antara A dan B)"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_vectors",
+          "type": "animation",
+          "title": "Diagram Vektor dan Resultan",
+          "description": "Vektor A (hijau) dan B (merah) dari titik origin, jajargenjang terbentuk secara animasi, diagonal jajargenjang adalah resultan R (biru tebal). Komponen x dan y masing-masing vektor ditampilkan garis putus."
+        },
+        {
+          "id": "viz_component_table",
+          "type": "table",
+          "title": "Panel Data Operasi",
+          "description": "Tabel real-time: |A|, θ_A, |B|, θ_B, Rx, Ry, |R|, θ_R, dan A·B diperbarui setiap slider digeser."
+        },
+        {
+          "id": "viz_magnitude_chart",
+          "type": "graph",
+          "x_axis": "theta_b",
+          "y_axis": "mag_r",
+          "title": "Grafik |R| terhadap θ_B (|A| dan θ_A tetap)"
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur |A| = 6 satuan, θ_A = 0°, |B| = 8 satuan, θ_B = 90°. Hitung dan verifikasi besar serta sudut resultannya menggunakan simulator.",
+          "success_condition": "abs(mag_a - 6) < 0.3 AND abs(theta_a) < 2 AND abs(mag_b - 8) < 0.3 AND abs(theta_b - 90) < 2",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan nilai θ_B sehingga resultan dua vektor dengan |A| = |B| = 10 satuan dan θ_A = 0° memiliki besar |R| = 10 satuan juga.",
+          "success_condition": "abs(mag_a - 10) < 0.5 AND abs(mag_b - 10) < 0.5 AND abs(theta_a) < 2 AND abs(mag_r - 10) < 1",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur dua vektor sehingga dot product A·B bernilai 0. Apa hubungan sudut antara kedua vektor saat dot product nol?",
+          "success_condition": "abs(dot_product) < 1",
+          "points": 25
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal 2 dari 3 tantangan operasi vektor",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Robot berhasil dinavigasi. Kamu menguasai operasi vektor seperti insinyur sejati!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: Rx = Ax+Bx, Ry = Ay+By, |R| = √(Rx²+Ry²). Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_parameter_change": 1
+      },
+      "lives": null,
+      "time_limit_seconds": 1080,
+      "pass_threshold": 50
+    }
+  }
+}

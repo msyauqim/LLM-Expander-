@@ -1,0 +1,157 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Osilasi Harmonis",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak harmonik sederhana",
+    "tingkat_kesulitan": 4,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_harmonik_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Osilasi Harmonis",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Getaran dan Gelombang",
+      "subbab": "Gerak Harmonik Sederhana",
+      "topik": "Gerak harmonik sederhana",
+      "difficulty": 4,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat mendeskripsikan persamaan posisi, kecepatan, dan energi pada gerak harmonik sederhana",
+        "Siswa dapat membuktikan hukum kekekalan energi mekanik pada sistem osilasi",
+        "Siswa dapat menghubungkan frekuensi anguler ω dengan periode T osilasi"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pendopo Getaran Nusantara",
+        "story": "Di pendopo penelitian berbasis kearifan lokal, seorang ilmuwan mengamati ayunan bandul dan pegas tradisional. Atur amplitudo dan frekuensi anguler sistem, amati osilasi yang terbentuk, dan buktikan bahwa energi mekanik sistem selalu terjaga!",
+        "image_description": "Pendopo kayu ukiran Jawa dengan pegas bergantung di balok atas, bandul berayun di sisi kiri, ornamen batik di pinggiran, cahaya sore keemasan",
+        "cta_text": "Mulai Osilasi"
+      },
+      "visual_element": {
+        "theme_name": "Pendopo Nusantara",
+        "theme_preset": "nusantara",
+        "mood": "serene, traditional, scientific",
+        "color_palette": {
+          "primary": "#c0392b",
+          "secondary": "#d4a017",
+          "background": "#2c1810",
+          "accent": "#27ae60",
+          "text": "#fdebd0"
+        },
+        "setting_description": "Pendopo kayu berukiran Jawa dengan tiang-tiang berornamen batik coklat-emas, langit sore keemasan di latar belakang, pegas dan bandul tergantung di balok utama.",
+        "art_style": "flat design with batik ornament accents and warm earth tones",
+        "ambient_elements": ["Ornamen batik berkilau lembut di tiang", "Cahaya sore keemasan dari celah atap", "Bayangan berayun mengikuti osilasi benda"]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur amplitudo A (simpangan maksimum) dengan slider." },
+          { "step": 2, "text": "Atur frekuensi anguler ω sistem dengan slider." },
+          { "step": 3, "text": "Atur massa benda m yang berosilasi." },
+          { "step": 4, "text": "Tekan Mulai untuk menjalankan simulasi osilasi." },
+          { "step": 5, "text": "Amati grafik x–t dan grafik energi Ek, Ep terhadap waktu." },
+          { "step": 6, "text": "Tantangan: verifikasi bahwa Ek + Ep selalu konstan sepanjang osilasi!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Persamaan GHS & Energi",
+          "strategy": "Posisi GHS: x = A·cos(ωt). Kecepatan: v = −A·ω·sin(ωt), maksimum di titik setimbang. Energi kinetik dan potensial saling berganti, tetapi jumlahnya (energi mekanik) selalu konstan sebesar ½mω²A².",
+          "formula": "x = A·cos(ωt),  Ek = ½mv²,  Ep = ½mω²x²,  Em = ½mω²A²",
+          "example": "A=0.2 m, ω=5 rad/s, m=1 kg: Em = 0.5×1×25×0.04 = 0.5 J. Di posisi x=0: Ek=0.5 J, Ep=0. Di x=A: Ek=0, Ep=0.5 J.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_tick", "event": "on_correct_action", "description": "Bunyi detik lembut setiap periode osilasi terselesaikan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi gamelan singkat bertanda kemenangan" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Nada gamelan turun lembut" },
+          { "id": "bgm", "event": "background", "description": "Musik gamelan ambient pelan dan mengalun, loop tenang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Gerak Harmonik Sederhana",
+        "narrative": "Amati osilasi benda pada pegas ideal, analisis perubahan posisi dan kecepatan sepanjang waktu, serta verifikasi kekekalan energi mekanik sistem.",
+        "context": "Sistem pegas-massa ideal tanpa redaman (undamped), pegas mengikuti Hukum Hooke, posisi awal di simpangan maksimum x = A pada t = 0."
+      },
+      "variables": [
+        { "id": "amplitudo", "label": "Amplitudo", "symbol": "A", "unit": "m", "type": "user_input", "min": 0.1, "max": 2.0, "default": 0.5, "step": 0.1 },
+        { "id": "omega", "label": "Frekuensi anguler", "symbol": "ω", "unit": "rad/s", "type": "user_input", "min": 1, "max": 20, "default": 5, "step": 0.5 },
+        { "id": "massa", "label": "Massa benda", "symbol": "m", "unit": "kg", "type": "user_input", "min": 0.1, "max": 5.0, "default": 1.0, "step": 0.1 },
+        { "id": "t", "label": "Waktu", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 20 },
+        { "id": "x", "label": "Posisi", "symbol": "x", "unit": "m", "type": "computed" },
+        { "id": "vel", "label": "Kecepatan", "symbol": "v", "unit": "m/s", "type": "computed" },
+        { "id": "ek", "label": "Energi kinetik", "symbol": "Eₖ", "unit": "J", "type": "computed" },
+        { "id": "ep", "label": "Energi potensial elastis", "symbol": "Eₚ", "unit": "J", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_x", "computes": "x", "formula": "x = amplitudo * cos(omega * t)", "description": "Posisi GHS sebagai fungsi waktu, fase awal nol" },
+        { "id": "eq_vel", "computes": "vel", "formula": "vel = -amplitudo * omega * sin(omega * t)", "description": "Kecepatan GHS, turunan posisi terhadap waktu" },
+        { "id": "eq_ek", "computes": "ek", "formula": "ek = 0.5 * massa * vel^2", "description": "Energi kinetik benda berosilasi" },
+        { "id": "eq_ep", "computes": "ep", "formula": "ep = 0.5 * massa * omega^2 * x^2", "description": "Energi potensial elastis pegas (½kx² = ½mω²x²)" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Benda bermassa berayun pada pegas vertikal ideal, posisi diperbarui real-time dari variabel x, tanda simpangan ditampilkan dengan garis putus-putus" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "x", "title": "Posisi vs Waktu (x–t)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "t", "y_axis": "ek", "title": "Energi Kinetik & Potensial vs Waktu (Eₖ dan Eₚ overlay)" }
+      ],
+      "challenges": [
+        { "id": "ch_001", "task": "Atur A, ω, dan m sehingga energi mekanik total sistem (Eₖ + Eₚ) bernilai tepat 1 Joule.", "success_condition": "abs((ek + ep) - 1.0) < 0.05", "points": 25 },
+        { "id": "ch_002", "task": "Temukan nilai frekuensi anguler ω yang menghasilkan periode osilasi T = 1 detik (T = 2π/ω).", "success_condition": "abs((2 * 3.14159 / omega) - 1.0) < 0.05", "points": 30 },
+        { "id": "ch_003", "task": "Amati grafik Eₖ dan Eₚ selama minimal 2 periode penuh dan verifikasi bahwa jumlah Eₖ + Eₚ konstan di setiap titik waktu.", "success_condition": "exploration_count >= 4 AND abs(ek + ep - 0.5 * massa * omega^2 * amplitudo^2) < 0.05", "points": 35 }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan minimal dua dari tiga tantangan GHS",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu memahami gerak harmonik dan kekekalan energi mekanik!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Batas waktu habis tanpa menyelesaikan satu pun tantangan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis. Gunakan rumus Em = ½mω²A² sebagai panduan. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 2 },
+      "lives": null,
+      "time_limit_seconds": 1200,
+      "pass_threshold": 55
+    }
+  }
+}

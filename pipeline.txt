@@ -1,0 +1,42 @@
+Input Stage
+The teacher provides input through a form with fields for Kelas (Class), Mata Pelajaran (Subject), Bab (Chapter), and Subab (Subchapter) as required field with Topic of Subchapter as optional field. This input is labeled Input Guru and feeds into two parallel paths simultaneously: the Mini LLM JSON filler and the RAG system.
+
+Prompt Preparation Stage
+This stage has two parallel tracks that eventually merge.
+The first track is the JSON filling track. The Mini LLM receives the teacher input and checks whether the JSON fields are complete (filling the model game, visual theme, audio theme, etc). If incomplete, it fills in the missing fields to produce a Complete JSON Game Spec. This output is cached so the same spec doesn't need to be regenerated if the teacher makes a similar request later. The JSON then passes through a JSON Validator before becoming a fully complete JSON field that moves forward.
+The second track is the RAG track. The RAG system (labeled RAG SR 3) receives the teacher input and retrieves a Ringkasan Bab/Subtopik (Chapter/Subtopic Summary) from its knowledge base. This summary provides curriculum-aligned context that enriches the prompt generation step.
+Both tracks — the validated JSON and the RAG summary — feed into the LLM Prompter.
+
+Prompt Stage
+The LLM Prompter receives the complete JSON spec and the RAG summary, then produces a single output: one JSON file containing three prompts. This output is also cached.
+The three prompts inside that file are:
+- Prompt 1 for CSS — covering visual elements and simple animations
+- Prompt 2 for HTML — covering the structure of the game
+- Prompt 3 for JavaScript — covering game script, logic, mechanic, and win/lose condition
+
+These three prompts are parsed by a Backend JSON Parsing step which routes each prompt to its respective specialist LLM in the next stage.
+Separately, a Variable Registry Extractor also reads all three prompts and produces the shared registry of DOM IDs, class names, and JS variables. This registry output is also cached, and it feeds into all three specialist LLMs as a shared contract. Notably, the variable registry also has a connection feeding into the LLM Integration node at the bottom, which handles the case where validation fails repeatedly.
+
+Coder Stage
+This stage is wrapped in a Backend Assembler container. Three specialist LLMs run in parallel, each receiving their targeted prompt plus the shared variable registry:
+- LLM Coder CSS Specialist → produces CSS Code
+- LLM Coder HTML Specialist → produces HTML Code
+- LLM Coder Javascript Specialist → produces Javascript Code
+
+All three outputs feed into the assembler which combines them into 1 File Code — a single self-contained HTML file.
+That file then goes to the Validator. If validation passes, the file moves to the Preview Stage. If validation fails, a Backend Simple Fix is attempted automatically. If the fix resolves the issue, it loops back cleanly. If validation fails 3 times (3 Kali Tidak Lolos Validator), the file is escalated to the LLM Integration node, which performs a deeper correction pass using the variable registry as reference context before trying again.
+
+Preview Stage
+The teacher (Preview Guru) plays and reviews the generated game. They then reach a Keputusan Guru (Teacher Decision) point with two outcomes: Tidak Revisi (No Revision) which moves forward to publication, or Revisi which sends the feedback back into the revision stage.
+
+Revision Stage
+The teacher's revision input (Input Revisi Guru) is first passed through a JSON Revisi step which structures the feedback, then into a Backend Classifier.
+The Classifier determines whether the revision is Simple or Complex, routing to a Backend Selector which has three possible outputs:
+- Simple → Back to LLM CSS (only the CSS specialist re-runs)
+- Simple → Back to LLM HTML (only the HTML specialist re-runs)
+- Complex → Back to LLM Prompter (full re-generation from the prompt stage downward)
+
+After the targeted specialist re-runs, the output loops back through the assembler, validator, and preview cycle again.
+
+Publication Stage
+Once the teacher approves with no revision, the game is saved to the database and published as Playable on MVP — accessible to students anytime on the main platform.

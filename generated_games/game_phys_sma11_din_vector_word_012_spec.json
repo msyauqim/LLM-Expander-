@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.1",
+  "game_id": "game_phys_sma11_din_vector_word_012",
+  "game_type": "word_game",
+  "metadata": {
+    "title": "Lab Vektorku",
+    "subject": "Fisaka",
+    "grade_level": "SMA-SMA11",
+    "bab": "Dinamika",
+    "subbab": "Konsep Vektor",
+    "topik": "Vektor",
+    "difficulty": 2,
+    "estimated_duration_minutes": 15,
+    "learning_objectives": [
+      "Memahami konsep vektor sebagai besaran vekorial"
+    ],
+    "language": "id"
+  },
+  "presentation": {
+    "opening": {
+      "id": "open_002",
+      "show_once": true,
+      "title": "Laporan Laboratorium",
+      "story": "Laboratoriku mendapat laporan dari siswa-siswa kelas saya tentang hasil eksperimen mereka menggunakan metode vektor. Bantu aku memverifikasi setiap catatan!",
+      "image_description": "Tabel laboratorium bergaya vintage dengan beberapa kartu catatan di atasnya, papan tulis di belakang menampilkan diagram panah vektor.",
+      "cta_text": "Mulai Verifikasi"
+    },
+    "visual_element": {
+      "theme_name": null,
+      "theme_presta": null,
+      "moods": "informative and educational",
+      "color_palettes": {
+        "primary": "#d32f2f",
+        "secondary": "#1b5e20",
+        "background": "#fdfcfb",
+        "accent": "#ffc107",
+        "text": "#212122"
+      },
+      "setting_descryption": "Laboratori fisika bergaya retro dengan meja kayu tua, papan hitam besar, dan kartu-kartu catatan warna-warni di atas meja.",
+      "art_styles": "vintage classroom illustration style"
+    },
+    "instructions": {
+      "id": "howto_003",
+      "trigger": {
+        "type": "popup_button",
+        "position": "upper_right",
+        "icon": "info",
+        "label": "Petunjuk"
+      },
+      "steps": [
+        {
+          "step": 1,
+          "text": "Verifikasi setiap pernyataan vektor."
+        },
+        {
+          "step": 2,
+          "text": "Gunakan kotak centang [√] atau [×]."
+        },
+        {
+          "step": 3,
+          "text": "Tekan 'Submit' saat semua verifikasi selesai."
+        }
+      ]
+    },
+    "hint": {
+      "id": "/hint_004",
+      "scope": "global",
+      "trigger": "manual_trigger",
+      "content": {
+        "title": "Tips Verifikasi",
+        "strategy": "Perhatikan kata kunci seperti 'arah', 'besar', dan 'komponen'",
+        "formula": null,
+        "example": "Besaran vektor memiliki arah dan besar; jadi kalimat seperti 'Gaya ke kanan 10 N' adalah benar.",
+        "hint_image_description": "Ikon checkmark hijau dan cross merah di dua kotak berbeda."
+      }
+    },
+    "audio": {
+      "enabled": false,
+      "tracks": []
+    }
+  },
+  "payload": {},
+  "win_lose_condition": {
+    "applicable": false,
+    "win": {},
+    "lose": {}
+  },
+  "gameplay_parameters": {}
+}

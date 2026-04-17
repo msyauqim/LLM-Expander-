@@ -1,0 +1,314 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Momentum dan Impuls"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_dinamika_momentum_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Arena Tumbukan: Lab Momentum",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika",
+      "subbab": "Momentum dan Impuls",
+      "topik": "Momentum dan Impuls",
+      "difficulty": 3,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menghitung momentum dan impuls serta menjelaskan hubungannya melalui teorema impuls-momentum",
+        "Siswa dapat membedakan tumbukan elastis sempurna, tidak elastis sebagian, dan tidak elastis sempurna",
+        "Siswa dapat memverifikasi hukum kekekalan momentum pada berbagai skenario tumbukan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Arena Tumbukan Bola",
+        "story": "Selamat datang di arena uji tumbukan! Dua bola besi meluncur di atas rel licin tanpa gesekan. Tugasmu sebagai fisikawan arena: atur massa dan kecepatan kedua bola, pilih jenis tumbukan, lalu amati dan verifikasi kekekalan momentum. Apakah momentum total sebelum dan sesudah tumbukan benar-benar sama?",
+        "image_description": "Arena laboratorium berwarna cerah dengan rel panjang di tengah, dua bola berwarna berbeda (biru dan merah) siap bertabrakan, detektor kecepatan di sepanjang rel, layar digital menampilkan data momentum",
+        "cta_text": "Masuk Arena"
+      },
+      "visual_element": {
+        "theme_name": "Physics Arena",
+        "theme_preset": "scifi_neon",
+        "mood": "dynamic, energetic, scientific",
+        "color_palette": {
+          "primary": "#4361ee",
+          "secondary": "#f72585",
+          "background": "#10002b",
+          "accent": "#7209b7",
+          "text": "#e2e2e2"
+        },
+        "setting_description": "Arena uji tumbukan futuristik: rel panjang bercahaya putih di tengah ruang gelap, bola biru dan merah bersinar, panel data holografik di sisi kiri dan kanan, garis-garis kecepatan memancar dari bola.",
+        "art_style": "futuristic flat neon, physics lab arena",
+        "ambient_elements": [
+          "Jejak cahaya di belakang bola yang bergerak",
+          "Angka momentum terbang keluar saat tumbukan",
+          "Garis batas tumbukan bercahaya di tengah rel",
+          "Panel holografik momentum sebelum dan sesudah"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa (m₁, m₂) dan kecepatan awal (v₁, v₂) kedua bola." },
+          { "step": 2, "text": "Pilih jenis tumbukan: elastis sempurna, tidak elastis sebagian, atau tidak elastis sempurna." },
+          { "step": 3, "text": "Tekan Jalankan untuk memulai animasi tumbukan." },
+          { "step": 4, "text": "Panel data menampilkan momentum sebelum dan sesudah tumbukan secara otomatis." },
+          { "step": 5, "text": "Verifikasi kekekalan momentum dan selesaikan tantangan yang diberikan!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Momentum, Impuls, dan Kekekalan",
+          "strategy": "Momentum (p=mv) selalu kekal jika tidak ada gaya luar. Impuls adalah perubahan momentum (J=ΔP=FΔt). Tumbukan elastis: energi kinetik kekal. Tumbukan tidak elastis sempurna: kedua bola bersatu, energi kinetik berkurang.",
+          "formula": "p = m·v  |  J = F·Δt = Δp  |  p_total_awal = p_total_akhir  |  e = (v₂'–v₁')/(v₁–v₂)",
+          "example": "Bola 2 kg (v=3 m/s) menabrak bola 2 kg diam (elastis): setelah tumbukan, bola pertama berhenti dan bola kedua bergerak 3 m/s — momentum tetap 6 kg·m/s.",
+          "hint_image_description": "Diagram dua bola sebelum dan sesudah tumbukan: panah kecepatan sebelum di atas, panah kecepatan sesudah di bawah, persamaan kekekalan momentum di tengah"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_collision", "event": "on_correct_action", "description": "Suara dentuman bola bertubrukan, intensitas sesuai jenis tumbukan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Alarm arena berhasil: tiga bip naik tangga nada dan sorak sorai" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Alarm waktu habis: bip turun dan bunyi sirene pendek" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik elektronik bertempo sedang-cepat, nuansa arena futuristik, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Laboratorium Tumbukan dan Kekekalan Momentum",
+        "narrative": "Simulasikan tumbukan dua bola di atas rel licin. Eksplorasi tiga jenis tumbukan dan verifikasi bahwa momentum total sistem selalu kekal selama tidak ada gaya eksternal.",
+        "context": "Tumbukan 1D di atas rel horizontal tanpa gesekan. Arah positif ke kanan. Kecepatan negatif berarti bergerak ke kiri. g = 10 m/s²."
+      },
+      "variables": [
+        {
+          "id": "m1",
+          "label": "Massa bola 1",
+          "symbol": "m₁",
+          "unit": "kg",
+          "type": "user_input",
+          "min": 0.5,
+          "max": 10,
+          "default": 2,
+          "step": 0.5
+        },
+        {
+          "id": "m2",
+          "label": "Massa bola 2",
+          "symbol": "m₂",
+          "unit": "kg",
+          "type": "user_input",
+          "min": 0.5,
+          "max": 10,
+          "default": 2,
+          "step": 0.5
+        },
+        {
+          "id": "v1_init",
+          "label": "Kecepatan awal bola 1",
+          "symbol": "v₁",
+          "unit": "m/s",
+          "type": "user_input",
+          "min": -10,
+          "max": 10,
+          "default": 4,
+          "step": 0.5
+        },
+        {
+          "id": "v2_init",
+          "label": "Kecepatan awal bola 2",
+          "symbol": "v₂",
+          "unit": "m/s",
+          "type": "user_input",
+          "min": -10,
+          "max": 10,
+          "default": 0,
+          "step": 0.5
+        },
+        {
+          "id": "collision_type",
+          "label": "Jenis tumbukan",
+          "symbol": "e",
+          "unit": "",
+          "type": "user_input",
+          "options": [
+            { "value": "elastic", "label": "Elastis sempurna (e=1)" },
+            { "value": "partial", "label": "Tidak elastis sebagian (e=0,5)" },
+            { "value": "perfect_inelastic", "label": "Tidak elastis sempurna (e=0)" }
+          ]
+        },
+        {
+          "id": "p_before",
+          "label": "Momentum total sebelum",
+          "symbol": "p_awal",
+          "unit": "kg·m/s",
+          "type": "computed"
+        },
+        {
+          "id": "p_after",
+          "label": "Momentum total sesudah",
+          "symbol": "p_akhir",
+          "unit": "kg·m/s",
+          "type": "computed"
+        },
+        {
+          "id": "v1_final",
+          "label": "Kecepatan akhir bola 1",
+          "symbol": "v₁'",
+          "unit": "m/s",
+          "type": "computed"
+        },
+        {
+          "id": "v2_final",
+          "label": "Kecepatan akhir bola 2",
+          "symbol": "v₂'",
+          "unit": "m/s",
+          "type": "computed"
+        },
+        {
+          "id": "ek_before",
+          "label": "Energi kinetik total sebelum",
+          "symbol": "EK_awal",
+          "unit": "J",
+          "type": "computed"
+        },
+        {
+          "id": "ek_after",
+          "label": "Energi kinetik total sesudah",
+          "symbol": "EK_akhir",
+          "unit": "J",
+          "type": "computed"
+        }
+      ],
+      "equations": [
+        {
+          "id": "eq_p_before",
+          "computes": "p_before",
+          "formula": "p_before = m1 * v1_init + m2 * v2_init",
+          "description": "Momentum total sistem sebelum tumbukan"
+        },
+        {
+          "id": "eq_v1_final_elastic",
+          "computes": "v1_final",
+          "formula": "v1_final = ((m1 - m2) * v1_init + 2 * m2 * v2_init) / (m1 + m2)  [elastis]  |  v1_final = (m1 * v1_init + m2 * v2_init) / (m1 + m2)  [sempurna tidak elastis]",
+          "description": "Kecepatan akhir bola 1 bergantung jenis tumbukan"
+        },
+        {
+          "id": "eq_v2_final_elastic",
+          "computes": "v2_final",
+          "formula": "v2_final = ((m2 - m1) * v2_init + 2 * m1 * v1_init) / (m1 + m2)  [elastis]  |  v2_final = v1_final  [sempurna tidak elastis]",
+          "description": "Kecepatan akhir bola 2 bergantung jenis tumbukan"
+        },
+        {
+          "id": "eq_p_after",
+          "computes": "p_after",
+          "formula": "p_after = m1 * v1_final + m2 * v2_final",
+          "description": "Momentum total sesudah tumbukan (harus sama dengan p_before)"
+        },
+        {
+          "id": "eq_ek_before",
+          "computes": "ek_before",
+          "formula": "ek_before = 0.5 * m1 * v1_init^2 + 0.5 * m2 * v2_init^2",
+          "description": "Energi kinetik total sebelum tumbukan"
+        },
+        {
+          "id": "eq_ek_after",
+          "computes": "ek_after",
+          "formula": "ek_after = 0.5 * m1 * v1_final^2 + 0.5 * m2 * v2_final^2",
+          "description": "Energi kinetik total sesudah tumbukan"
+        }
+      ],
+      "visualizations": [
+        {
+          "id": "viz_collision",
+          "type": "animation",
+          "title": "Animasi Tumbukan Dua Bola",
+          "description": "Dua bola bergerak di atas rel, bertabrakan di tengah, dan memantul atau bersatu sesuai jenis tumbukan. Vektor kecepatan ditampilkan sebagai panah di atas setiap bola."
+        },
+        {
+          "id": "viz_momentum_table",
+          "type": "table",
+          "title": "Tabel Kekekalan Momentum",
+          "description": "Tabel dua baris (sebelum / sesudah): kolom p₁, p₂, p_total, EK_total untuk verifikasi kekekalan."
+        },
+        {
+          "id": "viz_ek_comparison",
+          "type": "graph",
+          "x_axis": "collision_type",
+          "y_axis": "ek_after",
+          "title": "Perbandingan Energi Kinetik Sesudah Tumbukan"
+        }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur m₁ = 4 kg, v₁ = 3 m/s, m₂ = 2 kg, v₂ = 0 m/s, tumbukan elastis sempurna. Verifikasi bahwa momentum total sebelum dan sesudah tumbukan sama.",
+          "success_condition": "abs(m1 - 4) < 0.1 AND abs(v1_init - 3) < 0.1 AND abs(m2 - 2) < 0.1 AND abs(v2_init) < 0.1 AND collision_type == 'elastic' AND abs(p_before - p_after) < 0.5",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Atur dua bola dengan massa sama (m₁ = m₂) dan tumbukan elastis sempurna. Amati apa yang terjadi pada kecepatan masing-masing bola setelah tumbukan.",
+          "success_condition": "abs(m1 - m2) < 0.1 AND collision_type == 'elastic'",
+          "points": 25
+        },
+        {
+          "id": "ch_003",
+          "task": "Gunakan tumbukan tidak elastis sempurna dengan m₁ = 3 kg, v₁ = 6 m/s, m₂ = 3 kg, v₂ = 0. Hitung kecepatan bersama setelah tumbukan dan verifikasi dengan simulator.",
+          "success_condition": "abs(m1 - 3) < 0.1 AND abs(m2 - 3) < 0.1 AND abs(v1_init - 6) < 0.1 AND abs(v2_init) < 0.1 AND collision_type == 'perfect_inelastic' AND abs(v1_final - 3) < 0.3",
+          "points": 30
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan minimal 2 dari 3 tantangan tumbukan",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Luar biasa! Kamu membuktikan kekekalan momentum secara eksperimental. Fisikawan arena sejati!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: p_total = m₁v₁ + m₂v₂ selalu kekal. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "challenge_completion": 25,
+        "exploration_per_simulation_run": 2
+      },
+      "lives": null,
+      "time_limit_seconds": 1080,
+      "pass_threshold": 50
+    }
+  }
+}

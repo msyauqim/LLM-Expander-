@@ -1,0 +1,147 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Simulator Lensa Cembung",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Pembiasan cahaya pada lensa cembung",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_lensa_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Simulator Lensa Cembung",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Optik",
+      "subbab": "Lensa",
+      "topik": "Pembiasan cahaya pada lensa cembung",
+      "difficulty": 3,
+      "estimated_duration_minutes": 18,
+      "learning_objectives": [
+        "Siswa dapat menggunakan persamaan lensa tipis untuk menentukan jarak bayangan",
+        "Siswa dapat menganalisis sifat bayangan berdasarkan posisi benda terhadap titik fokus",
+        "Siswa dapat menghitung perbesaran linier bayangan lensa cembung"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Laboratorium Optik Futuristik",
+        "story": "Di laboratorium optik canggih, kamu mengoperasikan lensa cembung presisi tinggi. Atur posisi benda dan panjang fokus lensa, amati bayangan yang terbentuk di layar holografik, dan temukan pola di balik pembentukan bayangan!",
+        "image_description": "Laboratorium optik gelap dengan sinar laser cyan melewati lensa transparan besar bercahaya biru, bayangan terbentuk di layar holografik di sebelah kanan",
+        "cta_text": "Aktifkan Lensa"
+      },
+      "visual_element": {
+        "theme_name": "Optic Neon Lab",
+        "theme_preset": "scifi_neon",
+        "mood": "precise, futuristic, investigative",
+        "color_palette": {
+          "primary": "#00f5ff",
+          "secondary": "#7b2fff",
+          "background": "#050514",
+          "accent": "#ff6b35",
+          "text": "#ffffff"
+        },
+        "setting_description": "Laboratorium optik gelap dengan lensa besar transparan bercahaya cyan, sinar laser paralel, layar holografik di kanan, grid biru samar di latar.",
+        "art_style": "flat design with neon glow and ray tracing lines",
+        "ambient_elements": ["Sinar cahaya cyan melayang di sekitar lensa", "Grid holografik samar di latar belakang", "Glow pulse pada lensa aktif", "Partikel foton melayang pelan"]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur panjang fokus lensa f dengan slider kiri." },
+          { "step": 2, "text": "Atur jarak benda s dari lensa dengan slider bawah." },
+          { "step": 3, "text": "Amati posisi bayangan s' dan perbesaran M pada panel kanan." },
+          { "step": 4, "text": "Perhatikan diagram sinar yang diperbarui secara otomatis." },
+          { "step": 5, "text": "Eksplorasi: apa yang terjadi saat posisi benda s lebih kecil dari f?" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Persamaan Lensa Tipis",
+          "strategy": "Gunakan persamaan 1/s + 1/s' = 1/f. Jika s' bernilai positif, bayangan nyata (di sisi berlawanan lensa); jika negatif, bayangan maya (sama sisi dengan benda). Perbesaran M = −s'/s; negatif berarti bayangan terbalik.",
+          "formula": "1/s + 1/s' = 1/f,  M = −s'/s",
+          "example": "Lensa f=10 cm, benda s=30 cm: 1/s'=1/10−1/30=2/30, s'=15 cm. M=−15/30=−0.5 (nyata, terbalik, diperkecil).",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_adjust", "event": "on_correct_action", "description": "Bunyi klik halus elektronik setiap slider digeser" },
+          { "id": "sfx_win", "event": "on_win", "description": "Nada pencapaian futuristik singkat saat semua tantangan selesai" },
+          { "id": "bgm", "event": "background", "description": "Ambient elektronik lembut berirama lambat, loop tenang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_optics",
+      "scenario": {
+        "title": "Pembentukan Bayangan Lensa Cembung",
+        "narrative": "Atur posisi benda dan panjang fokus lensa, amati diagram sinar, lalu analisis jarak dan sifat bayangan yang terbentuk.",
+        "context": "Lensa cembung tipis ideal (thin lens), medium udara homogen, benda berupa panah tegak lurus sumbu utama lensa."
+      },
+      "variables": [
+        { "id": "s", "label": "Jarak benda", "symbol": "s", "unit": "cm", "type": "user_input", "min": 5, "max": 200, "default": 30, "step": 1 },
+        { "id": "f", "label": "Panjang fokus lensa", "symbol": "f", "unit": "cm", "type": "user_input", "min": 5, "max": 50, "default": 10, "step": 1 },
+        { "id": "s_prime", "label": "Jarak bayangan", "symbol": "s'", "unit": "cm", "type": "computed" },
+        { "id": "perbesaran", "label": "Perbesaran linier", "symbol": "M", "unit": "kali", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_bayangan", "computes": "s_prime", "formula": "s_prime = (s * f) / (s - f)", "description": "Jarak bayangan dari persamaan lensa tipis 1/s + 1/s' = 1/f" },
+        { "id": "eq_perbesaran", "computes": "perbesaran", "formula": "perbesaran = -(s_prime / s)", "description": "Perbesaran linier; negatif = terbalik, positif = tegak" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Diagram sinar utama lensa cembung: sinar sejajar sumbu dibelokkan ke titik fokus, sinar melalui pusat optik diteruskan lurus, bayangan ditampilkan di titik perpotongan sinar bias" },
+        { "id": "viz_2", "type": "table", "title": "Ringkasan: s, f, s', M, dan sifat bayangan (nyata/maya, tegak/terbalik, diperbesar/diperkecil)" }
+      ],
+      "challenges": [
+        { "id": "ch_001", "task": "Temukan posisi benda s yang menghasilkan bayangan nyata dengan perbesaran tepat 2 kali (|M| = 2) untuk lensa f = 15 cm.", "success_condition": "abs(abs(perbesaran) - 2) < 0.1 AND s_prime > 0 AND f == 15", "points": 30 },
+        { "id": "ch_002", "task": "Atur jarak benda s lebih kecil dari panjang fokus f, amati bayangan yang terbentuk, dan eksplorasi setidaknya 3 kombinasi berbeda.", "success_condition": "s < f AND exploration_count >= 3", "points": 20 }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa menyelesaikan kedua tantangan optik",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Brilian! Kamu memahami pembentukan bayangan lensa cembung.",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Batas waktu habis tanpa menyelesaikan satu pun tantangan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis. Ingat rumus: 1/s + 1/s' = 1/f. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 1200,
+      "pass_threshold": 50
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Peta Vektor Nusantara",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Konsep Vektor",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_konsep_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Peta Vektor Nusantara",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Konsep Vektor",
+      "topik": "Konsep Vektor",
+      "difficulty": 2,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan pengertian vektor sebagai besaran yang memiliki nilai dan arah",
+        "Siswa dapat menggambar vektor pada bidang koordinat beserta lambang dan notasinya",
+        "Siswa dapat membedakan besaran vektor dari besaran skalar"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pelaut Muda Nusantara",
+        "story": "Kamu adalah pelaut muda yang belajar navigasi di atas kapal layar tradisional Nusantara. Kaptenmu mengajarkan cara membaca peta vektor: setiap anak panah menunjukkan arah dan jarak tempuh kapal. Atur besaran dan arah vektormu, lalu amati bagaimana panah navigasi bergerak di atas peta!",
+        "image_description": "Peta navigasi bergaya batik Nusantara dengan anak panah vektor berwarna emas di atas laut biru, kompas tradisional di pojok kanan bawah, kapal layar kecil di ujung panah",
+        "cta_text": "Mulai Navigasi"
+      },
+      "visual_element": {
+        "theme_name": "Nusantara Navigator",
+        "theme_preset": "nusantara",
+        "mood": "adventurous, warm, cultural",
+        "color_palette": {
+          "primary": "#c0392b",
+          "secondary": "#e67e22",
+          "background": "#fef9e7",
+          "accent": "#2c3e50",
+          "text": "#2c3e50"
+        },
+        "setting_description": "Peta navigasi bergaya batik Jawa dengan ornamen khas Nusantara, laut biru kehijauan, dan garis kisi-kisi koordinat berwarna emas pudar.",
+        "art_style": "flat design dengan motif batik dan ornamen tradisional Nusantara",
+        "ambient_elements": [
+          "Ombak kecil bergerak perlahan di latar belakang peta",
+          "Angin sepoi menggerakkan bendera kapal layar",
+          "Motif batik berkilau halus di tepi bingkai peta"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur besar vektor (|V|) dengan slider Besaran." },
+          { "step": 2, "text": "Atur arah vektor (sudut θ dari sumbu X positif) dengan slider Sudut." },
+          { "step": 3, "text": "Amati anak panah vektor yang muncul di papan koordinat." },
+          { "step": 4, "text": "Perhatikan nilai komponen horizontal (Vx) dan vertikal (Vy) di panel samping." },
+          { "step": 5, "text": "Coba ubah sudut ke 0°, 90°, 180°, dan 270° untuk memahami arah vektor." }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Konsep Dasar Vektor",
+          "strategy": "Vektor adalah besaran fisika yang memiliki nilai (besaran) sekaligus arah, dilambangkan dengan anak panah. Panjang panah merepresentasikan besaran, ujung panah menunjukkan arah. Berbeda dengan besaran skalar yang hanya memiliki nilai, vektor membutuhkan keduanya.",
+          "formula": "V = |V| pada arah θ terhadap sumbu X positif",
+          "example": "Vektor perpindahan 5 m ke Timur (θ=0°) berbeda dengan 5 m ke Utara (θ=90°), meskipun besarannya sama.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_slider", "event": "on_correct_action", "description": "Suara derak tali layar kapal yang lembut saat parameter diubah" },
+          { "id": "bgm", "event": "background", "description": "Musik gamelan laut yang tenang dan berirama santai bernuansa Nusantara, loop halus" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Vektor Navigasi Kapal",
+        "narrative": "Atur besaran dan arah vektor posisi kapalmu di atas peta koordinat. Amati bagaimana representasi anak panah berubah dan pahami hubungan antara besaran, arah, serta komponen-komponennya.",
+        "context": "Bidang koordinat dua dimensi; sudut θ diukur berlawanan arah jarum jam dari sumbu X positif (arah Timur); satuan besaran dalam meter."
+      },
+      "variables": [
+        { "id": "besaran", "label": "Besaran vektor", "symbol": "|V|", "unit": "m", "type": "user_input", "min": 1, "max": 20, "default": 10, "step": 0.5 },
+        { "id": "sudut", "label": "Sudut arah", "symbol": "θ", "unit": "derajat", "type": "user_input", "min": 0, "max": 360, "default": 45, "step": 1 },
+        { "id": "vx", "label": "Komponen horizontal", "symbol": "Vx", "unit": "m", "type": "computed" },
+        { "id": "vy", "label": "Komponen vertikal", "symbol": "Vy", "unit": "m", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_vx", "computes": "vx", "formula": "vx = besaran * cos(sudut * pi / 180)", "description": "Komponen horizontal vektor pada sumbu X" },
+        { "id": "eq_vy", "computes": "vy", "formula": "vy = besaran * sin(sudut * pi / 180)", "description": "Komponen vertikal vektor pada sumbu Y" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Anak panah vektor dari titik asal (0,0) ke titik ujung; garis putus-putus menunjukkan proyeksi Vx (horizontal) dan Vy (vertikal); label besaran dan sudut tampil di samping panah" },
+        { "id": "viz_2", "type": "table", "title": "Nilai Komponen Vektor", "description": "Tabel yang menampilkan nilai besaran, sudut θ, Vx, dan Vy secara real-time saat slider diubah" }
+      ],
+      "challenges": []
+    },
+    "win_lose_condition": { "applicable": false },
+    "gameplay_parameters": {
+      "scoring": { "exploration_points_per_parameter_change": 2 },
+      "lives": null,
+      "time_limit_seconds": null,
+      "pass_threshold": null
+    }
+  }
+}

@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misteri Kedalaman Samudra - Game Edukasi Fluida Statis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Exo 2', sans-serif;
+  background: linear-gradient(180deg, #03045E 0%, #023E8A 25%, #0077B6 50%, #0096C7 75%, #00B4D8 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #CAF0F8;
+}
+
+#canvas-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.game-container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Opening Screen */
+#opening-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.opening-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5em;
+  font-weight: 900;
+  color: #FFD166;
+  text-shadow: 0 0 30px rgba(255,209,102,0.5), 0 0 60px rgba(255,209,102,0.3);
+  margin-bottom: 20px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 20px rgba(255,209,102,0.4), 0 0 40px rgba(255,209,102,0.2); }
+  to { text-shadow: 0 0 40px rgba(255,209,102,0.8), 0 0 80px rgba(255,209,102,0.4); }
+}
+
+.submarine-art {
+  width: 280px;
+  height: 200px;
+  margin: 20px auto;
+  position: relative;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.submarine-body {
+  width: 200px;
+  height: 80px;
+  background: linear-gradient(180deg, #FFD166 0%, #E6A817 50%, #CC8800 100%);
+  border-radius: 50px 60px 40px 50px;
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4), inset 0 -5px 15px rgba(0,0,0,0.2);
+}
+
+.submarine-window {
+  width: 35px;
+  height: 35px;
+  background: radial-gradient(circle at 40% 40%, #90E0EF, #0077B6, #023E8A);
+  border: 3px solid #E6A817;
+  border-radius: 50%;
+  position: absolute;
+  top: 70px;
+  left: 155px;
+  box-shadow: 0 0 15px rgba(0,180,216,0.6), inset 0 0 10px rgba(0,180,216,0.3);
+}
+
+.submarine-tower {
+  width: 40px;
+  height: 35px;
+  background: linear-gradient(180deg, #FFD166, #E6A817);
+  border-radius: 8px 8px 0 0;
+  position: absolute;
+  top: 30px;
+  left: 100px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+}
+
+.submarine-periscope {
+  width: 6px;
+  height: 25px;
+  background: #CC8800;
+  position: absolute;
+  top: 8px;
+  left: 117px;
+  border-radius: 3px;
+}
+
+.submarine-periscope::after {
+  content: '';
+  width: 14px;
+  height: 6px;
+  background: #CC8800;
+  position: absolute;
+  top: 0;
+  left: -4px;
+  border-radius: 3px;
+}
+
+.submarine-propeller {
+  width: 15px;
+  height: 40px;
+  position: absolute;
+  top: 80px;
+  left: 30px;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.prop-blade {
+  width: 4px;
+  height: 18px;
+  background: #999;
+  border-radius: 2px;
+  position: absolute;
+  left: 5px;
+  transform-origin: center bottom;
+}
+
+.prop-blade:nth-child(1) { top: 0; transform: rotate(0deg); }
+.prop-blade:nth-child(2) { top: 0; transform: rotate(120deg); }
+.prop-blade:nth-child(3) { top: 0; transform: rotate(240deg); }
+
+.submarine-light {
+  width: 20px;
+  height: 14px;
+  background: #fff;
+  border-radius: 0 10px 10px 0;
+  position: absolute;
+  top: 93px;
+  left: 240px;
+  box-shadow: 0 0 20px #fff, 0 0 40px rgba(255,255,255,0.5);
+}
+
+.light-beam {
+  width: 120px;
+  height: 60px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+  position: absolute;
+  top: 73px;
+  left: 255px;
+  clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 70%);
+}
+
+.story-text {
+  max-width: 700px;
+  font-size: 1.05em;
+  line-height: 1.8;
+  color: #CAF0F8;
+  margin: 20px auto;
+  padding: 25px;
+  background: rgba(3, 4, 94, 0.6);
+  border-radius: 15px;
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.cta-button {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #03045E;
+  background: linear-gradient(135deg, #FFD166 0%, #FFE08A 50%, #FFD166 100%);
+  border: none;
+  padding: 16px 50px;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 25px rgba(255,209,102,0.4), 0 0 50px rgba(255,209,102,0.15);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 35px rgba(255,209,102,0.6), 0 0 80px rgba(255,209,102,0.25);
+}
+
+.cta-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.cta-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(30deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -60%; }
+  100% { left: 120%; }
+}
+
+/* Game Screen */
+#game-screen {
+  display: none;
+  padding-top: 10px;
+}
+
+/* HUD */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px 20px;
+  background: rgba(3, 4, 94, 0.7);
+  border-radius: 15px;
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85em;
+}
+
+.hud-icon {
+  font-size: 1.3em;
+}
+
+.hud-value {
+  color: #FFD166;
+  font-weight: 700;
+}
+
+/* Depth Meter */
+.depth-meter {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 180, 216, 0.2);
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.depth-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00B4D8, #FFD166);
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  width: 0%;
+  box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+}
+
+/* Question Area */
+.question-area {
+  background: rgba(3, 4, 94, 0.65);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 180, 216, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.question-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #00B4D8, #FFD166, #00B4D8, transparent);
+}
+
+.question-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8em;
+  color: #00B4D8;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.question-type-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7em;
+  color: #FFD166;
+  background: rgba(255, 209, 102, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 209, 102, 0.3);
+}
+
+.hint-text {
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #CAF0F8;
+  margin-bottom: 20px;
+}
+
+/* Word Display */
+.word-display {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 25px 0;
+}
+
+.letter-slot {
+  width: 48px;
+  height: 56px;
+  background: rgba(0, 119, 182, 0.3);
+  border: 2px solid rgba(0, 180, 216, 0.4);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #FFD166;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.letter-slot.filled {
+  background: rgba(0, 180, 216, 0.25);
+  border-color: #00B4D8;
+  animation: slotFill 0.3s ease;
+}
+
+.letter-slot.correct {
+  background: rgba(6, 214, 160, 0.3);
+  border-color: #06D6A0;
+  color: #06D6A0;
+  box-shadow: 0 0 15px rgba(6, 214, 160, 0.3);
+}
+
+.letter-slot.wrong {
+  background: rgba(239, 71, 111, 0.3);
+  border-color: #EF476F;
+  color: #EF476F;
+  animation: shake 0.4s ease;
+}
+
+.letter-slot.revealed {
+  background: rgba(0, 119, 182, 0.2);
+  border-color: rgba(0, 180, 216, 0.5);
+  color: #90E0EF;
+}
+
+@keyframes slotFill {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Word separator (space) */
+.word-space {
+  width: 20px;
+}
+
+/* Keyboard */
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.key-btn {
+  width: 42px;
+  height: 48px;
+  background: linear-gradient(180deg, rgba(0, 119, 182, 0.6) 0%, rgba(0, 119, 182, 0.3) 100%);
+  border: 1px solid rgba(0, 180, 216, 0.4);
+  border-radius: 8px;
+  color: #CAF0F8;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.key-btn:hover:not(.disabled) {
+  background: linear-gradient(180deg, rgba(0, 180, 216, 0.7) 0%, rgba(0, 180, 216, 0.4) 100%);
+  border-color: #00B4D8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+}
+
+.key-btn:active:not(.disabled) {
+  transform: translateY(1px);
+}
+
+.key-btn.correct-key {
+  background: linear-gradient(180deg, rgba(6, 214, 160, 0.6) 0%, rgba(6, 214, 160, 0.3) 100%);
+  border-color: #06D6A0;
+  color: #06D6A0;
+}
+
+.key-btn.wrong-key {
+  background: rgba(239, 71, 111, 0.2);
+  border-color: rgba(239, 71, 111, 0.3);
+  color: rgba(239, 71, 111, 0.5);
+}
+
+.key-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.action-btn {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 25px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint-btn {
+  background: rgba(255, 209, 102, 0.15);
+  border-color: rgba(255, 209, 102, 0.4);
+  color: #FFD166;
+}
+
+.hint-btn:hover:not(:disabled) {
+  background: rgba(255, 209, 102, 0.25);
+  box-shadow: 0 0 20px rgba(255, 209, 102, 0.2);
+}
+
+.skip-btn {
+  background: rgba(239, 71, 111, 0.15);
+  border-color: rgba(239, 71, 111, 0.4);
+  color: #EF476F;
+}
+
+.skip-btn:hover {
+  background: rgba(239, 71, 111, 0.25);
+  box-shadow: 0 0 20px rgba(239, 71, 111, 0.2);
+}
+
+.action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Feedback */
+.feedback-area {
+  margin-top: 15px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-area.show {
+  display: block;
+}
+
+.feedback-area.correct-feedback {
+  background: rgba(6, 214, 160, 0.15);
+  border: 1px solid rgba(6, 214, 160, 0.3);
+}
+
+.feedback-area.wrong-feedback {
+  background: rgba(239, 71, 111, 0.15);
+  border: 1px solid rgba(239, 71, 111, 0.3);
+}
+
+.feedback-area.info-feedback {
+  background: rgba(0, 180, 216, 0.15);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+}
+
+.feedback-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.feedback-text {
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.next-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #03045E;
+  background: linear-gradient(135deg, #FFD166, #FFE08A);
+  border: none;
+  padding: 12px 35px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 209, 102, 0.3);
+}
+
+.next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 209, 102, 0.5);
+}
+
+/* Lives / Oxygen */
+.oxygen-display {
+  display: flex;
+  gap: 4px;
+}
+
+.oxygen-bubble {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #90E0EF, #0077B6);
+  border: 1px solid #00B4D8;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+}
+
+.oxygen-bubble.lost {
+  background: rgba(239, 71, 111, 0.3);
+  border-color: rgba(239, 71, 111, 0.4);
+  box-shadow: none;
+  transform: scale(0.8);
+}
+
+/* Result Screen */
+#result-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.result-card {
+  background: rgba(3, 4, 94, 0.7);
+  border-radius: 25px;
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  animation: fadeIn 0.5s ease;
+}
+
+.result-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2em;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.result-subtitle {
+  font-size: 1.1em;
+  color: #90E0EF;
+  margin-bottom: 30px;
+}
+
+.result-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  background: rgba(0, 119, 182, 0.2);
+  border: 1px solid rgba(0, 180, 216, 0.2);
+  border-radius: 15px;
+  padding: 20px 15px;
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2em;
+  font-weight: 700;
+  color: #FFD166;
+}
+
+.stat-label {
+  font-size: 0.85em;
+  color: #90E0EF;
+  margin-top: 5px;
+}
+
+.star-rating {
+  font-size: 2.5em;
+  margin: 20px 0;
+}
+
+.star {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.star.filled {
+  color: #FFD166;
+  text-shadow: 0 0 20px rgba(255, 209, 102, 0.6);
+  animation: starPop 0.5s ease backwards;
+}
+
+.star.empty {
+  color: rgba(255, 209, 102, 0.2);
+}
+
+@keyframes starPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.review-section {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.review-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9em;
+  color: #00B4D8;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.review-item {
+  background: rgba(0, 119, 182, 0.15);
+  border-radius: 10px;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9em;
+}
+
+.review-icon {
+  font-size: 1.2em;
+}
+
+.retry-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  color: #03045E;
+  background: linear-gradient(135deg, #FFD166, #FFE08A);
+  border: none;
+  padding: 15px 45px;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 25px rgba(255, 209, 102, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.retry-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 35px rgba(255, 209, 102, 0.6);
+}
+
+/* Decorative Elements */
+.bubble {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(0,180,216,0.05));
+  border: 1px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+  z-index: 0;
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) translateX(var(--drift)); opacity: 0; }
+}
+
+/* Timer bar */
+.timer-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 180, 216, 0.2);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #06D6A0, #FFD166, #EF476F);
+  border-radius: 2px;
+  transition: width 1s linear;
+  width: 100%;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7em;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-left: 10px;
+}
+
+.diff-easy { background: rgba(6, 214, 160, 0.2); color: #06D6A0; border: 1px solid rgba(6, 214, 160, 0.3); }
+.diff-medium { background: rgba(255, 209, 102, 0.2); color: #FFD166; border: 1px solid rgba(255, 209, 102, 0.3); }
+.diff-hard { background: rgba(239, 71, 111, 0.2); color: #EF476F; border: 1px solid rgba(239, 71, 111, 0.3); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .opening-title { font-size: 1.6em; }
+  .story-text { font-size: 0.9em; padding: 18px; }
+  .cta-button { font-size: 1em; padding: 14px 35px; }
+  .letter-slot { width: 38px; height: 45px; font-size: 1.2em; }
+  .key-btn { width: 34px; height: 40px; font-size: 0.85em; }
+  .hud { padding: 10px 12px; font-size: 0.8em; }
+  .question-area { padding: 20px 15px; }
+  .result-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-value { font-size: 1.5em; }
+  .game-container { padding: 10px; }
+  .word-space { width: 12px; }
+}
+
+@media (max-width: 400px) {
+  .letter-slot { width: 32px; height: 40px; font-size: 1em; }
+  .key-btn { width: 28px; height: 35px; font-size: 0.75em; }
+  .keyboard-row { gap: 3px; }
+}
+
+/* Particles */
+.particle {
+  position: fixed;
+  width: 3px;
+  height: 3px;
+  background: rgba(0, 180, 216, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 8s linear infinite;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* Tooltip for educational content */
+.edu-tooltip {
+  background: rgba(3, 4, 94, 0.9);
+  border: 1px solid #FFD166;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 10px;
+  font-size: 0.85em;
+  line-height: 1.6;
+  color: #CAF0F8;
+}
+
+.edu-tooltip strong {
+  color: #FFD166;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Sonar ping animation on correct answer */
+.sonar-ping {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #06D6A0;
+  animation: sonarExpand 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes sonarExpand {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(8); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<div class="game-container">
+  <!-- Opening Screen -->
+  <div id="opening-screen">
+    <div class="opening-title">🌊 Misteri Kedalaman Samudra</div>
+    
+    <div class="submarine-art">
+      <div class="submarine-periscope"></div>
+      <div class="submarine-tower"></div>
+      <div class="submarine-body"></div>
+      <div class="submarine-window"></div>
+      <div class="submarine-light"></div>
+      <div class="light-beam"></div>
+      <div class="submarine-propeller">
+        <div class="prop-blade"></div>
+        <div class="prop-blade"></div>
+        <div class="prop-blade"></div>
+      </div>
+    </div>
+
+    <div class="story-text">
+      Kamu adalah seorang peneliti kelautan muda yang ditugaskan menyelami palung laut terdalam di Nusantara. 
+      Kapal selam mini milikmu dilengkapi sistem navigasi berbasis pengetahuan fluida statis. 
+      Untuk mengendalikan kapal selam dan menemukan artefak kuno di dasar laut, kamu harus memecahkan 
+      teka-teki kata yang berkaitan dengan hukum-hukum fluida statis. Setiap jawaban benar akan membawa 
+      kapalmu lebih dalam dan lebih dekat ke harta karun pengetahuan! 🏛️
+    </div>
+
+    <button class="cta-button" onclick="startGame()">🚀 Mulai Penyelaman!</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen">
+    <div class="hud">
+      <div class="hud-item">
+        <span class="hud-icon">🔬</span>
+        <span>Soal: <span class="hud-value" id="question-counter">1/10</span></span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-icon">⭐</span>
+        <span>Skor: <span class="hud-value" id="score-display">0</span></span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-icon">💨</span>
+        <span>O₂:</span>
+        <div class="oxygen-display" id="oxygen-display"></div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-icon">⏱️</span>
+        <span>Waktu: <span class="hud-value" id="timer-display">0:00</span></span>
+      </div>
+      <div style="width:100%;">
+        <div class="depth-meter">
+          <div class="depth-fill" id="depth-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-area" id="question-area">
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span class="question-number" id="question-number">KEDALAMAN 1</span>
+        <span class="question-type-label" id="question-type-label">Tebak Kata</span>
+      </div>
+      
+      <div class="hint-text" id="hint-text"></div>
+      
+      <div class="word-display" id="word-display"></div>
+
+      <div class="keyboard" id="keyboard"></div>
+
+      <div class="action-buttons">
+        <button class="action-btn hint-btn" id="hint-btn" onclick="useHint()">
+          💡 Petunjuk (<span id="hints-left">3</span>)
+        </button>
+        <button class="action-btn skip-btn" id="skip-btn" onclick="skipQuestion()">
+          ⏭️ Lewati
+        </button>
+      </div>
+
+      <div class="feedback-area" id="feedback-area">
+        <div class="feedback-title" id="feedback-title"></div>
+        <div class="feedback-text" id="feedback-text"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Selanjutnya ➜</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="result-screen">
+    <div class="result-card">
+      <div class="result-title" id="result-title"></div>
+      <div class="result-subtitle" id="result-subtitle"></div>
+      
+      <div class="star-rating" id="star-rating"></div>
+
+      <div class="result-stats">
+        <div class="stat-box">
+          <div class="stat-value" id="final-score">0</div>
+          <div class="stat-label">Total Skor</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="correct-count">0</div>
+          <div class="stat-label">Jawaban Benar</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="time-taken">0:00</div>
+          <div class="stat-label">Waktu</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="accuracy-pct">0%</div>
+          <div class="stat-label">Akurasi</div>
+        </div>
+      </div>
+
+      <div class="review-section" id="review-section">
+        <div class="review-title">📋 Ringkasan Jawaban</div>
+        <div id="review-list"></div>
+      </div>
+
+      <button class="retry-btn" onclick="restartGame()">🔄 Selam Ulang!</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== GAME DATA ==========
+const questions = [
+  {
+    id: 1,
+    answer: "HIDROSTATIS",
+    hint: "Tekanan yang dialami fluida diam karena beratnya sendiri. Tekanan ini bertambah seiring kedalaman dan dihitung dengan rumus P = ρgh.",
+    type: "Konsep Tekanan",
+    difficulty: "easy",
+    explanation: "Tekanan hidrostatis adalah tekanan yang diberikan oleh fluida diam pada kedalaman tertentu. Rumusnya P = ρgh, di mana ρ = massa jenis fluida, g = percepatan gravitasi, h = kedalaman.",
+    formula: "P = ρgh"
+  },
+  {
+    id: 2,
+    answer: "PASCAL",
+    hint: "Hukum yang menyatakan bahwa tekanan yang diberikan pada fluida tertutup diteruskan sama besar ke segala arah. Prinsip ini digunakan pada dongkrak hidrolik.",
+    type: "Hukum Fisika",
+    difficulty: "easy",
+    explanation: "Hukum Pascal menyatakan bahwa tekanan yang diberikan pada fluida dalam ruang tertutup akan diteruskan sama besar ke segala arah. Penerapannya: dongkrak hidrolik, rem hidrolik, dan mesin hidrolik.",
+    formula: "F₁/A₁ = F₂/A₂"
+  },
+  {
+    id: 3,
+    answer: "ARCHIMEDES",
+    hint: "Hukum yang menyatakan bahwa benda yang dicelupkan dalam fluida akan mengalami gaya apung sebesar berat fluida yang dipindahkan. Penemu hukum ini berteriak 'Eureka!'",
+    type: "Hukum Fisika",
+    difficulty: "medium",
+    explanation: "Hukum Archimedes: setiap benda yang dicelupkan dalam fluida akan mengalami gaya ke atas (gaya apung) sebesar berat fluida yang dipindahkan. F_apung = ρ_fluida × g × V_tercelup.",
+    formula: "F_apung = ρ_f × g × V"
+  },
+  {
+    id: 4,
+    answer: "MASSA JENIS",
+    hint: "Besaran yang menyatakan perbandingan massa suatu zat terhadap volumenya. Simbolnya ρ (rho), satuannya kg/m³. Air memiliki nilai sekitar 1000 kg/m³.",
+    type: "Besaran Fisika",
+    difficulty: "easy",
+    explanation: "Massa jenis (ρ) adalah perbandingan massa terhadap volume suatu zat: ρ = m/V. Massa jenis menentukan apakah benda tenggelam atau mengapung dalam fluida.",
+    formula: "ρ = m/V"
+  },
+  {
+    id: 5,
+    answer: "GAYA APUNG",
+    hint: "Gaya ke atas yang dialami benda saat dicelupkan dalam fluida. Gaya ini menyebabkan benda terasa lebih ringan di dalam air dan memungkinkan kapal mengapung.",
+    type: "Gaya Fisika",
+    difficulty: "easy",
+    explanation: "Gaya apung (buoyancy) adalah gaya dorong ke atas oleh fluida pada benda yang tercelup. Besarnya sama dengan berat fluida yang dipindahkan (Hukum Archimedes).",
+    formula: "F_A = ρ_f × V × g"
+  },
+  {
+    id: 6,
+    answer: "TEGANGAN PERMUKAAN",
+    hint: "Gejala yang membuat permukaan fluida cenderung menegang seperti selaput elastis. Fenomena ini menyebabkan serangga dapat berjalan di atas air dan tetesan air berbentuk bulat.",
+    type: "Sifat Fluida",
+    difficulty: "hard",
+    explanation: "Tegangan permukaan adalah kecenderungan permukaan fluida untuk menegang sehingga permukaannya luas minimum. Disebabkan oleh gaya tarik-menarik antar molekul (kohesi) di permukaan.",
+    formula: "γ = F/L"
+  },
+  {
+    id: 7,
+    answer: "KAPILARITAS",
+    hint: "Peristiwa naik atau turunnya permukaan fluida dalam pipa kapiler (pipa sempit). Fenomena ini menjelaskan mengapa air bisa naik pada sumbu kompor dan tumbuhan bisa menyerap air.",
+    type: "Fenomena Fluida",
+    difficulty: "medium",
+    explanation: "Kapilaritas terjadi karena perbedaan gaya kohesi (antar molekul sejenis) dan adhesi (antar molekul berbeda). Jika adhesi > kohesi, fluida naik. Jika kohesi > adhesi, fluida turun.",
+    formula: "h = 2γ cos θ / (ρgr)"
+  },
+  {
+    id: 8,
+    answer: "MANOMETER",
+    hint: "Alat ukur yang digunakan untuk mengukur tekanan gas dalam ruang tertutup. Alat ini biasanya menggunakan pipa U berisi cairan (umumnya raksa) untuk menunjukkan selisih tekanan.",
+    type: "Alat Ukur",
+    difficulty: "medium",
+    explanation: "Manometer adalah alat untuk mengukur tekanan gas dalam ruang tertutup. Manometer pipa U menggunakan prinsip tekanan hidrostatis: P_gas = P_atm ± ρgh (tergantung selisih ketinggian cairan).",
+    formula: "P_gas = P_atm ± ρgh"
+  },
+  {
+    id: 9,
+    answer: "BAROMETER",
+    hint: "Alat yang digunakan untuk mengukur tekanan atmosfer (udara). Ditemukan oleh Torricelli, biasanya menggunakan tabung berisi raksa. Tekanan atmosfer standar = 76 cmHg.",
+    type: "Alat Ukur",
+    difficulty: "medium",
+    explanation: "Barometer Torricelli mengukur tekanan atmosfer. Pada permukaan laut, tekanan atmosfer standar mampu menopang kolom raksa setinggi 76 cm (1 atm = 76 cmHg = 101.325 Pa).",
+    formula: "P_atm = ρ_Hg × g × h"
+  },
+  {
+    id: 10,
+    answer: "VISKOSITAS",
+    hint: "Ukuran kekentalan fluida atau hambatan fluida terhadap aliran. Madu memiliki nilai ini lebih besar dari air. Menentukan seberapa mudah fluida mengalir.",
+    type: "Sifat Fluida",
+    difficulty: "hard",
+    explanation: "Viskositas adalah ukuran resistansi fluida terhadap deformasi oleh tegangan geser. Fluida dengan viskositas tinggi (seperti madu) mengalir lebih lambat dibanding fluida dengan viskositas rendah (seperti air).",
+    formula: "F = η × A × (dv/dy)"
+  }
+];
+
+// ========== GAME STATE ==========
+let gameState = {
+  currentQuestion: 0,
+  score: 0,
+  totalQuestions: questions.length,
+  oxygen: 5,
+  maxOxygen: 5,
+  hintsRemaining: 3,
+  correctAnswers: 0,
+  wrongGuesses: 0,
+  currentWrongGuesses: 0,
+  maxWrongPerQuestion: 5,
+  guessedLetters: [],
+  revealedPositions: [],
+  startTime: null,
+  timerInterval: null,
+  elapsedSeconds: 0,
+  questionResults: [],
+  isAnswered: false
+};
+
+// ========== CANVAS BACKGROUND ==========
+function initCanvas() {
+  const canvas = document.getElementById('canvas-bg');
+  const ctx = canvas
+</html>

@@ -1,0 +1,174 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Simulator Tumbukan Kosmik",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Momentum dan Impuls",
+    "tingkat_kesulitan": 3,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_din_momentumimpuls_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Simulator Tumbukan Kosmik",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika Gerak Partikel",
+      "subbab": "Momentum dan Impuls",
+      "topik": "Momentum dan Impuls",
+      "difficulty": 3,
+      "estimated_duration_minutes": 20,
+      "learning_objectives": [
+        "Siswa dapat menghitung momentum dan impuls benda sebelum dan sesudah tumbukan",
+        "Siswa dapat memverifikasi Hukum Kekekalan Momentum pada berbagai jenis tumbukan",
+        "Siswa dapat membedakan tumbukan lenting sempurna, lenting sebagian, dan tidak lenting sama sekali menggunakan koefisien restitusi"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Stasiun Pengamat Asteroid",
+        "story": "Di stasiun pengamat ruang angkasa, sensor mendeteksi dua asteroid yang akan saling bertabrakan! Sebagai fisikawan misi, tugasmu adalah memprediksi kecepatan kedua asteroid setelah tumbukan. Gunakan Hukum Kekekalan Momentum dan koefisien restitusi untuk menentukan hasilnya sebelum tabrakan benar-benar terjadi!",
+        "image_description": "Dua asteroid berbeda ukuran melaju di ruang angkasa penuh bintang, anak panah kecepatan berwarna cyan dan magenta menunjukkan arah gerak masing-masing, stasiun pengamat berbentuk cincin berputar di latar belakang, efek partikel bercahaya di jalur asteroid",
+        "cta_text": "Analisis Tumbukan"
+      },
+      "visual_element": {
+        "theme_name": "Cosmic Collision Lab",
+        "theme_preset": "space_cosmic",
+        "mood": "tense, scientific, immersive",
+        "color_palette": {
+          "primary": "#00bcd4",
+          "secondary": "#e040fb",
+          "background": "#050516",
+          "accent": "#ffeb3b",
+          "text": "#e8f4fd"
+        },
+        "setting_description": "Ruang angkasa dalam yang gelap dengan nebula berwarna ungu-biru di latar, dua asteroid bercahaya, bintang-bintang berkilauan, dan tampilan holografik data tumbukan berwarna cyan.",
+        "art_style": "flat design sci-fi dengan efek glowing neon dan partikel kosmik",
+        "ambient_elements": [
+          "Partikel debu kosmik melayang di sekitar kedua asteroid",
+          "Efek cahaya berpendar di jalur gerak asteroid",
+          "Tampilan holografik data momentum berkedip di layar stasiun"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur massa asteroid pertama (m1) dan kecepatannya (v1)." },
+          { "step": 2, "text": "Atur massa asteroid kedua (m2) dan kecepatannya (v2). Nilai negatif berarti bergerak ke kiri." },
+          { "step": 3, "text": "Atur koefisien restitusi (e): 1=lenting sempurna, 0=tidak lenting sama sekali." },
+          { "step": 4, "text": "Amati kecepatan setelah tumbukan (v1_akhir dan v2_akhir) dan verifikasi kekekalan momentum." },
+          { "step": 5, "text": "Selesaikan tiga tantangan untuk menyelesaikan misi observasi!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Kekekalan Momentum dan Restitusi",
+          "strategy": "Momentum total sistem selalu kekal: p_awal = p_akhir. Koefisien restitusi e mengukur 'kelenturan' tumbukan: e=1 (lenting sempurna, energi kinetik kekal), e=0 (tidak lenting, dua benda bergerak bersama). Gunakan formula umum untuk menghitung v1' dan v2' dari m1, m2, v1, v2, dan e.",
+          "formula": "v1' = [(m1−e·m2)v1 + (1+e)m2·v2]/(m1+m2),   v2' = [(m2−e·m1)v2 + (1+e)m1·v1]/(m1+m2)",
+          "example": "m1=m2=2kg, v1=4m/s, v2=0, e=1: v1'=0, v2'=4m/s (kecepatan bertukar). e=0: v1'=v2'=2m/s.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_collision", "event": "on_correct_action", "description": "Suara tumbukan kosmik yang dalam dan berat saat simulasi tumbukan dijalankan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara sonar ping dan melodi kemenangan futuristik saat misi berhasil" },
+          { "id": "sfx_fail", "event": "on_lose", "description": "Suara alarm stasiun angkasa yang berdenyut merah saat waktu habis" },
+          { "id": "bgm", "event": "background", "description": "Musik ambient ruang angkasa yang megah dan misterius, synthesizer dalam, loop panjang" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Tumbukan 1D dengan Koefisien Restitusi",
+        "narrative": "Atur massa dan kecepatan awal dua asteroid beserta koefisien restitusi tumbukan. Simulasi menghitung kecepatan setelah tumbukan menggunakan persamaan umum tumbukan dan memverifikasi kekekalan momentum.",
+        "context": "Tumbukan 1 dimensi; arah positif ke kanan; tidak ada gaya eksternal; momentum total sistem kekal; e=1 (lenting sempurna), e=0 (tidak lenting sama sekali), 0<e<1 (lenting sebagian)."
+      },
+      "variables": [
+        { "id": "m1", "label": "Massa asteroid 1", "symbol": "m₁", "unit": "kg", "type": "user_input", "min": 1, "max": 20, "default": 2, "step": 0.5 },
+        { "id": "v1_awal", "label": "Kecepatan awal asteroid 1", "symbol": "v₁", "unit": "m/s", "type": "user_input", "min": -20, "max": 20, "default": 4, "step": 0.5 },
+        { "id": "m2", "label": "Massa asteroid 2", "symbol": "m₂", "unit": "kg", "type": "user_input", "min": 1, "max": 20, "default": 2, "step": 0.5 },
+        { "id": "v2_awal", "label": "Kecepatan awal asteroid 2", "symbol": "v₂", "unit": "m/s", "type": "user_input", "min": -20, "max": 20, "default": 0, "step": 0.5 },
+        { "id": "e", "label": "Koefisien restitusi", "symbol": "e", "unit": "-", "type": "user_input", "min": 0, "max": 1, "default": 1, "step": 0.05 },
+        { "id": "p_awal", "label": "Momentum total awal", "symbol": "p_i", "unit": "kg·m/s", "type": "computed" },
+        { "id": "v1_akhir", "label": "Kecepatan akhir asteroid 1", "symbol": "v₁'", "unit": "m/s", "type": "computed" },
+        { "id": "v2_akhir", "label": "Kecepatan akhir asteroid 2", "symbol": "v₂'", "unit": "m/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_p_awal", "computes": "p_awal", "formula": "p_awal = m1 * v1_awal + m2 * v2_awal", "description": "Momentum total sistem sebelum tumbukan" },
+        { "id": "eq_v1_akhir", "computes": "v1_akhir", "formula": "v1_akhir = ((m1 - e * m2) * v1_awal + (1 + e) * m2 * v2_awal) / (m1 + m2)", "description": "Kecepatan asteroid 1 setelah tumbukan berdasarkan kekekalan momentum dan koefisien restitusi" },
+        { "id": "eq_v2_akhir", "computes": "v2_akhir", "formula": "v2_akhir = ((m2 - e * m1) * v2_awal + (1 + e) * m1 * v1_awal) / (m1 + m2)", "description": "Kecepatan asteroid 2 setelah tumbukan berdasarkan kekekalan momentum dan koefisien restitusi" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Dua asteroid bergerak mendekati satu sama lain, bertabrakan di tengah, lalu bergerak menjauh dengan kecepatan baru; anak panah cyan (v1) dan magenta (v2) menunjukkan arah dan besar kecepatan sebelum dan sesudah tumbukan" },
+        { "id": "viz_2", "type": "table", "title": "Verifikasi Kekekalan Momentum", "description": "Tabel berdampingan menampilkan p_awal = m1·v1+m2·v2 dan p_akhir = m1·v1'+m2·v2'; keduanya harus sama persis sebagai bukti kekekalan momentum" },
+        { "id": "viz_3", "type": "graph", "x_axis": "e", "y_axis": "v1_akhir", "title": "Kecepatan v1 Setelah Tumbukan vs Koefisien Restitusi" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur m1=m2=2 kg, v1=4 m/s, v2=0, dan e=1 (lenting sempurna). Verifikasi bahwa kecepatan bertukar: v1'≈0 dan v2'≈4 m/s.",
+          "success_condition": "abs(m1 - 2) < 0.1 AND abs(m2 - 2) < 0.1 AND abs(v1_awal - 4) < 0.1 AND abs(v2_awal) < 0.1 AND abs(e - 1) < 0.05 AND abs(v1_akhir) < 0.2 AND abs(v2_akhir - 4) < 0.3",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Atur m1=m2=3 kg, v1=6 m/s, v2=0, dan e=0 (tidak lenting sama sekali). Verifikasi bahwa kedua asteroid bergerak bersama dengan kecepatan yang sama setelah tumbukan.",
+          "success_condition": "abs(m1 - 3) < 0.1 AND abs(m2 - 3) < 0.1 AND abs(v1_awal - 6) < 0.1 AND abs(v2_awal) < 0.1 AND abs(e) < 0.05 AND abs(v1_akhir - v2_akhir) < 0.2",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Untuk tumbukan apa pun dengan nilai m1, m2, v1, v2, dan e yang kamu pilih: verifikasi bahwa momentum total sebelum tumbukan sama dengan momentum total setelah tumbukan (Hukum Kekekalan Momentum).",
+          "success_condition": "abs(m1 * v1_akhir + m2 * v2_akhir - p_awal) < 0.3",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan tumbukan",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Misi berhasil! Asteroid berhasil diprediksi. Momentum total selalu kekal: p_awal = p_akhir, apapun jenis tumbukannya!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Misi gagal! Ingat: v1' = [(m1−e·m2)v1+(1+e)m2·v2]/(m1+m2). Coba dengan e=1 dan m1=m2 dulu!",
+        "feedback_audio": "sfx_fail",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 900,
+      "pass_threshold": 50
+    }
+  }
+}

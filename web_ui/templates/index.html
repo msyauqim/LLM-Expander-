@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Generator - Pipeline 3-LLM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎮 Game Edukasi Generator</h1>
+            <p>Pipeline 3-LLM: JSON Filler + Prompter + 3 Specialist Coders</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Step 1: Input -->
+            <section id="input-section" class="section active">
+                <h2>📋 Step 1: Input Guru</h2>
+                <form id="input-form">
+                    <div class="form-group">
+                        <label for="kelas">Kelas *</label>
+                        <select id="kelas" name="kelas" required>
+                            <option value="">Pilih Kelas</option>
+                            {% for grade in grades %}
+                            <option value="{{ grade }}">{{ grade }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mata_pelajaran">Mata Pelajaran *</label>
+                        <select id="mata_pelajaran" name="mata_pelajaran" required>
+                            <option value="">Pilih Mata Pelajaran</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject }}">{{ subject }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bab">Bab *</label>
+                        <input type="text" id="bab" name="bab" placeholder="Contoh: Kinematika" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subbab">Subbab</label>
+                        <input type="text" id="subbab" name="subbab" placeholder="Contoh: Gerak Lurus Beraturan (opsional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topik">Topik</label>
+                        <input type="text" id="topik" name="topik" placeholder="Contoh: Kecepatan Konstan (opsional)">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner" id="spinner"></span>
+                        Generate Game
+                    </button>
+                </form>
+
+                <div id="loading-message" class="message hidden">
+                    <p>⏳ Sedang generate game... Ini bisa memakan waktu 1-2 menit.</p>
+                    <p style="font-size: 0.9em; color: #666;">
+                        Tahap: JSON Filler → Prompter → 3 Specialists → Assembler → Validator
+                    </p>
+                </div>
+
+                <div id="error-message" class="message message-error hidden"></div>
+            </section>
+
+            <!-- Step 2: Preview -->
+            <section id="preview-section" class="section hidden">
+                <h2>👀 Step 2: Preview Game</h2>
+                <p class="section-subtitle">Cek apakah game sudah sesuai. Jika ada masalah, bisa direvisi.</p>
+
+                <div class="preview-container">
+                    <iframe id="game-preview" class="preview-iframe" title="Game Preview"></iframe>
+                </div>
+
+                <div class="preview-actions">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Kembali</button>
+                    <button type="button" class="btn btn-warning" onclick="showRevisionModal()">📝 Revisi</button>
+                    <button type="button" class="btn btn-success" onclick="publishGame()">✅ Publikasi</button>
+                </div>
+
+                <div id="revision-modal" class="modal hidden">
+                    <div class="modal-content">
+                        <h3>📝 Feedback Revisi</h3>
+                        <p>Jelaskan apa yang ingin diubah (contoh: "Ubah warna latar jadi biru", "Hapus animasi partikel", "Soal terlalu sulit")</p>
+
+                        <textarea id="feedback-input" class="form-control"
+                                  placeholder="Tulis feedback di sini..." rows="4"></textarea>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn btn-secondary" onclick="closeRevisionModal()">Batal</button>
+                            <button type="button" class="btn btn-primary" onclick="submitRevision()">Kirim Revisi</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="publish-message" class="message message-success hidden"></div>
+            </section>
+
+            <!-- Step 3: Success -->
+            <section id="success-section" class="section hidden">
+                <h2>✅ Game Berhasil Dipublikasi!</h2>
+                <div class="success-content">
+                    <p id="success-message"></p>
+                    <button type="button" class="btn btn-primary" onclick="resetForm()">Buat Game Baru</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Pipeline 3-LLM © 2026 | Tim 4 Fortensor</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

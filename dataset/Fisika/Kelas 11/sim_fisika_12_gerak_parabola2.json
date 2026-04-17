@@ -1,0 +1,168 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Analisis Kecepatan Gerak Parabola",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gerak Parabola",
+    "tingkat_kesulitan": 1,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_kin_parabola_sim_002",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Analisis Kecepatan Gerak Parabola",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Gerak Parabola",
+      "topik": "Gerak Parabola",
+      "difficulty": 1,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat menguraikan gerak parabola menjadi komponen kecepatan horizontal dan vertikal",
+        "Siswa dapat menghitung waktu untuk mencapai ketinggian maksimum dan waktu terbang total",
+        "Siswa dapat menjelaskan bahwa komponen kecepatan horizontal benda tetap konstan sepanjang lintasan"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Taman Bermain Fisika",
+        "story": "Di taman bermain sekolah yang ceria, kamu melempar bola warna-warni ke udara! Setiap lemparan menghasilkan lintasan parabola yang indah. Tugasmu adalah menganalisis kecepatan bola di berbagai titik lintasannya: berapa cepat bola bergerak ke samping? Berapa lama bola mencapai puncak? Mari bermain sambil belajar fisika!",
+        "image_description": "Taman bermain cerah warna-warni dengan bola-bola berwarna mengikuti lintasan parabola berwarna pastel, pelangi kecil di langit biru muda, rumput hijau lembut dan bunga-bunga di sekitar",
+        "cta_text": "Lempar Bola!"
+      },
+      "visual_element": {
+        "theme_name": "Pastel Playground",
+        "theme_preset": "candy_pastel",
+        "mood": "playful, cheerful, accessible",
+        "color_palette": {
+          "primary": "#ff6b9d",
+          "secondary": "#ffd93d",
+          "background": "#fff5f9",
+          "accent": "#6bcb77",
+          "text": "#2d2d2d"
+        },
+        "setting_description": "Taman bermain outdoor dengan warna pastel cerah, langit biru muda dengan awan putih fluffy, rumput hijau lembut, dan efek lintasan parabola berkilau warna pelangi.",
+        "art_style": "flat design bergaya kawaii dengan warna pastel cerah dan elemen taman bermain",
+        "ambient_elements": [
+          "Bunga-bunga kecil bergoyang pelan di sekitar taman",
+          "Bintang-bintang kecil berkilauan mengikuti lintasan bola",
+          "Awan putih bergerak perlahan di latar langit biru muda"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur kecepatan awal (v0) bola dengan slider." },
+          { "step": 2, "text": "Atur sudut pelemparan (θ) dari 1° hingga 89°." },
+          { "step": 3, "text": "Tekan Lempar untuk melihat animasi lintasan bola." },
+          { "step": 4, "text": "Amati nilai Vx, Vy, waktu ke puncak (t_puncak), dan waktu terbang (t_terbang)." },
+          { "step": 5, "text": "Selesaikan dua tantangan untuk lulus sebagai analis parabola!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Komponen Kecepatan Parabola",
+          "strategy": "Kecepatan horizontal (Vx) selalu konstan karena tidak ada gaya horizontal. Kecepatan vertikal (Vy) berkurang karena gravitasi. Bola mencapai puncak saat Vy=0. Waktu terbang total adalah dua kali waktu ke puncak karena geraknya simetris.",
+          "formula": "Vx = v₀·cosθ,  Vy = v₀·sinθ − g·t,  t_puncak = v₀·sinθ/g,  t_terbang = 2·t_puncak",
+          "example": "v0=20 m/s, θ=30°: Vx=17,3 m/s (tetap), t_puncak=20×0,5/10=1 s, t_terbang=2 s.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_throw", "event": "on_correct_action", "description": "Suara lemparan bola yang ringan dan ceria saat simulasi dijalankan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Suara tepuk tangan anak-anak yang ceria dan melodi gembira saat tantangan selesai" },
+          { "id": "bgm", "event": "background", "description": "Musik taman bermain yang ceria dan ringan, irama gembira anak-anak, loop pendek" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_kinematics",
+      "scenario": {
+        "title": "Simulasi Komponen Kecepatan Gerak Parabola",
+        "narrative": "Lempar bola dengan berbagai kecepatan awal dan sudut. Amati bagaimana komponen kecepatan horizontal (konstan) dan vertikal (berubah oleh gravitasi) mempengaruhi lintasan, waktu mencapai puncak, dan waktu terbang total.",
+        "context": "Gerak parabola ideal; hambatan udara diabaikan; g = 10 m/s²; bola diluncurkan dari permukaan tanah (y=0)."
+      },
+      "variables": [
+        { "id": "v0", "label": "Kecepatan awal", "symbol": "v₀", "unit": "m/s", "type": "user_input", "min": 5, "max": 40, "default": 20, "step": 1 },
+        { "id": "theta", "label": "Sudut peluncuran", "symbol": "θ", "unit": "derajat", "type": "user_input", "min": 1, "max": 89, "default": 30, "step": 1 },
+        { "id": "t", "label": "Waktu simulasi", "symbol": "t", "unit": "s", "type": "simulation_time", "min": 0, "max": 20 },
+        { "id": "vx", "label": "Kecepatan horizontal", "symbol": "Vx", "unit": "m/s", "type": "computed" },
+        { "id": "vy", "label": "Kecepatan vertikal saat t", "symbol": "Vy(t)", "unit": "m/s", "type": "computed" },
+        { "id": "v_total", "label": "Kecepatan total saat t", "symbol": "v(t)", "unit": "m/s", "type": "computed" },
+        { "id": "t_puncak", "label": "Waktu ke puncak", "symbol": "t_p", "unit": "s", "type": "computed" },
+        { "id": "t_terbang", "label": "Waktu terbang total", "symbol": "t_f", "unit": "s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_vx", "computes": "vx", "formula": "vx = v0 * cos(theta * pi / 180)", "description": "Komponen kecepatan horizontal, konstan sepanjang gerak parabola" },
+        { "id": "eq_vy", "computes": "vy", "formula": "vy = v0 * sin(theta * pi / 180) - 10 * t", "description": "Komponen kecepatan vertikal pada waktu t, berkurang akibat gravitasi" },
+        { "id": "eq_v_total", "computes": "v_total", "formula": "v_total = sqrt(vx^2 + vy^2)", "description": "Kecepatan total (resultan) benda pada waktu t" },
+        { "id": "eq_t_puncak", "computes": "t_puncak", "formula": "t_puncak = v0 * sin(theta * pi / 180) / 10", "description": "Waktu yang dibutuhkan bola mencapai ketinggian maksimum (saat Vy=0)" },
+        { "id": "eq_t_terbang", "computes": "t_terbang", "formula": "t_terbang = 2 * v0 * sin(theta * pi / 180) / 10", "description": "Waktu terbang total hingga bola kembali ke ketinggian semula, sama dengan 2×t_puncak" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Bola bergerak mengikuti lintasan parabola berwarna pelangi; anak panah biru menunjukkan Vx (selalu sama panjang) dan anak panah merah menunjukkan Vy (mengecil menuju puncak, membalik setelah puncak); titik puncak ditandai bintang emas" },
+        { "id": "viz_2", "type": "graph", "x_axis": "t", "y_axis": "v_total", "title": "Kecepatan Total vs Waktu" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur v0=20 m/s dan θ=30°. Berapa waktu yang dibutuhkan bola untuk mencapai ketinggian maksimum? (Jawaban: 1,0 detik)",
+          "success_condition": "abs(v0 - 20) < 0.1 AND abs(theta - 30) < 1 AND abs(t_puncak - 1.0) < 0.15",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Atur v0=30 m/s dan θ=45°. Berapa waktu terbang total bola? (Jawaban: sekitar 4,24 detik)",
+          "success_condition": "abs(v0 - 30) < 0.1 AND abs(theta - 45) < 1 AND abs(t_terbang - 4.24) < 0.3",
+          "points": 30
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal satu tantangan analisis parabola",
+        "logic": "challenges_completed >= 1",
+        "feedback_text": "Hore! Bola mendarat dengan sempurna! Kamu memahami komponen kecepatan gerak parabola dengan baik!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum satu pun tantangan berhasil diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat: t_puncak = v₀·sinθ / g. Untuk θ=30°, sinθ=0,5. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 25, "exploration_points_per_parameter_change": 2 },
+      "lives": null,
+      "time_limit_seconds": 600,
+      "pass_threshold": 25
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Lab Besaran dan Karakteristik Gelombang",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Gelombang",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_gelombang_besaran_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Lab Besaran dan Karakteristik Gelombang",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Gelombang, Bunyi, dan Cahaya",
+      "subbab": "Gelombang",
+      "topik": "Besaran dan Karakteristik Gelombang",
+      "difficulty": 2,
+      "estimated_duration_minutes": 15,
+      "learning_objectives": [
+        "Siswa dapat menghitung cepat rambat gelombang menggunakan hubungan v = λf",
+        "Siswa dapat menghitung periode gelombang dari frekuensi menggunakan T = 1/f",
+        "Siswa dapat mengidentifikasi hubungan antara frekuensi, panjang gelombang, dan cepat rambat gelombang"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Pantai Gelombang Nusantara",
+        "story": "Di pantai selatan Jawa, seorang peneliti mengamati gelombang laut yang bergerak teratur menuju pantai. Ia ingin memahami pola gelombang — seberapa cepat gelombang bergerak, seberapa sering puncak gelombang datang, dan seberapa jauh jarak antar puncaknya. Bantu ia menganalisis karakteristik gelombang menggunakan persamaan dasar gelombang!",
+        "image_description": "Pantai pasir putih Nusantara dengan gelombang laut berwarna biru-hijau bergerak teratur; puncak gelombang ditandai garis putih berkilau; anak panah horizontal menunjukkan panjang gelombang λ; peneliti berpakaian batik mengamati panel digital di tepi pantai; pohon kelapa di latar",
+        "cta_text": "Amati Gelombang"
+      },
+      "visual_element": {
+        "theme_name": "Pantai Gelombang Nusantara",
+        "theme_preset": "forest_green",
+        "mood": "calm, observational, natural",
+        "color_palette": {
+          "primary": "#00695c",
+          "secondary": "#0288d1",
+          "background": "#e8f5e9",
+          "accent": "#f9a825",
+          "text": "#1b5e20"
+        },
+        "setting_description": "Pantai Nusantara yang tenang dengan gelombang laut berirama; panel pengukur gelombang digital berwarna hijau teal; pasir berwarna krem dan air laut biru kehijauan yang jernih.",
+        "art_style": "ilustrasi flat watercolor bergaya alam tropis Nusantara dengan gradien hijau-biru dan aksen emas",
+        "ambient_elements": [
+          "Gelombang sinusoidal bergerak dari kiri ke kanan dengan kecepatan proporsional terhadap nilai v",
+          "Puncak dan lembah gelombang ditandai titik merah dan biru yang bergerak naik-turun",
+          "Partikel pasir pantai yang bergerak halus mengikuti irama gelombang"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur frekuensi gelombang (f) dalam satuan Hz." },
+          { "step": 2, "text": "Atur panjang gelombang (λ) dalam satuan meter." },
+          { "step": 3, "text": "Atur amplitudo gelombang (A) untuk mengatur tinggi gelombang." },
+          { "step": 4, "text": "Simulasi menghitung otomatis: periode (T), cepat rambat (v), dan kecepatan sudut (ω)." },
+          { "step": 5, "text": "Selesaikan tantangan untuk membuktikan pemahamanmu tentang besaran gelombang!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Besaran-Besaran Gelombang",
+          "strategy": "Empat besaran utama gelombang saling terkait: frekuensi (f) adalah banyak getaran per detik (Hz), periode (T = 1/f) adalah waktu satu getaran penuh, panjang gelombang (λ) adalah jarak satu pola gelombang lengkap, dan cepat rambat (v = λf) adalah seberapa cepat pola gelombang berpindah. Amplitudo (A) adalah tinggi maksimum gelombang — tidak memengaruhi v.",
+          "formula": "T = 1/f ;  v = λ·f ;  ω = 2π·f",
+          "example": "f=5 Hz, λ=4 m → T=0,2 s; v=5×4=20 m/s; ω=2π×5≈31,4 rad/s.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_wave", "event": "on_correct_action", "description": "Suara ombak laut yang berirama, semakin cepat saat frekuensi dinaikkan" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi gamelan pantai yang merdu menandakan keberhasilan analisis gelombang" },
+          { "id": "sfx_lose", "event": "on_lose", "description": "Suara ombak yang menurun perlahan menandakan waktu habis" },
+          { "id": "bgm", "event": "background", "description": "Suara ombak pantai yang berirama tenang berpadu dengan melodi seruling bambu, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_dynamics",
+      "scenario": {
+        "title": "Simulasi Besaran Gelombang Transversal",
+        "narrative": "Atur frekuensi, panjang gelombang, dan amplitudo gelombang. Simulasi menghitung periode, cepat rambat, dan kecepatan sudut secara otomatis, serta menampilkan bentuk gelombang secara visual.",
+        "context": "Gelombang transversal merambat dalam medium homogen; kecepatan rambat hanya bergantung pada medium (diwakili oleh kombinasi f dan λ); amplitudo tidak memengaruhi cepat rambat; konstanta π = 3.14159."
+      },
+      "variables": [
+        { "id": "f", "label": "Frekuensi", "symbol": "f", "unit": "Hz", "type": "user_input", "min": 0.5, "max": 100, "default": 5, "step": 0.5 },
+        { "id": "lambda", "label": "Panjang gelombang", "symbol": "λ", "unit": "m", "type": "user_input", "min": 0.1, "max": 50, "default": 4, "step": 0.1 },
+        { "id": "A", "label": "Amplitudo", "symbol": "A", "unit": "m", "type": "user_input", "min": 0.1, "max": 5, "default": 1, "step": 0.1 },
+        { "id": "T", "label": "Periode", "symbol": "T", "unit": "s", "type": "computed" },
+        { "id": "v", "label": "Cepat rambat gelombang", "symbol": "v", "unit": "m/s", "type": "computed" },
+        { "id": "omega", "label": "Kecepatan sudut (frekuensi angular)", "symbol": "ω", "unit": "rad/s", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_T", "computes": "T", "formula": "T = 1 / f", "description": "Periode = kebalikan frekuensi; waktu untuk satu getaran penuh" },
+        { "id": "eq_v", "computes": "v", "formula": "v = f * lambda", "description": "Cepat rambat gelombang = frekuensi × panjang gelombang" },
+        { "id": "eq_omega", "computes": "omega", "formula": "omega = 2 * 3.14159 * f", "description": "Kecepatan sudut = 2π kali frekuensi; menggambarkan laju perubahan fase" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Gelombang sinusoidal transversal bergerak ke kanan; amplitudo A ditandai anak panah vertikal dua arah; panjang gelombang λ ditandai anak panah horizontal antar dua puncak; kecepatan gerak animasi proporsional terhadap v" },
+        { "id": "viz_2", "type": "graph", "x_axis": "f", "y_axis": "v", "title": "Cepat Rambat vs Frekuensi (v–f) pada λ tetap" },
+        { "id": "viz_3", "type": "graph", "x_axis": "lambda", "y_axis": "v", "title": "Cepat Rambat vs Panjang Gelombang (v–λ) pada f tetap" }
+      ],
+      "challenges": [
+        {
+          "id": "ch_001",
+          "task": "Atur frekuensi f = 10 Hz dan panjang gelombang λ = 3 m. Verifikasi bahwa cepat rambat v = 30 m/s dan periode T = 0,1 s.",
+          "success_condition": "abs(f - 10) < 0.1 AND abs(lambda - 3) < 0.05 AND abs(v - 30) < 0.3 AND abs(T - 0.1) < 0.005",
+          "points": 25
+        },
+        {
+          "id": "ch_002",
+          "task": "Temukan kombinasi f dan λ yang menghasilkan cepat rambat v = 50 m/s. Pastikan frekuensi yang kamu pilih menghasilkan periode T kurang dari 0,5 s.",
+          "success_condition": "abs(v - 50) < 1 AND T < 0.5",
+          "points": 30
+        },
+        {
+          "id": "ch_003",
+          "task": "Atur f = 20 Hz dan v = 60 m/s. Berapa panjang gelombang λ yang harus diatur agar hubungan v = λf terpenuhi? (Petunjuk: λ = v/f)",
+          "success_condition": "abs(f - 20) < 0.1 AND abs(v - 60) < 1 AND abs(lambda - 3) < 0.1",
+          "points": 35
+        }
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil menyelesaikan minimal dua dari tiga tantangan besaran gelombang",
+        "logic": "challenges_completed >= 2",
+        "feedback_text": "Analisis gelombang berhasil! Kamu menguasai besaran gelombang: T=1/f, v=λf, dan ω=2πf. Gelombang pantai telah terpetakan!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Waktu habis sebelum ada satu pun tantangan yang diselesaikan",
+        "logic": "time_elapsed >= time_limit_seconds AND challenges_completed < 1",
+        "feedback_text": "Waktu habis! Ingat hubungan kunci: v = λ × f, T = 1/f, ω = 2πf. Amplitudo tidak memengaruhi kecepatan rambat. Coba lagi!",
+        "feedback_audio": "sfx_lose",
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": { "challenge_completion": 30, "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": 780,
+      "pass_threshold": 50
+    }
+  }
+}

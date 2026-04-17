@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluida Statis Word Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="50" cy="30" r="1.5" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="15" r="1" fill="rgba(255,255,255,0.2)"/></svg>');
+            animation: wave 3s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #0ea5e9;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 500px;
+        }
+        
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .left-panel {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .right-panel {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .current-word {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .letter-tile {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: grab;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .letter-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .letter-tile.dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+        
+        .answer-area {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed #0ea5e9;
+            border-radius: 10px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .answer-letter {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-letter:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #374151);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .definition {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .definition h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .definition p {
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .hints {
+            background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .hints h3 {
+            color: #4c1d95;
+            margin-bottom: 10px;
+        }
+        
+        .hint-item {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #4c1d95;
+            border-left: 3px solid #8b5cf6;
+        }
+        
+        .progress {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #d1d5db;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeInScale 0.5s ease;
+        }
+        
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fluida Statis Word Challenge</h1>
+            <p>Menguji pemahaman kamu tentang konsep-konsep dalam fluida statis</p>
+        </div>
+        
+        <div class="game-area">
+            <div class="instructions">
+                Tebak kata kunci yang berkaitan dengan fluida statis. Geser huruf untuk membentuk kata yang benar!
+            </div>
+            
+            <div class="game-board">
+                <div class="left-panel">
+                    <div class="current-word" id="currentWord">TEKANAN</div>
+                    
+                    <div class="letter-grid" id="letterGrid">
+                        <!-- Letters will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="answer-area" id="answerArea">
+                        <!-- Answer letters will be placed here -->
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="clearAnswer()">Clear</button>
+                        <button class="btn btn-primary" onclick="checkAnswer()">Check</button>
+                        <button class="btn btn-success" onclick="nextWord()">Next</button>
+                    </div>
+                </div>
+                
+                <div class="right-panel">
+                    <div class="definition">
+                        <h3>Definisi:</h3>
+                        <p id="definitionText">Gaya per satuan luas yang dialami oleh suatu permukaan dalam fluida</p>
+                    </div>
+                    
+                    <div class="hints">
+                        <h3>Petunjuk:</h3>
+                        <div id="hintsContainer">
+                            <!-- Hints will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="progress">
+                        <h3>Kemajuan: <span id="progressCount">1</span>/4</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 25%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="backgroundCanvas"></canvas>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            <h2>Selamat!</h2>
+            <p>Kamu telah menyelesaikan semua tantangan!</p>
+            <button class="btn btn-success" onclick="restartGame()">Main Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const gameData = {
+            vocabulary_items: [
+                {
+                    target_word: "TEKANAN",
+                    definition: "Gaya per satuan luas yang dialami oleh suatu permukaan dalam fluida",
+                    hints: [
+                        "Besaran pokok dalam fluida",
+                        "Satuannya Pascal",
+                        "Berbanding lurus dengan gaya"
+                    ]
+                },
+                {
+                    target_word: "PASCAL",
+                    definition: "Prinsip bahwa tekanan diteruskan sama besar ke segala arah dalam fluida tertutup",
+                    hints: [
+                        "Nama ilmuwan Prancis",
+                        "Prinsip dalam fluida statis",
+                        "Alat hidrolik bekerja berdasarkan prinsip ini"
+                    ]
+                },
+                {
+                    target_word: "ARCHIMEDES",
+                    definition: "Hukum yang menyatakan bahwa benda tercelup mengalami gaya ke atas sebesar berat fluida yang dipindahkan",
+                    hints: [
+                        "Ilmuwan Yunani kuno",
+                        "Berkaitan dengan gaya apung",
+                        "Ditemukan saat mandi di bak air"
+                    ]
+                },
+                {
+                    target_word: "HIDROSTATIK",
+                    definition: "Tekanan yang disebabkan oleh berat zat cair itu sendiri",
+                    hints: [
+                        "Tekanan akibat kedalaman",
+                        "Semakin dalam semakin besar",
+                        "Rumusnya ρgh"
+                    ]
+                }
+            ],
+            scrambled_letters: [
+                ["T", "E", "K", "N", "A", "A", "N"],
+                ["P", "A", "C", "L", "S", "A"],
+                ["C", "A", "H", "I", "M", "E", "R", "D", "E", "S"],
+                ["I", "O", "R", "H", "D", "I", "T", "S", "A", "K", "T", "N", "I", "Y"]
+            ]
+        };
+
+        let currentWordIndex = 0;
+        let draggedLetter = null;
+        let answerLetters = [];
+
+        function initGame() {
+            loadCurrentWord();
+            setupDragAndDrop();
+            drawBackground();
+        }
+
+        function loadCurrentWord() {
+            const current = gameData.vocabulary_items[currentWordIndex];
+            const scrambled = gameData.scrambled_letters[currentWordIndex];
+            
+            document.getElementById('currentWord').textContent = current.target_word;
+            document.getElementById('definitionText').textContent = current.definition;
+            
+            // Populate hints
+            const hintsContainer = document.getElementById('hintsContainer');
+            hintsContainer.innerHTML = '';
+            current.hints.forEach(hint => {
+                const hintElement = document.createElement('div');
+                hintElement.className = 'hint-item';
+                hintElement.textContent = hint;
+                hintsContainer.appendChild(hintElement);
+            });
+            
+            // Populate letter grid
+            const letterGrid = document.getElementById('letterGrid');
+            letterGrid.innerHTML = '';
+            
+            scrambled.forEach((letter, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'letter-tile';
+                tile.textContent = letter;
+                tile.draggable = true;
+                tile.dataset.index = index;
+                tile.id = `tile-${index}`;
+                letterGrid.appendChild(tile);
+            });
+            
+            // Update progress
+            const progress = ((currentWordIndex + 1) / gameData.vocabulary_items.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressCount').textContent = `${currentWordIndex + 1}/${gameData.vocabulary_items.length}`;
+        }
+
+        function setupDragAndDrop() {
+            const tiles = document.querySelectorAll('.letter-tile');
+            tiles.forEach(tile => {
+                tile.addEventListener('dragstart', dragStart);
+                tile.addEventListener('dragend', dragEnd);
+            });
+            
+            const answerArea = document.getElementById('answerArea');
+            answerArea.addEventListener('dragover', dragOver);
+            answerArea.addEventListener('drop', drop);
+        }
+
+        function dragStart(e) {
+            draggedLetter = e.target;
+            e.target.classList.add('dragging');
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedLetter = null;
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            if (draggedLetter) {
+                const answerArea = document.getElementById('answerArea');
+                const letterCopy = draggedLetter.cloneNode(true);
+                letterCopy.id = `answer-${Date.now()}`;
+                letterCopy.draggable = false;
+                letterCopy.onclick = function() {
+                    this.remove();
+                    updateAnswerArray();
+                };
+                answerArea.appendChild(letterCopy);
+                draggedLetter.remove();
+                updateAnswerArray();
+            }
+        }
+
+        function updateAnswerArray() {
+            const answerArea = document.getElementById('answerArea');
+            answerLetters = Array.from(answerArea.children).map(child => child.textContent);
+        }
+
+        function clearAnswer() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerLetters = [];
+            
+            // Repopulate tiles
+            const current = gameData.scrambled_letters[currentWordIndex];
+            const letterGrid = document.getElementById('letterGrid');
+            letterGrid.innerHTML = '';
+            
+            current.forEach((letter, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'letter-tile';
+                tile.textContent = letter;
+                tile.draggable = true;
+                tile.dataset.index = index;
+                tile.id = `tile-${index}`;
+                letterGrid.appendChild(tile);
+            });
+            
+            setupDragAndDrop();
+        }
+
+        function checkAnswer() {
+            const currentWord = gameData.vocabulary_items[currentWordIndex].target_word;
+            const userAnswer = answerLetters.join('');
+            
+            if (userAnswer === currentWord) {
+                alert('Benar! Jawaban kamu tepat!');
+                if (currentWordIndex < gameData.vocabulary_items.length - 1) {
+                    nextWord();
+                } else {
+                    showSuccessMessage();
+                }
+            } else {
+                alert('Jawaban belum benar. Coba lagi!');
+            }
+        }
+
+        function nextWord() {
+            if (currentWordIndex < gameData.vocabulary_items.length - 1) {
+                currentWordIndex++;
+                clearAnswer();
+                loadCurrentWord();
+                setupDragAndDrop();
+            } else {
+                showSuccessMessage();
+            }
+        }
+
+        function showSuccessMessage() {
+            document.getElementById('successMessage').classList.add('show');
+        }
+
+        function restartGame() {
+            currentWordIndex = 0;
+            clearAnswer();
+            document.getElementById('successMessage').classList.remove('show');
+            loadCurrentWord();
+            setupDragAndDrop();
+        }
+
+        function drawBackground() {
+            const canvas = document.getElementById('backgroundCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size to match container
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Draw water-like background
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#1e40af');
+            gradient.addColorStop(1, '#3b82f6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw animated bubbles
+            setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < 20; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const radius = Math.random() * 10 + 5;
+                    const opacity = Math.random() * 0.3 + 0.1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.fill();
+                }
+            }, 100);
+        }
+
+        // Initialize the game when the page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>

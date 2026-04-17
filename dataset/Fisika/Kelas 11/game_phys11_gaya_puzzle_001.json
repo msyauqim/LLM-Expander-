@@ -1,0 +1,173 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Jenis-Jenis Gaya"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_dinamika_gaya_puzzle_001",
+    "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Museum Gaya: Kenali Jenisnya!",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Dinamika",
+      "subbab": "Jenis-Jenis Gaya",
+      "topik": "Jenis-Jenis Gaya",
+      "difficulty": 1,
+      "estimated_duration_minutes": 10,
+      "learning_objectives": [
+        "Siswa dapat mengidentifikasi berbagai jenis gaya yang umum dijumpai dalam fisika mekanika",
+        "Siswa dapat menjelaskan karakteristik dan rumus dari setiap jenis gaya",
+        "Siswa dapat membedakan gaya sentuh (kontak) dan gaya tak sentuh (non-kontak)"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Tur Museum Gaya",
+        "story": "Selamat datang di Museum Gaya Fisika! Kurator museum membutuhkan bantuanmu: label-label pada setiap pameran gaya terlepas dari deskripsinya. Pasangkan kembali setiap jenis gaya dengan penjelasan yang tepat agar pengunjung museum bisa belajar. Petualangan fisika menantimu di setiap ruangan!",
+        "image_description": "Lorong museum modern dengan berbagai instalasi fisika di kiri-kanan: pegas menggantung, magnet menarik bola besi, benda di atas permukaan miring, semua berlabel nomor tanpa keterangan",
+        "cta_text": "Mulai Tur"
+      },
+      "visual_element": {
+        "theme_name": "Science Museum",
+        "theme_preset": "classroom",
+        "mood": "curious, friendly, educational",
+        "color_palette": {
+          "primary": "#118ab2",
+          "secondary": "#06d6a0",
+          "background": "#fefefe",
+          "accent": "#ffd166",
+          "text": "#073b4c"
+        },
+        "setting_description": "Ruang museum sains bersih dan terang dengan dinding putih, instalasi fisika berwarna-warni di atas alas hitam, pencahayaan sorot putih, label museum berbentuk kartu persegi panjang.",
+        "art_style": "clean educational flat illustration, museum exhibit style",
+        "ambient_elements": [
+          "Sorot lampu museum di setiap instalasi",
+          "Ikon kecil panah gaya di dekat setiap pameran",
+          "Papan informasi kosong menunggu diisi"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Lihat nama jenis gaya di kolom kiri." },
+          { "step": 2, "text": "Klik nama gaya untuk memilihnya." },
+          { "step": 3, "text": "Klik definisi atau ciri yang paling cocok di kolom kanan." },
+          { "step": 4, "text": "Jawaban benar langsung terkunci dengan warna hijau." },
+          { "step": 5, "text": "Pasangkan semua 6 jenis gaya untuk menyelesaikan tur!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 40,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Dua Kategori Besar Gaya",
+          "strategy": "Gaya dibagi dua: SENTUH (kontak langsung) dan TAK SENTUH (jarak jauh). Gaya sentuh: normal, gesek, tegangan tali, pegas. Gaya tak sentuh: gravitasi, listrik, magnet. Rumus kunci: w=mg (berat), f=μN (gesek), F=kx (pegas).",
+          "formula": "w = m·g  |  f_s ≤ μ_s·N  |  f_k = μ_k·N  |  F_pegas = k·x",
+          "example": "Buku di meja: gaya berat ke bawah (w=mg), gaya normal ke atas dari meja (N=mg), sehingga buku diam — ΣF=0.",
+          "hint_image_description": "Diagram free body benda di atas meja: panah ke bawah berlabel w=mg dan panah ke atas berlabel N, dua panah sama panjang menandakan keseimbangan"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Bunyi 'ding!' museum saat label terpasang dengan benar di instalasinya" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Bunyi 'bzzzt' singkat saat label tidak cocok" },
+          { "id": "sfx_win", "event": "on_win", "description": "Musik fanfare museum dan suara tepuk tangan pengunjung saat semua pameran selesai" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik piano ambient ringan bertempo pelan, nuansa museum sains modern, loop" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 6 jenis gaya di kolom kiri dengan deskripsi, ciri khas, atau rumusnya di kolom kanan. Ada 3 distraktor — teliti sebelum memilih!",
+      "pairs": [
+        {
+          "id": "p_001",
+          "left": { "type": "text", "content": "Gaya Berat (w)" },
+          "right": { "type": "text", "content": "Gaya gravitasi bumi yang menarik benda ke pusat bumi; besarnya w = m·g" },
+          "explanation": "Gaya berat adalah gaya tak sentuh yang bekerja pada setiap benda bermassa. Arahnya selalu tegak lurus ke bawah, besar w = mg (g ≈ 10 m/s²)."
+        },
+        {
+          "id": "p_002",
+          "left": { "type": "text", "content": "Gaya Normal (N)" },
+          "right": { "type": "text", "content": "Gaya kontak dari permukaan yang menopang benda; arahnya selalu tegak lurus permukaan menjauhi permukaan tersebut" },
+          "explanation": "Gaya normal adalah reaksi permukaan terhadap benda yang menekannya. Besar N tidak selalu sama dengan berat benda — bergantung kondisi (misal: bidang miring, lift berakselerasi)."
+        },
+        {
+          "id": "p_003",
+          "left": { "type": "text", "content": "Gaya Gesek (f)" },
+          "right": { "type": "text", "content": "Gaya kontak yang berlawanan arah dengan gerak atau kecenderungan gerak benda; dibedakan atas gesek statis dan kinetis" },
+          "explanation": "Gaya gesek statis mencegah benda mulai bergerak (f_s ≤ μ_s N), sedangkan gesek kinetis bekerja saat benda sudah bergerak (f_k = μ_k N). Selalu berlawanan dengan arah gerak."
+        },
+        {
+          "id": "p_004",
+          "left": { "type": "text", "content": "Gaya Tegangan Tali (T)" },
+          "right": { "type": "text", "content": "Gaya tarik yang bekerja sepanjang tali atau kabel; arahnya menjauh dari benda menuju tali, besar sama di seluruh tali ideal" },
+          "explanation": "Tegangan tali adalah gaya sentuh yang bekerja melalui tali. Pada tali ideal (massanya nol dan tidak mulur), besar tegangan di kedua ujung tali selalu sama."
+        },
+        {
+          "id": "p_005",
+          "left": { "type": "text", "content": "Gaya Pegas (F_p)" },
+          "right": { "type": "formula", "content": "F_p = k · x  — gaya pemulih pegas sebanding dengan simpangan dari posisi setimbang (Hukum Hooke)" },
+          "explanation": "Hukum Hooke: pegas memberikan gaya pemulih yang besarnya sebanding simpangan x dan arahnya berlawanan dengan arah simpangan. k adalah konstanta pegas (N/m)."
+        },
+        {
+          "id": "p_006",
+          "left": { "type": "text", "content": "Gaya Sentripetal (F_s)" },
+          "right": { "type": "text", "content": "Gaya yang selalu mengarah ke pusat lingkaran, menyebabkan benda bergerak melingkar; bukan jenis gaya baru melainkan peran yang diemban gaya lain" },
+          "explanation": "Gaya sentripetal bukan gaya tersendiri — ia adalah resultan gaya yang mengarah ke pusat. Bisa berupa tegangan tali, gravitasi, gaya normal, atau gesek bergantung konteksnya."
+        }
+      ],
+      "distractors": [
+        "Gaya yang selalu searah dengan perpindahan benda",
+        "Gaya tolak yang bekerja saat dua benda saling menjauhi satu sama lain",
+        "Gaya yang besarnya selalu sama dengan gaya berat benda dalam segala kondisi"
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil memasangkan semua 6 jenis gaya dengan benar",
+        "logic": "correct_pairs == 6",
+        "feedback_text": "Tur selesai! Semua pameran gaya kini berlabel dengan benar. Pengunjung museum berterima kasih!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Siswa melakukan lebih dari 5 kesalahan",
+        "logic": "wrong_attempts > 5",
+        "feedback_text": "Label masih banyak yang salah tempat. Ingat perbedaan gaya sentuh dan tak sentuh. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "correct_pair": 15,
+        "wrong_attempt": -2
+      },
+      "lives": null,
+      "time_limit_seconds": 480,
+      "pass_threshold": 70
+    }
+  }
+}

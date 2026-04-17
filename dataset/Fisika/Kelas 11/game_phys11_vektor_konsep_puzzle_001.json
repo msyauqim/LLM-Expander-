@@ -1,0 +1,173 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Konsep Vektor"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_vektor_konsep_puzzle_001",
+    "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Agen Klasifikasi Besaran",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Vektor",
+      "subbab": "Konsep Dasar Vektor",
+      "topik": "Konsep Vektor",
+      "difficulty": 2,
+      "estimated_duration_minutes": 10,
+      "learning_objectives": [
+        "Siswa dapat membedakan besaran vektor dan besaran skalar berdasarkan ciri-cirinya",
+        "Siswa dapat mengidentifikasi contoh besaran fisika yang termasuk vektor atau skalar",
+        "Siswa dapat menjelaskan pengertian vektor sebagai besaran yang memiliki besar dan arah"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Misi Klasifikasi Besaran",
+        "story": "Agen muda, sistem database laboratorium fisika kacau balau! Kartu-kartu besaran fisika terlepas dari definisi dan sifatnya. Tugasmu adalah mencocokkan kembali setiap besaran dengan deskripsi yang tepat. Hati-hati — banyak besaran yang tampak mirip tetapi berbeda kategori!",
+        "image_description": "Ruang kontrol futuristik dengan layar holografik menampilkan kartu-kartu besaran fisika melayang tak beraturan, latar langit malam berbintang, meja kendali bercahaya biru",
+        "cta_text": "Mulai Misi"
+      },
+      "visual_element": {
+        "theme_name": "Holographic Command",
+        "theme_preset": "scifi_neon",
+        "mood": "focused, analytical, futuristic",
+        "color_palette": {
+          "primary": "#00b4d8",
+          "secondary": "#7209b7",
+          "background": "#03045e",
+          "accent": "#f72585",
+          "text": "#ffffff"
+        },
+        "setting_description": "Ruang kontrol sains futuristik dengan panel holografik biru, kartu besaran melayang berisi simbol fisika, diagram panah vektor di latar belakang, pencahayaan biru-ungu.",
+        "art_style": "flat design holographic with glowing outlines",
+        "ambient_elements": [
+          "Partikel cahaya melayang perlahan di latar",
+          "Garis grid holografik di lantai",
+          "Panah-panah kecil bergerak sporadis di background"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Baca kartu besaran atau konsep di kolom kiri dengan cermat." },
+          { "step": 2, "text": "Klik satu kartu di kolom kiri untuk memilihnya (kartu akan menyala)." },
+          { "step": 3, "text": "Klik kartu yang cocok di kolom kanan (definisi atau sifat)." },
+          { "step": 4, "text": "Kartu hijau = pasangan benar dan terkunci; kartu merah = salah, coba lagi." },
+          { "step": 5, "text": "Pasangkan semua 6 kartu untuk menyelesaikan misi!" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 45,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Kunci Membedakan Vektor & Skalar",
+          "strategy": "Tanyakan satu pertanyaan ini: 'Apakah arahnya penting untuk besaran ini?' Jika ya → vektor. Jika tidak → skalar. Vektor digambarkan sebagai panah: panjang panah = besar, arah panah = arah besaran.",
+          "formula": null,
+          "example": "Kecepatan 60 km/jam ke utara = VEKTOR (arah penting). Kelajuan 60 km/jam = SKALAR (hanya nilai). Gaya 10 N ke kanan = VEKTOR. Massa 5 kg = SKALAR.",
+          "hint_image_description": "Diagram dua kolom: kiri bertuliskan VEKTOR dengan ikon panah (nilai + arah), kanan bertuliskan SKALAR dengan ikon lingkaran (nilai saja), masing-masing disertai 3 contoh"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara klik elektronik memuaskan saat pasangan benar terhubung" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Buzz singkat bertekanan rendah saat pasangan salah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Fanfare futuristik pendek dan sorak keberhasilan misi" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik elektronik ambient bertempo sedang, nuansa sci-fi, loop tenang" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 6 besaran atau konsep vektor di kolom kiri dengan definisi dan sifatnya di kolom kanan. Waspadai 3 distraktor yang menyesatkan!",
+      "pairs": [
+        {
+          "id": "p_001",
+          "left": { "type": "text", "content": "Besaran Vektor" },
+          "right": { "type": "text", "content": "Besaran fisika yang memiliki nilai (besar) sekaligus arah" },
+          "explanation": "Vektor memerlukan dua informasi untuk dinyatakan secara lengkap: magnitudo (seberapa besar) dan arah (ke mana). Digambarkan sebagai panah."
+        },
+        {
+          "id": "p_002",
+          "left": { "type": "text", "content": "Besaran Skalar" },
+          "right": { "type": "text", "content": "Besaran fisika yang cukup dinyatakan hanya dengan nilai tanpa arah" },
+          "explanation": "Skalar ditentukan oleh satu angka saja. Operasinya mengikuti aturan aljabar biasa, berbeda dengan vektor yang mengikuti aturan khusus."
+        },
+        {
+          "id": "p_003",
+          "left": { "type": "text", "content": "Perpindahan" },
+          "right": { "type": "text", "content": "Vektor — perubahan posisi dari titik awal ke titik akhir yang memiliki arah tertentu" },
+          "explanation": "Perpindahan adalah besaran vektor karena tidak hanya menyatakan seberapa jauh, tetapi juga ke arah mana benda berpindah dari posisi awalnya."
+        },
+        {
+          "id": "p_004",
+          "left": { "type": "text", "content": "Energi Kinetik" },
+          "right": { "type": "text", "content": "Skalar — energi yang dimiliki benda akibat geraknya, bernilai selalu positif" },
+          "explanation": "Energi kinetik (Ek = ½mv²) hanya memiliki nilai numerik dan tidak memiliki arah, sehingga termasuk besaran skalar."
+        },
+        {
+          "id": "p_005",
+          "left": { "type": "text", "content": "Percepatan" },
+          "right": { "type": "text", "content": "Vektor — laju perubahan kecepatan terhadap waktu, memiliki arah yang sama dengan perubahan kecepatan" },
+          "explanation": "Percepatan adalah vektor karena merupakan turunan kecepatan (yang juga vektor) terhadap waktu. Arahnya bisa searah atau berlawanan dengan gerak."
+        },
+        {
+          "id": "p_006",
+          "left": { "type": "text", "content": "Suhu" },
+          "right": { "type": "text", "content": "Skalar — derajat panas atau dingin suatu benda, dinyatakan dengan satu angka dalam Kelvin atau Celsius" },
+          "explanation": "Suhu hanya memerlukan satu nilai numerik untuk dinyatakan secara lengkap. Tidak ada konsep 'arah' dalam suhu, sehingga ini adalah besaran skalar."
+        }
+      ],
+      "distractors": [
+        "Besaran yang selalu bernilai positif dan tidak pernah nol",
+        "Vektor — laju perubahan posisi tanpa memperhatikan arah gerak",
+        "Skalar — hasil kali massa dan percepatan suatu benda"
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil memasangkan semua 6 kartu dengan benar",
+        "logic": "correct_pairs == 6",
+        "feedback_text": "Misi selesai, Agen! Semua besaran berhasil diklasifikasikan. Kamu siap menguasai operasi vektor!",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Siswa melakukan lebih dari 5 kesalahan pasangan",
+        "logic": "wrong_attempts > 5",
+        "feedback_text": "Terlalu banyak kesalahan klasifikasi. Ingat: vektor punya arah, skalar tidak. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "correct_pair": 15,
+        "wrong_attempt": -3
+      },
+      "lives": null,
+      "time_limit_seconds": 480,
+      "pass_threshold": 70
+    }
+  }
+}

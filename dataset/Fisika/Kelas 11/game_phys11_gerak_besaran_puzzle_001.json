@@ -1,0 +1,173 @@
+{
+  "instruction": "Buatkan game edukasi yang sesuai untuk topik berikut. Pilih jenis game (word_game, puzzle_game, atau sim_lab) yang paling tepat berdasarkan karakteristik topik, tentukan judul game yang menarik, dan gunakan tingkat kesulitan 2 sebagai default. Output hanya JSON valid sesuai schema, tanpa komentar atau teks tambahan.",
+  "input": {
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Besaran-Besaran Gerak"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_gerak_besaran_puzzle_001",
+    "game_type": "puzzle_game",
+    "metadata": {
+      "title": "Kamus Gerak: Pasangkan Besarannya!",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Kinematika",
+      "subbab": "Besaran-Besaran Gerak",
+      "topik": "Besaran-Besaran Gerak",
+      "difficulty": 2,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat membedakan jarak dan perpindahan secara konseptual dan matematis",
+        "Siswa dapat membedakan kelajuan dan kecepatan beserta satuannya",
+        "Siswa dapat menjelaskan konsep percepatan dan menghubungkannya dengan rumus yang tepat"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Laboratorium Besaran Gerak",
+        "story": "Ilmuwan muda, lemari arsip laboratorium kacau! Kartu-kartu besaran gerak terpisah dari definisi dan rumusnya. Pasangkan kembali setiap besaran dengan deskripsi yang tepat — jangan tertukar antara jarak dan perpindahan, atau kelajuan dan kecepatan!",
+        "image_description": "Laboratorium fisika modern dengan meja putih bersih, kartu-kartu berisi simbol besaran fisika berserakan di meja, papan tulis di belakang bertuliskan rumus-rumus kinematika",
+        "cta_text": "Rapikan Arsip"
+      },
+      "visual_element": {
+        "theme_name": "Clean Lab",
+        "theme_preset": "minimal_mono",
+        "mood": "focused, organized, scientific",
+        "color_palette": {
+          "primary": "#4361ee",
+          "secondary": "#f77f00",
+          "background": "#f8f9fa",
+          "accent": "#3a0ca3",
+          "text": "#212529"
+        },
+        "setting_description": "Laboratorium bersih dengan meja putih, kartu besaran fisika berisi simbol dan satuan, rak peralatan rapi di latar, pencahayaan terang dan netral.",
+        "art_style": "clean minimal flat, scientific illustration",
+        "ambient_elements": [
+          "Kartu melayang dengan simbol fisika",
+          "Garis-garis lintasan tipis di latar",
+          "Ikon stopwatch dan penggaris kecil"
+        ]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "info",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Baca nama besaran di kolom kiri." },
+          { "step": 2, "text": "Klik besaran, lalu klik definisi/rumus/satuan yang cocok di kolom kanan." },
+          { "step": 3, "text": "Perhatikan perbedaan besaran skalar dan vektor!" },
+          { "step": 4, "text": "Jawaban benar langsung terkunci, jawaban salah bisa dicoba ulang." },
+          { "step": 5, "text": "Selesaikan 6 pasangan untuk menang." }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 50,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Skalar vs Vektor dalam Gerak",
+          "strategy": "Pasangan kunci: Jarak (skalar, total lintasan) ↔ Perpindahan (vektor, perubahan posisi). Kelajuan (skalar, jarak/waktu) ↔ Kecepatan (vektor, perpindahan/waktu). Percepatan selalu vektor — perubahan kecepatan per satuan waktu.",
+          "formula": "v = Δx/Δt,  a = Δv/Δt,  kelajuan = jarak/waktu",
+          "example": "Lari mengelilingi lapangan 400 m dan kembali ke start: jarak = 400 m, perpindahan = 0 m.",
+          "hint_image_description": "Tabel dua kolom: Skalar (jarak, kelajuan, waktu) vs Vektor (perpindahan, kecepatan, percepatan) dengan ikon panah untuk vektor"
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_correct", "event": "on_correct_action", "description": "Suara 'tock' mekanik puas saat kartu berhasil dipasangkan" },
+          { "id": "sfx_wrong", "event": "on_wrong_action", "description": "Suara gesekan kertas singkat saat pasangan salah" },
+          { "id": "sfx_win", "event": "on_win", "description": "Melodi lab berhasil: bunyi bip elektronik naik tangga nada" },
+          { "id": "bgm_loop", "event": "background", "description": "Musik elektronik ambient minimalis, tempo sedang, cocok untuk konsentrasi" }
+        ]
+      }
+    },
+    "payload": {
+      "puzzle_subtype": "matching",
+      "intro_narrative": "Pasangkan 6 besaran gerak di kolom kiri dengan definisi, rumus, atau satuannya di kolom kanan. Hati-hati dengan distraktor yang mirip!",
+      "pairs": [
+        {
+          "id": "p_001",
+          "left": { "type": "text", "content": "Jarak" },
+          "right": { "type": "text", "content": "Panjang total lintasan yang ditempuh benda; besaran skalar, selalu bernilai positif" },
+          "explanation": "Jarak mengukur seberapa jauh benda telah menempuh lintasan tanpa mempedulikan arah. Satuannya meter (m)."
+        },
+        {
+          "id": "p_002",
+          "left": { "type": "text", "content": "Perpindahan" },
+          "right": { "type": "text", "content": "Perubahan posisi benda dari titik awal ke titik akhir; besaran vektor, bisa negatif" },
+          "explanation": "Perpindahan hanya memperhatikan posisi awal dan akhir, bukan panjang lintasan. Berlawanan arah acuan bernilai negatif."
+        },
+        {
+          "id": "p_003",
+          "left": { "type": "text", "content": "Kelajuan Rata-Rata" },
+          "right": { "type": "formula", "content": "v_rata = jarak total / waktu tempuh" },
+          "explanation": "Kelajuan rata-rata adalah besaran skalar yang mengukur seberapa cepat benda menempuh jarak dalam selang waktu tertentu."
+        },
+        {
+          "id": "p_004",
+          "left": { "type": "text", "content": "Kecepatan Rata-Rata" },
+          "right": { "type": "formula", "content": "v̄ = Δx / Δt = (x₂ − x₁) / (t₂ − t₁)" },
+          "explanation": "Kecepatan rata-rata adalah besaran vektor: perpindahan dibagi selang waktu. Bisa bernilai nol meski benda telah bergerak jauh."
+        },
+        {
+          "id": "p_005",
+          "left": { "type": "text", "content": "Percepatan" },
+          "right": { "type": "formula", "content": "a = Δv / Δt = (v₂ − v₁) / (t₂ − t₁)" },
+          "explanation": "Percepatan adalah besaran vektor yang menyatakan laju perubahan kecepatan. Bernilai negatif jika kecepatan berkurang (perlambatan)."
+        },
+        {
+          "id": "p_006",
+          "left": { "type": "text", "content": "Kecepatan Sesaat" },
+          "right": { "type": "text", "content": "Kecepatan benda pada suatu titik waktu tertentu; nilai limit kecepatan rata-rata saat Δt mendekati nol" },
+          "explanation": "Kecepatan sesaat adalah turunan posisi terhadap waktu: v = dx/dt. Itulah yang ditunjukkan speedometer kendaraan."
+        }
+      ],
+      "distractors": [
+        "Posisi benda diukur dari titik asal koordinat",
+        "a = v × t",
+        "Besaran skalar yang menyatakan perubahan kecepatan per satuan jarak"
+      ]
+    },
+    "win_lose_condition": {
+      "applicable": true,
+      "win": {
+        "description": "Siswa berhasil memasangkan semua 6 besaran dengan benar",
+        "logic": "correct_pairs == 6",
+        "feedback_text": "Arsip laboratorium kembali rapi! Kamu menguasai semua besaran gerak dengan tepat.",
+        "feedback_audio": "sfx_win"
+      },
+      "lose": {
+        "description": "Siswa melakukan lebih dari 5 kesalahan pasangan",
+        "logic": "wrong_attempts > 5",
+        "feedback_text": "Terlalu banyak kesalahan. Perhatikan perbedaan skalar dan vektor. Coba lagi!",
+        "feedback_audio": null,
+        "retry_allowed": true
+      }
+    },
+    "gameplay_parameters": {
+      "scoring": {
+        "correct_pair": 15,
+        "wrong_attempt": -3
+      },
+      "lives": null,
+      "time_limit_seconds": 540,
+      "pass_threshold": 70
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "Laboratorium Hukum Ohm",
+    "jenjang": "SMA-11",
+    "mata_pelajaran": "Fisika",
+    "topik": "Hukum Ohm dan hubungan V, I, R",
+    "tingkat_kesulitan": 2,
+    "jenis_game": "sim_lab"
+  },
+  "output": {
+    "schema_version": "1.2",
+    "game_id": "game_phys11_ohm_sim_001",
+    "game_type": "sim_lab",
+    "metadata": {
+      "title": "Laboratorium Hukum Ohm",
+      "subject": "Fisika",
+      "grade_level": "SMA-11",
+      "bab": "Listrik Dinamis",
+      "subbab": "Hukum Ohm",
+      "topik": "Hukum Ohm dan hubungan V, I, R",
+      "difficulty": 2,
+      "estimated_duration_minutes": 12,
+      "learning_objectives": [
+        "Siswa dapat menjelaskan hubungan antara tegangan, arus, dan hambatan listrik",
+        "Siswa dapat menerapkan Hukum Ohm untuk menghitung arus dan daya listrik"
+      ],
+      "language": "id"
+    },
+    "presentation": {
+      "opening": {
+        "id": "opening_001",
+        "show_once": true,
+        "title": "Stasiun Kendali Energi",
+        "story": "Kamu adalah teknisi di stasiun pembangkit energi luar angkasa. Kendalikan tegangan dan hambatan pada rangkaian sederhana, amati bagaimana arus dan daya berubah. Pahami hukum dasar kelistrikan untuk menjaga stasiun tetap beroperasi!",
+        "image_description": "Stasiun luar angkasa dengan panel kontrol berpendar, layar menampilkan diagram rangkaian listrik, bintang-bintang berkilau di latar belakang",
+        "cta_text": "Aktifkan Rangkaian"
+      },
+      "visual_element": {
+        "theme_name": "Space Station Control",
+        "theme_preset": "space_cosmic",
+        "mood": "focused, technical, majestic",
+        "color_palette": {
+          "primary": "#4fc3f7",
+          "secondary": "#ff8a65",
+          "background": "#0d1b2a",
+          "accent": "#ffd54f",
+          "text": "#e0e0e0"
+        },
+        "setting_description": "Ruang kendali stasiun luar angkasa dengan panel layar biru bercahaya, diagram rangkaian listrik holografik, galaksi samar di latar belakang jendela.",
+        "art_style": "flat design with cosmic glow and circuit line accents",
+        "ambient_elements": ["Bintang berkelip di latar jendela", "Animasi elektron mengalir di kabel rangkaian", "Indikator daya berkedip lembut"]
+      },
+      "instructions": {
+        "id": "howto_001",
+        "trigger": {
+          "type": "popup_button",
+          "position": "top_right",
+          "icon": "question_mark",
+          "label": "Petunjuk"
+        },
+        "steps": [
+          { "step": 1, "text": "Atur tegangan listrik V dengan slider." },
+          { "step": 2, "text": "Atur hambatan listrik R dengan slider." },
+          { "step": 3, "text": "Amati arus I dan daya P yang terhitung pada panel." },
+          { "step": 4, "text": "Amati grafik I terhadap V untuk memahami hubungan linearnya." },
+          { "step": 5, "text": "Eksplorasi: bagaimana daya berubah jika R diperbesar dua kali?" }
+        ]
+      },
+      "hint": {
+        "id": "hint_001",
+        "scope": "global",
+        "trigger": {
+          "type": "auto_popup",
+          "after_seconds": 60,
+          "dismissible": true,
+          "reusable": true,
+          "manual_trigger_available": true
+        },
+        "content": {
+          "title": "Hukum Ohm & Daya Listrik",
+          "strategy": "Arus berbanding lurus dengan tegangan dan berbanding terbalik dengan hambatan. Daya listrik adalah laju energi yang digunakan, yang bergantung pada tegangan dan arus.",
+          "formula": "I = V / R,  P = V · I = V² / R",
+          "example": "Tegangan 12 V, hambatan 4 Ω: I = 12/4 = 3 A, P = 12×3 = 36 W. Jika R diganti 6 Ω: I = 2 A, P = 24 W.",
+          "hint_image_description": null
+        }
+      },
+      "audio": {
+        "enabled": true,
+        "tracks": [
+          { "id": "sfx_adjust", "event": "on_correct_action", "description": "Bunyi klik mekanis singkat saat slider digeser" },
+          { "id": "bgm", "event": "background", "description": "Ambient elektronik tenang bertema luar angkasa, loop lembut" }
+        ]
+      }
+    },
+    "payload": {
+      "sim_subtype": "physics_electricity",
+      "scenario": {
+        "title": "Rangkaian Ohm Sederhana",
+        "narrative": "Ubah tegangan dan hambatan pada rangkaian satu loop, amati arus dan daya yang dihasilkan secara real-time.",
+        "context": "Rangkaian DC sederhana: satu sumber tegangan ideal dan satu hambatan, kawat penghubung tanpa hambatan."
+      },
+      "variables": [
+        { "id": "tegangan", "label": "Tegangan", "symbol": "V", "unit": "V", "type": "user_input", "min": 0, "max": 24, "default": 12, "step": 0.5 },
+        { "id": "hambatan", "label": "Hambatan", "symbol": "R", "unit": "Ω", "type": "user_input", "min": 1, "max": 100, "default": 10, "step": 1 },
+        { "id": "arus", "label": "Arus listrik", "symbol": "I", "unit": "A", "type": "computed" },
+        { "id": "daya", "label": "Daya listrik", "symbol": "P", "unit": "W", "type": "computed" }
+      ],
+      "equations": [
+        { "id": "eq_arus", "computes": "arus", "formula": "arus = tegangan / hambatan", "description": "Hukum Ohm: arus berbanding lurus tegangan, berbanding terbalik hambatan" },
+        { "id": "eq_daya", "computes": "daya", "formula": "daya = tegangan * arus", "description": "Daya listrik = tegangan dikali arus" }
+      ],
+      "visualizations": [
+        { "id": "viz_1", "type": "animation", "description": "Diagram rangkaian DC sederhana: baterai, kabel, dan resistor, dengan animasi elektron bergerak searah arus dan indikator arus serta tegangan yang diperbarui real-time" },
+        { "id": "viz_2", "type": "graph", "x_axis": "tegangan", "y_axis": "arus", "title": "Karakteristik I–V (Arus vs Tegangan)" },
+        { "id": "viz_3", "type": "graph", "x_axis": "tegangan", "y_axis": "daya", "title": "Daya vs Tegangan (P–V)" }
+      ],
+      "challenges": []
+    },
+    "win_lose_condition": { "applicable": false },
+    "gameplay_parameters": {
+      "scoring": { "exploration_points_per_parameter_change": 1 },
+      "lives": null,
+      "time_limit_seconds": null,
+      "pass_threshold": null
+    }
+  }
+}

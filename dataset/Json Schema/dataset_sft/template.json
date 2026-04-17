@@ -1,0 +1,23 @@
+{
+  "instruction": "Buatkan game edukasi dengan parameter berikut sesuai JSON schema yang telah ditentukan. Output hanya JSON valid, tanpa komentar atau teks tambahan.",
+  "input": {
+    "judul_game": "string",
+    "jenjang": "SMA-10 | SMA-11 | SMA-12",
+    "mata_pelajaran": "Fisika | Kimia | Biologi | Matematika",
+    "topik": "string",
+    "tingkat_kesulitan": "1-5 (integer)",
+    "jenis_game": "word_game | puzzle_game | sim_lab"
+  },
+  "output": {
+    "_comment": "Full JSON envelope + payload sesuai schema. Wajib include:",
+    "_fields": [
+      "schema_version, game_id, game_type",
+      "metadata: title, subject, grade_level, bab, subbab, topik, difficulty, estimated_duration_minutes, learning_objectives, language",
+      "presentation.opening: id, show_once, title, story, image_description, cta_text",
+      "presentation.visual_element: theme_name, theme_preset, mood, color_palette (termasuk gradient_bg), setting_description, art_style, ambient_elements, canvas_scene (render_method, background_layers, objects, particle_effects), ui_components (button_style, card_style, score_display_style, input_style)",
+      "presentation.instructions, presentation.hint, presentation.audio",
+      "payload: sesuai game_type (word_game/puzzle_game/sim_lab schema). Untuk sim_lab WAJIB include scene (interactive_objects, visual_feedback, animation_on_run)",
+      "win_lose_condition, gameplay_parameters"
+    ]
+  }
+}
